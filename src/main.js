@@ -4,6 +4,8 @@ import { Game } from "./scenes/Game";
 import { Preloader } from "./scenes/Preloader";
 import { UI } from "./scenes/UI";
 import { Stats } from "./scenes/Stats";
+import { Shop } from "./scenes/Shop";
+import { Inventory } from "./scenes/Inventory";
 
 const GAME_WIDTH = 480; //ratio * 720;
 const GAME_HEIGHT = 270; //720;
@@ -23,7 +25,7 @@ const config = {
     width: GAME_WIDTH,
     height: GAME_HEIGHT,
   },
-  scene: [Boot, Preloader, Game, UI, Stats],
+  scene: [Boot, Preloader, Game, UI, Stats, Shop, Inventory],
   pixelArt: true,
   roundPixels: true,
 };
@@ -92,7 +94,27 @@ window.addEventListener("load", () => {
   });
 
   resize();
+  connectWallet();
 });
+
+var wallet;
+//const lamports_per_sol= solanaWeb3.LAMPORTS_PER_SOL;
+function connectWallet() {
+  (async () => {
+    try {
+      if (window.solana) {
+        window.solana.on("connect", () => console.log("connected"));
+        const resp = await window.solana.connect();
+        wallet = resp;
+      }
+
+      // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo
+    } catch (err) {
+      // { code: 4001, message: 'User rejected the request.' }
+    }
+  })();
+  //window.solana.on("connect", () => document.getElementById("status").innerText="Connected")
+}
 
 export default game;
 

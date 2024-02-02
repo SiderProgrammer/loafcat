@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { GameModel } from "../models/GameModel";
 
 export class Game extends Scene {
   constructor() {
@@ -19,13 +20,14 @@ export class Game extends Scene {
     this.map.createLayer("ground", streetTileset);
 
     const loafcat = this.add
-      .sprite(this.game.config.width - 350, 250, "loafcat")
+      .sprite(this.game.config.width - 350, 200, "loafcat")
 
-      .play("idle");
+      .play("walk");
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
-
+      GameModel.GAME_WIDTH = gameSize.width;
+      GameModel.GAME_HEIGHT = gameSize.height;
       //loafcat.x = gameSize.width - 50;
 
       // this.cameras.main.centerOn(gameSize.width / 2, gameSize.height / 2);

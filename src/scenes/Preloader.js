@@ -32,6 +32,8 @@ export class Preloader extends Scene {
     this.load.image("storeButton", "storeButton.png");
     this.load.image("statsButton", "statsButton.png");
     this.load.image("mainMenuButton", "mainMenuButton.png");
+    this.load.image("closeButton", "closeButton.png");
+    this.load.image("leaderboardButton", "leaderboardButton.png");
 
     this.load.image("hourGlassIcon", "hourGlassIcon.png");
     this.load.image("hungerIcon", "hungerIcon.png");
@@ -39,6 +41,11 @@ export class Preloader extends Scene {
     this.load.image("thunderIcon", "thunderIcon.png");
     this.load.image("statsProgressBar", "statsProgressBar.png");
     this.load.image("statsProgressBarFill", "statsProgressBarFill.png");
+
+    this.load.image("avatarFrame", "avatarFrame.png");
+    this.load.image("levelFrame", "levelFrame.png");
+    this.load.image("statsBoard", "statsBoard.png");
+    this.load.image("blackBackground", "blackBackground.png");
     // this.load.image("logo", "logo.png");
     // this.load.image("logo", "logo.png");
     // this.load.image("logo", "logo.png");
@@ -48,7 +55,7 @@ export class Preloader extends Scene {
     this.anims.create({
       key: "idle",
       frames: this.anims.generateFrameNumbers("loafcat", {
-        frames: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        frames: [0, 1, 2],
       }),
       frameRate: 8,
       repeat: -1,
