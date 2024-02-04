@@ -9,7 +9,7 @@ const { format, addHours } = require("date-fns");
 const swaggerSpec = require("./swaggerDef"); // Import the Swagger configuration
 const swaggerUi = require("swagger-ui-express"); // Add this line
 const swaggerJsdoc = require("swagger-jsdoc");
-console.log(process.env.API_BASE_URL);
+
 const accessToken = process.env.JWT_SECRET;
 const baseApiDomain = process.env.API_BASE_URL;
 
@@ -17,6 +17,7 @@ app.use(express.json()); // For parsing application/json
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:8080",
   "http://localhost:3001",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 const corsOptions = {
   origin: [
     "http://localhost:3000",
+    "http://localhost:8080",
     "http://localhost:3001",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
@@ -52,7 +54,6 @@ const corsOptions = {
     "http://localhost:5077",
     "https://bread.loaf.cat/",
     "https://mrrr.loaf.cat",
-    "  http://localhost:8080/",
   ],
   optionsSuccessStatus: 200,
   // allowedHeaders: ['Content-Type'],
@@ -71,11 +72,16 @@ app.options("*", cors(corsOptions));
  * @returns {Promise<Object>} The leaderboard data as a JSON object.
  * @throws Will throw an error if the GET request fails.
  */
-const getLeadersBoard = async () => {
+const getLeadersBoard = async (limit) => {
   try {
     const response = await axios.get(`${baseApiDomain}items/leaders_board`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        fields: ["*"],
+        limit: limit, // Limit the results to the top 10 players
+        sort: "-level", // This will sort the results by the 'level' field in descending order
       },
     });
     // Return the data part of the response which contains the leaderboard
@@ -88,16 +94,21 @@ const getLeadersBoard = async () => {
 
 // Express route handler for the '/api/leadersboard' endpoint.
 // This route provides a JSON response containing the leaders board data.
-app.get("/api/leadersboard", async (req, res) => {
-  try {
-    const leadersBoard = await getLeadersBoard();
-    res.json(leadersBoard);
-  } catch (error) {
-    // If an error occurs, respond with a 500 status code and an error message
-    res.status(500).json({ message: "Failed to fetch leaders board" });
-  }
-});
+// app.get("/api/leadersboard", async (req, res) => {
+//   try {
+//     const limit = req.body.limit || 10;
 
+//     const leadersBoard = await getLeadersBoard(limit);
+//     res.json(leadersBoard);
+//   } catch (error) {
+//     // If an error occurs, respond with a 500 status code and an error message
+//     res.status(500).json({ message: "Failed to fetch leaders board" });
+//   }
+// });
+
+app.post("/", async (req, res) => {
+  res.json({ hello: "world" });
+});
 /**
  * Creates a new user in the Directus MRR Backend.
  * It makes an authenticated POST request to the Directus API to create a user record.
@@ -164,6 +175,36 @@ const findUserByWallet = async (walletAddress) => {
     throw error; // Re-throw the error to be handled by the calling function
   }
 };
+const validateUsername = async (username) => {
+  try {
+    // Construct the URL for querying the 'users_data' collection
+    const url = `${baseApiDomain}items/users_data`;
+
+    // Set the params to filter the 'users_data' collection by the 'UserID' field
+    const params = {
+      filter: {
+        UserName: {
+          _eq: username,
+        },
+      },
+      limit: 1, // We only need to know if at least one record exists
+    };
+
+    // Make the GET request to Directus to search for the user
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params,
+    });
+    console.log(response);
+    // Check the response data to determine if a user was found
+    return response.data.data && response.data.data.length > 0;
+  } catch (error) {
+    console.error("Error searching for user by wallet address:", error);
+    throw error; // Re-throw the error to be handled by the calling function
+  }
+};
 
 /**
  * Inserts default player data into the players_table in Directus.
@@ -208,7 +249,8 @@ const insertDefaultUserItems = async (userID) => {
     // Define the default items to give to a new player. Replace with actual item IDs.
     const itemsData = {
       UserID: userID,
-      ItemID: 1, // The ID of the default item
+      Index: 1,
+      ItemID: 118, // The ID of the default item
       Quantity: 1, // The quantity of the default item
     };
 
@@ -247,6 +289,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  *             properties:
  *               UserID:
  *                 type: string
+ *               username:
+ *                 type: string  # Include "username" field
  *               RegistrationDate:
  *                 type: integer
  *               LastActiveDate:
@@ -264,6 +308,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Define a schema for user data validation
 const userSchema = Joi.object({
   UserID: Joi.string().alphanum().length(44).required(), // Example validation for Solana wallet, which is typically 44 base58 characters
+  username: Joi.string().required(), // Include "username" field
   RegistrationDate: Joi.number().integer().required(),
   LastActiveDate: Joi.number().integer().required(),
 });
@@ -273,6 +318,7 @@ app.post("/api/users", async (req, res) => {
   try {
     // Extract the wallet address from the request
     const walletAddress = req.body.UserID;
+    const username = req.body.username;
 
     // Validate the request data against the schema
     const { value, error } = userSchema.validate(req.body);
@@ -290,7 +336,8 @@ app.post("/api/users", async (req, res) => {
 
     // Check if the wallet address already exists in the database
     const existingUser = await findUserByWallet(walletAddress);
-    if (existingUser) {
+    const availableUsername = await validateUsername(username);
+    if (existingUser || availableUsername) {
       // If the user exists, return a conflict response
       return res.status(409).json({ message: "User already exists." });
     }
@@ -298,6 +345,7 @@ app.post("/api/users", async (req, res) => {
     // If validation succeeds, proceed to create the user with sanitized data
     const newUserData = {
       UserID: value.UserID,
+      UserName: value.username,
       RegistrationDate: value.RegistrationDate, // Ensure date is in ISO format
       LastActiveDate: value.LastActiveDate, // Ensure date is in ISO format
     };
@@ -327,10 +375,12 @@ app.post("/api/users", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res.status(500).json({
-        message:
-          "An error occurred while creating the user. Please try again later.",
-      });
+      res
+        .status(500)
+        .json({
+          message:
+            "An error occurred while creating the user. Please try again later.",
+        });
     }
   }
 });
@@ -369,10 +419,12 @@ app.post("/api/process-deposits", async (req, res) => {
 
     // Check if there are deposits to process
     if (deposits.length === 0) {
-      return res.status(200).json({
-        message:
-          "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
-      });
+      return res
+        .status(200)
+        .json({
+          message:
+            "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
+        });
     }
     const logPromises = []; // Prepare an array to hold all log promises
 
@@ -409,9 +461,11 @@ app.post("/api/process-deposits", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res.status(500).json({
-        message: "Failed to process deposits. Please try again later.",
-      });
+      res
+        .status(500)
+        .json({
+          message: "Failed to process deposits. Please try again later.",
+        });
     }
   }
 });
@@ -530,18 +584,21 @@ async function markDepositAsFilled(depositId) {
 
 /**
  * @swagger
- * /api/user-items/{userId}:
- *   get:
+ * /api/user-items/:
+ *   post:
  *     summary: Get user items with details.
  *     description: Retrieve user items with related details for a specific user.
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         description: The ID of the user for whom to retrieve items.
- *         schema:
- *           type: string
- *         example: user123
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *                 description: The ID of the user for whom to retrieve items.
+ *                 example: user123
  *     responses:
  *       200:
  *         description: Successfully retrieved user items.
@@ -598,10 +655,11 @@ async function markDepositAsFilled(depositId) {
  *       500:
  *         description: An error occurred while fetching user items.
  */
+
 // Endpoint to get user items with details
-app.get("/api/user-items/:userId", async (req, res) => {
+app.post("/api/user-items/", async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const { UserID } = req.body;
 
     // Fetch user items from Directus, including related game items
     const userItemsResponse = await axios.get(
@@ -613,7 +671,7 @@ app.get("/api/user-items/:userId", async (req, res) => {
         params: {
           filter: {
             UserID: {
-              _eq: userId,
+              _eq: UserID,
             },
           },
           // Adjust to the correct relational field name and nested fields
@@ -632,6 +690,7 @@ app.get("/api/user-items/:userId", async (req, res) => {
       const relatedItem = item.ItemID || {};
       return {
         itemId: item.id,
+        index: item.Index,
         quantity: item.Quantity,
         details: {
           name: relatedItem.item_name || "N/A", // Use fallback if undefined
@@ -813,6 +872,28 @@ app.post("/api/buy-item", async (req, res) => {
 
     const updateUserItemPromise = updateUserItem(userId, itemId);
 
+    // Fetch user_items_daily entry
+    const dailyItemResponse = await axios.get(
+      `${baseApiDomain}items/user_items_daily`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: {
+          filter: { UserID: { _eq: userId }, ItemID: { _eq: itemId } },
+        },
+      }
+    );
+    const dailyItemData = dailyItemResponse.data.data[0];
+    if (!dailyItemData) {
+      return res.status(404).json({ message: "Item not found in daily items" });
+    }
+    const markItemAsPurchasedPromise = axios.patch(
+      `${baseApiDomain}items/user_items_daily/${dailyItemData.id}`,
+      {
+        IsPurchased: true,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+
     // Log the purchase activity
     const logActivityPromise = logActivity(userId, {
       type: "purchase",
@@ -826,6 +907,7 @@ app.post("/api/buy-item", async (req, res) => {
     await Promise.all([
       updatePlayerPromise,
       updateUserItemPromise,
+      markItemAsPurchasedPromise,
       logActivityPromise,
     ]);
 
@@ -1081,6 +1163,7 @@ function calculateFeedingAmount(foodType, quantity) {
     vegetable: 4, // Each vegetable increases hunger by 4%
     junkFood: 3, // Each junk food increases hunger by 3%
     junkLiquid: 2, // Each junk liquid increases hunger by 2%
+    drink: 1,
     // Add other food types as needed
   };
 
@@ -1296,10 +1379,13 @@ app.post("/api/feed-pet", async (req, res) => {
         ]);
 
         let currentHungerLevel = petResponse.data.data.HungerLevel || 0;
+        let currentHydrationLevel = petResponse.data.data.HydrationLevel || 0;
         let currentFluffinessLevel = petResponse.data.data.FluffinessLevel || 0;
         let increaseAmount = calculateFeedingAmount(foodType, quantity);
         // Calculate the increased hunger level
         let newHungerLevel = currentHungerLevel + increaseAmount;
+        let newHydrationLevel = currentHydrationLevel + 1;
+
         let fluffinessIncrease = 0; // You will define how much to increase FluffinessLevel by
 
         // If the new hunger level is greater than 99, set it to 100, otherwise round it
@@ -1323,6 +1409,11 @@ app.post("/api/feed-pet", async (req, res) => {
         let currentEventTime = await getCurrentFeedingEventTime(PetID); // Fetch this from the database based on `feedingEventId`
         let originalIntervalHours = 6; // Original interval for Feeding
 
+        // Initialize update data object
+        let updateData = {
+          FluffinessLevel: newFluffinessLevel,
+          LastUpdateTime: new Date().getTime(),
+        };
         // Calculate additional time only if newHungerLevel did not reach 100
         let additionalTime = 0;
         if (newHungerLevel < 100) {
@@ -1334,6 +1425,14 @@ app.post("/api/feed-pet", async (req, res) => {
           );
         }
 
+        // Determine which level to update based on the food type
+        if (foodType === "drink") {
+          updateData.HydrationLevel = newHydrationLevel; // Assuming newHydrationLevel is calculated somewhere
+        } else {
+          updateData.HungerLevel = newHungerLevel < 100 ? newHungerLevel : 100; // Cap HungerLevel at 100
+        }
+
+        console.log("updateData", updateData);
         let newEventTime = currentEventTime + additionalTime;
         console.log("newEventTime in ROUTE----", newEventTime);
         // Fetch the Feeding event ID for the pet
@@ -1345,15 +1444,9 @@ app.post("/api/feed-pet", async (req, res) => {
 
         // Perform both updates concurrently
         await Promise.all([
-          axios.patch(
-            `${baseApiDomain}items/pet/${actualPetId}`,
-            {
-              HungerLevel: newHungerLevel,
-              FluffinessLevel: newFluffinessLevel,
-              LastUpdateTime: new Date().getTime(),
-            },
-            { headers: { Authorization: `Bearer ${accessToken}` } }
-          ),
+          axios.patch(`${baseApiDomain}items/pet/${actualPetId}`, updateData, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }),
         ]);
         // Only update the event timestamp if additional time is calculated
         if (additionalTime > 0) {
@@ -1363,7 +1456,7 @@ app.post("/api/feed-pet", async (req, res) => {
         // Log the user login aka connect wallet activity using Promise.all for parallel requests
         await Promise.all([
           logActivity(UserID, {
-            type: "feed",
+            type: foodType,
             additionalDetails: `Feed Activity in category:  ${category}.`,
           }),
           // Add other parallel logging activities here if needed
@@ -2276,6 +2369,9 @@ function calculateNextEventTime(eventType) {
     case "Feeding":
       hoursToAdd = 6;
       break;
+    case "Drink":
+      hoursToAdd = 6;
+      break;
     case "Cleaning":
       hoursToAdd = 24;
       break;
@@ -2288,6 +2384,12 @@ function calculateNextEventTime(eventType) {
     case "Happiness":
       hoursToAdd = 24; // Assuming happiness events are daily, adjust as needed
       break;
+    case "MentalHealth":
+      hoursToAdd = 24; // Assuming happiness events are daily, adjust as needed
+      break;
+    case "Experience":
+      hoursToAdd = 24; // Assuming happiness events are daily, adjust as needed
+      break;
     //... add cases for other event types if necessary
     default:
       hoursToAdd = 24;
@@ -2295,10 +2397,86 @@ function calculateNextEventTime(eventType) {
   return new Date(now.getTime() + hoursToAdd * 60 * 60 * 1000).getTime(); // Convert to timestamp
 }
 
+/**
+ * @swagger
+ * /api/link-pet:
+ *   post:
+ *     summary: Link a pet to a user and create default events
+ *     description: Links a pet to a user and creates default scheduled events for the pet.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *                 description: The ID of the user linking the pet.
+ *               petType:
+ *                 type: string
+ *                 description: The type of the pet (e.g., cat, dog).
+ *               PetID:
+ *                 type: string
+ *                 description: The ID of the pet (NFT ID).
+ *     responses:
+ *       201:
+ *         description: Pet linked and default events created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request, pet is already linked and alive or pet exists but is not alive.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Failed to link pet and create default events.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
 // Express route handler to link a pet to a user and create default events
 app.post("/api/link-pet", async (req, res) => {
   try {
     const { UserID, petType, PetID } = req.body;
+    const petIDString = String(PetID); // Convert PetID to string
+
+    // Step 0: Check if the pet is already linked and is alive
+    const existingPetsResponse = await axios.get(`${baseApiDomain}items/pet`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: { filter: { UserID: { _eq: UserID }, PetID: { _eq: PetID } } },
+    });
+    const existingPets = existingPetsResponse.data.data;
+    const existingPet = existingPets.find((pet) => pet.PetID === petIDString);
+
+    // Check if any pet matches the PetID and determine their alive status
+    if (existingPet) {
+      // Pet with the same PetID is already linked
+      if (existingPet.is_a_live) {
+        // The pet is alive
+        return res
+          .status(400)
+          .json({ message: "Pet is already linked and alive." });
+      } else {
+        // The pet exists but is not alive
+        return res
+          .status(400)
+          .json({ message: "Pet exists but is not alive." });
+      }
+    }
     const petName = await generateCatName();
     // Step 1: Create a new pet in the 'pet' collection with default values
     const newPetData = {
@@ -2313,6 +2491,8 @@ app.post("/api/link-pet", async (req, res) => {
       MentalHealthLevel: 100,
       ExperienceLevel: 100,
       ExerciseLevel: 100,
+      PeeLevel: 30,
+      PoopLevel: 30,
       LastCleanTime: new Date(),
       LastFedTime: new Date(),
       LastPlayTime: new Date(),
@@ -2352,6 +2532,8 @@ app.post("/api/link-pet", async (req, res) => {
         eventType: "Experience",
         eventTime: calculateNextEventTime("Experience"),
       },
+      { eventType: "Drink", eventTime: calculateNextEventTime("Drink") },
+
       ///.... add every other event that have timer related to the pet
     ];
 
@@ -2382,9 +2564,1081 @@ app.post("/api/link-pet", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/clean-wc:
+ *   post:
+ *     summary: Clean WC levels for a pet
+ *     description: Clean WC levels (PeeLevel or PoopLevel) for a specific pet based on the action type (Peeing or Pooping).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               actionType:
+ *                 type: string
+ *                 description: The action type, which can be 'Peeing' or 'Pooping'.
+ *               PetID:
+ *                 type: string
+ *                 description: The ID of the pet to clean WC levels for.
+ *               UserID:
+ *                 type: string
+ *                 description: The ID of the user who owns the pet.
+ *     responses:
+ *       200:
+ *         description: Pets WC levels cleaned successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: Pet not found for the provided PetID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Failed to clean pets WC levels.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+app.post("/api/clean-wc", async (req, res) => {
+  try {
+    const { actionType, PetID, UserID } = req.body; // 'Peeing' or 'Pooping'
+
+    const DECREMENT_AMOUNT = 30;
+    const petResponse = await axios.get(`${baseApiDomain}items/pet`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: { filter: { UserID: { _eq: UserID }, PetID: { _eq: PetID } } },
+    });
+
+    const pet = petResponse.data.data[0];
+    if (!pet) {
+      return res
+        .status(404)
+        .json({ message: `Pet not found for PetID: ${PetID}.` });
+    }
+
+    let updatedLevels = { LastUpdateTime: new Date().getTime() };
+    if (actionType === "Peeing") {
+      updatedLevels.PeeLevel = Math.max(pet.PeeLevel - DECREMENT_AMOUNT, 0);
+    } else if (actionType === "Pooping") {
+      updatedLevels.PoopLevel = Math.max(pet.PoopLevel - DECREMENT_AMOUNT, 0);
+    }
+
+    await axios.patch(`${baseApiDomain}items/pet/${pet.id}`, updatedLevels, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    await logActivity(pet.UserID, {
+      type: actionType,
+      additionalDetails: `Cleaned WC for pet ${PetID}. ${actionType} level decreased.`,
+    });
+
+    res
+      .status(200)
+      .json({
+        message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
+      });
+  } catch (error) {
+    console.error(
+      `Error cleaning pets WC levels for ${actionType} for PetID: ${PetID}:`,
+      error.response?.data || error
+    );
+    res
+      .status(500)
+      .json({
+        message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
+      });
+  }
+});
+
+// We reset the Levels of PEE and POO if they are above 80 and log the event for Self Peeing and Self Pooping
+async function resetWcLevels(pet, UserID) {
+  let updatedFields = {};
+  console.log(pet);
+
+  // Check and reset PeeLevel
+  if (pet.PeeLevel >= 80) {
+    updatedFields.PeeLevel = 0;
+    updatedFields.CleanlinessLevel = 0; // Reset CleanlinessLevel to 0 cause its dirty
+
+    // Log the pee event
+    await logActivity(UserID, {
+      type: "Self_Peeing",
+      additionalDetails: `PetID: ${pet.PetID} has peed.`,
+    });
+  }
+
+  // Check and reset PoopLevel
+  if (pet.PoopLevel >= 80) {
+    updatedFields.PoopLevel = 0;
+    updatedFields.CleanlinessLevel = 0; // Reset CleanlinessLevel to 0
+
+    // Log the poop event
+    await logActivity(UserID, {
+      type: "Self_Pooping",
+      additionalDetails: `PetID: ${pet.PetID} has pooped.`,
+    });
+  }
+
+  return updatedFields;
+}
+
+/**
+ * @swagger
+ * /api/update-wc:
+ *   post:
+ *     summary: Update WC levels for pets
+ *     description: Update WC levels (PeeLevel and PoopLevel) for all pets based on time elapsed since the last update.
+ *     responses:
+ *       200:
+ *         description: Pets WC levels updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Failed to update pets WC levels.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+app.post("/api/update-wc", async (req, res) => {
+  try {
+    // Constants for incrementing levels
+    const PEE_INCREMENT_PER_HOUR = 10; // Increase by 10 per hour
+    const POOP_INCREMENT_PER_HOUR = 8; // Increase by 8 per hour
+
+    // Fetch all pets
+    const petsResponse = await axios.get(`${baseApiDomain}items/pet`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const pets = petsResponse.data.data;
+
+    // Process each pet
+    pets.forEach(async (pet) => {
+      const now = new Date().getTime();
+      const timeSinceLastUpdate =
+        (now - new Date(pet.LastUpdateTime).getTime()) / (1000 * 3600); // Hours since last update
+
+      // Calculate new PeeLevel and PoopLevel
+      let newPeeLevel = Math.min(
+        pet.PeeLevel + PEE_INCREMENT_PER_HOUR * timeSinceLastUpdate,
+        100
+      );
+      let newPoopLevel = Math.min(
+        pet.PoopLevel + POOP_INCREMENT_PER_HOUR * timeSinceLastUpdate,
+        100
+      );
+
+      // Prepare updated levels object
+      let updatedLevels = {
+        PeeLevel: newPeeLevel,
+        PoopLevel: newPoopLevel,
+        LastUpdateTime: now,
+      };
+
+      // Reset WC levels and log activities if needed
+      const wcReset = await resetWcLevels(pet, pet.UserID); // Ensure UserID is available for the pet
+      updatedLevels = { ...updatedLevels, ...wcReset };
+
+      // Update pet in the database
+      await axios.patch(`${baseApiDomain}items/pet/${pet.id}`, updatedLevels, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+    });
+
+    res.status(200).json({ message: "Pets WC levels updated successfully." });
+  } catch (error) {
+    console.error("Error updating pets WC levels:", error);
+    res.status(500).json({ message: "Failed to update pets WC levels." });
+  }
+});
+
+/**
+ * @swagger
+ * /api/get-game-items:
+ *   post:
+ *     summary: Retrieve game items
+ *     description: Retrieve game items based on category and tags
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               category:
+ *                 type: string
+ *               tags:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved game items.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 category:
+ *                   type: string
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       500:
+ *         description: Failed to fetch game items.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+// {
+//   "category": "mental",  // All, food , liquid,toy, experiance, mental,
+//   "tags": "" // "", junk_food, mental etc..
+// }
+app.post("/api/get-game-items", async (req, res) => {
+  try {
+    const { category, tags, limit } = req.body;
+
+    // Initialize parameters
+    let params = new URLSearchParams({
+      "fields[0]": "id",
+      "fields[1]": "item_name",
+      "fields[2]": "PointValue",
+      "fields[3]": "Description",
+      "fields[4]": "Price",
+      "fields[5]": "Category",
+      "fields[6]": "Tags",
+      "fields[7]": "LevelAccess",
+      limit: limit,
+    });
+
+    // Append category and tags filters if needed
+    if (category !== "All") {
+      params.append("filter[Category][_eq]", category);
+    }
+    if (tags !== "") {
+      params.append("filter[Tags][_contains]", tags);
+    }
+
+    const response = await axios.get(`${baseApiDomain}items/game_items`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: params,
+    });
+
+    const gameItems = response.data.data;
+    res.status(200).json({ category, items: gameItems });
+  } catch (error) {
+    console.error("Error fetching game items:", error);
+    res.status(500).json({ message: "Failed to fetch game items." });
+  }
+});
+
+// Leadersboard
+/**
+ * @swagger
+ * /api/leadersboard:
+ *   post:
+ *     summary: Retrieve leaderboard data
+ *     description: Retrieve leaderboard data based on UserID and limit.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *               limit:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved leaderboard data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 leadersBoard:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       409:
+ *         description: Issue with the request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Failed to fetch leaderboard data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+app.post("/api/leadersboard", async (req, res) => {
+  try {
+    const { UserID, limit } = req.body;
+    if (!UserID) {
+      return res
+        .status(409)
+        .json({ message: "There is issue. Try Again Later." });
+    }
+    let params = new URLSearchParams({
+      "fields[0]": "id",
+      "fields[1]": "UserID",
+      "fields[2]": "Rank",
+      "fields[3]": "Experience",
+      "fields[4]": "Level",
+      sort: "-level",
+      limit: limit,
+    });
+
+    const response = await axios.get(`${baseApiDomain}items/leaders_board`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params,
+    });
+
+    const leadersBoard = response.data.data;
+    res.status(200).json({ leadersBoard: leadersBoard });
+  } catch (error) {
+    console.error("Error fetching game items:", error);
+    res.status(500).json({ message: "Failed to fetch leaders board." });
+  }
+});
+
+// MY Pet
+/**
+ * @swagger
+ * /api/my-pet:
+ *   post:
+ *     summary: Retrieve pet data
+ *     description: Retrieve pet data based on UserID and PetID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *               PetID:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved pet data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 pet:
+ *                   type: object
+ *       404:
+ *         description: Pet not found or pet is dead
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Failed to fetch pet data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+app.post("/api/my-pet", async (req, res) => {
+  try {
+    const { UserID, PetID } = req.body;
+    if (!UserID && !PetID) {
+      return res
+        .status(409)
+        .json({ message: "There is an issue. Try Again Later." });
+    }
+    const params = {
+      filter: {
+        id: {
+          _eq: PetID,
+        },
+      },
+      fields: [
+        "id",
+        "PetID",
+        "UserID",
+        "HungerLevel",
+        "CleanlinessLevel",
+        "HappinessLevel",
+        "HealthLevel",
+        "LastFedTime",
+        "LastCleanTime",
+        "LastPlayTime",
+        "LastHealthCheck",
+        "is_a_live",
+        "lives",
+        "MentalHealthLevel",
+        "ExperienceLevel",
+        "Type",
+        "Name",
+        "LastUpdateTime",
+        "ExerciseLevel",
+        "FluffinessLevel",
+        "PoopLevel",
+        "PeeLevel",
+        "HydrationLevel",
+        "Level.id",
+        "Level.experience_threshold",
+        "Level.login_points",
+        "Level.playtime_pointsRate",
+        "Level.care_activity_points",
+        "Level.special_activity_bonus",
+        "Level.purchase_points_cap",
+        "Level.LevelNumber",
+      ],
+      // fields: ['*', 'Level.*'],
+    };
+
+    const response = await axios.get(`${baseApiDomain}items/pet`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params,
+    });
+
+    const petData = response.data.data;
+
+    if (petData.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No pet found for the provided UserID and PetID." });
+    }
+
+    const pet = petData[0]; // Access the first item in the array
+
+    if (!pet.is_a_live) {
+      return res
+        .status(404)
+        .json({
+          message:
+            "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
+        });
+    }
+
+    res.status(200).json({ pet });
+  } catch (error) {
+    console.error("Error fetching pet data:", error);
+    res.status(500).json({ message: "Failed to fetch pet data." });
+  }
+});
+
+/**
+ * @swagger
+ * /api/my-pets:
+ *   post:
+ *     summary: Fetch live pets for a user
+ *     description: Retrieve live pet data for a specific user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *                 description: The user's unique identifier.
+ *     responses:
+ *       200:
+ *         description: A list of live pets for the specified user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: The unique identifier of the pet.
+ *                   PetID:
+ *                     type: string
+ *                     description: The unique identifier of the pet.
+ *       404:
+ *         description: No live pets found for the provided UserID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A message indicating no live pets were found.
+ *       409:
+ *         description: There is an issue with the request.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A message indicating an issue with the request.
+ *       500:
+ *         description: An error occurred while fetching pet data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A message indicating a server error.
+ */
+app.post("/api/my-pets", async (req, res) => {
+  try {
+    const { UserID } = req.body;
+    if (!UserID) {
+      return res
+        .status(409)
+        .json({ message: "There is an issue. Try Again Later." });
+    }
+    const params = {
+      filter: {
+        UserID: {
+          _eq: UserID,
+        },
+      },
+      fields: [
+        "id",
+        "PetID",
+        "UserID",
+        "HungerLevel",
+        "CleanlinessLevel",
+        "HappinessLevel",
+        "HealthLevel",
+        "LastFedTime",
+        "LastCleanTime",
+        "LastPlayTime",
+        "LastHealthCheck",
+        "is_a_live",
+        "lives",
+        "MentalHealthLevel",
+        "ExperienceLevel",
+        "Type",
+        "Name",
+        "LastUpdateTime",
+        "ExerciseLevel",
+        "FluffinessLevel",
+        "PoopLevel",
+        "PeeLevel",
+        "HydrationLevel",
+        "Level.id",
+        "Level.experience_threshold",
+        "Level.login_points",
+        "Level.playtime_pointsRate",
+        "Level.care_activity_points",
+        "Level.special_activity_bonus",
+        "Level.purchase_points_cap",
+        "Level.LevelNumber",
+      ],
+      // fields: ['*', 'Level.*'],
+    };
+
+    const response = await axios.get(`${baseApiDomain}items/pet`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params,
+    });
+
+    const petData = response.data.data;
+
+    if (petData.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No pet found for the provided UserID and PetID." });
+    }
+
+    const pets = petData.filter((pet) => pet.is_a_live); // Filter out only live pets
+
+    if (pets.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No live pets found for the provided UserID." });
+    }
+
+    res.status(200).json({ pets });
+  } catch (error) {
+    console.error("Error fetching pet data:", error);
+    res.status(500).json({ message: "Failed to fetch pet data." });
+  }
+});
 // script that loop the scheduled events and update the pet status
 
 // Express route handler to update the pet status based on the scheduled events
+
+/**
+ * @swagger
+ * /api/user-activity:
+ *   post:
+ *     summary: Fetch user activity
+ *     description: Retrieve user activity data from the Directus database.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *                 description: The user's unique identifier.
+ *               startDate:
+ *                 type: integer
+ *                 format: int64
+ *                 description: The start date for the activity query.
+ *               endDate:
+ *                 type: integer
+ *                 format: int64
+ *                 description: The end date for the activity query.
+ *           examples:
+ *             example1:
+ *               value:
+ *                 UserID: "CudDUqHiLDAnj4q6smfDbHC61Z5uCxhGjosN2NU2sa4b"
+ *                 startDate: 1706802603000
+ *                 endDate: 1706975403000
+ *     responses:
+ *       '200':
+ *         description: Successful response containing user activity data.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 userActivity:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         description: The unique identifier of the user activity entry.
+ *                       UserID:
+ *                         type: string
+ *                         description: The user's unique identifier.
+ *                       ActivityType:
+ *                         type: string
+ *                         description: The type of activity.
+ *                       ItemID:
+ *                         type: integer
+ *                         description: The item's unique identifier (can be null).
+ *                       AmountSpent:
+ *                         type: number
+ *                         description: The amount spent (can be null).
+ *                       PreviousCredits:
+ *                         type: number
+ *                         description: The previous credit balance (can be null).
+ *                       NewCredits:
+ *                         type: number
+ *                         description: The new credit balance (can be null).
+ *                       ActivityDate:
+ *                         type: integer
+ *                         description: The timestamp of the activity date.
+ *                       AdditionalDetails:
+ *                         type: string
+ *                         description: Additional details about the activity.
+ *       '400':
+ *         description: Bad request due to missing or invalid parameters.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message describing the issue.
+ *       '404':
+ *         description: User activity data not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message indicating that no data was found.
+ *       '500':
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message indicating a server error.
+ */
+
+app.post("/api/user-activity", async (req, res) => {
+  try {
+    // Check if the request body contains any required parameters
+    if (!req.body) {
+      return res.status(400).json({ message: "Request body is empty." });
+    }
+
+    // Extract any necessary parameters from req.body
+    const { UserID, startDate, endDate } = req.body;
+
+    // Validate userId, startDate, and endDate inputs (customize as needed)
+    if (!UserID || typeof UserID !== "string") {
+      return res.status(400).json({ message: "Invalid userId." });
+    }
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ message: "Both startDate and endDate are required." });
+    }
+
+    // Initialize parameters for the Directus API request
+    let params = {
+      // Add any required query parameters here
+      "filter[UserID][_eq]": UserID,
+      "filter[ActivityDate][_gte]": startDate,
+      "filter[ActivityDate][_lte]": endDate,
+      "fields[0]": "id",
+      "fields[1]": "UserID",
+      "fields[2]": "ActivityType",
+      "fields[3]": "ItemID",
+      "fields[4]": "AmountSpent",
+      "fields[5]": "PreviousCredits",
+      "fields[6]": "NewCredits",
+      "fields[7]": "ActivityDate",
+      "fields[8]": "AdditionalDetails",
+      // Add any other fields you need here
+      sort: "-id", // Sort by ID in descending order
+    };
+
+    // Make an HTTP GET request to fetch user activity
+    const response = await axios.get(`${baseApiDomain}items/activity_log`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: params,
+    });
+
+    const userActivityData = response.data.data;
+
+    // Check if user activity data is empty or not
+    if (!userActivityData || userActivityData.length === 0) {
+      return res.status(404).json({ message: "User activity data not found." });
+    }
+
+    res.status(200).json({ userActivity: userActivityData });
+  } catch (error) {
+    console.error("Error fetching user activity:", error);
+    res.status(500).json({ message: "Failed to fetch user activity." });
+  }
+});
+
+/**
+ * @swagger
+ * /api/events-times:
+ *   post:
+ *     summary: Fetch scheduled events for a pet
+ *     description: Retrieve the list of scheduled events for a given pet from the Directus database.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               PetID:
+ *                 type: string
+ *                 description: The unique identifier of the pet for which to fetch scheduled events.
+ *           examples:
+ *             example1:
+ *               value:
+ *                 PetID: "pet_unique_id_here"
+ *     responses:
+ *       '200':
+ *         description: Successfully retrieved scheduled events data for the pet.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 petEventsData:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         description: The unique identifier of the scheduled event.
+ *                       PetID:
+ *                         type: string
+ *                         description: The unique identifier of the pet.
+ *                       EventType:
+ *                         type: string
+ *                         description: The type of event scheduled.
+ *                       EventTime:
+ *                         type: string
+ *                         format: date-time
+ *                         description: The scheduled time for the event.
+ *                       Details:
+ *                         type: string
+ *                         description: Additional details about the scheduled event.
+ *       '400':
+ *         description: Bad request due to missing or invalid parameters.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message describing the issue.
+ *       '404':
+ *         description: No scheduled events data found for the provided PetID.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message indicating that no data was found.
+ *       '500':
+ *         description: Internal server error when fetching scheduled events.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message indicating a server error.
+ */
+
+app.post("/api/events-times", async (req, res) => {
+  try {
+    // Check if the request body contains any required parameters
+    if (!req.body) {
+      return res.status(400).json({ message: "Request body is empty." });
+    }
+
+    // Extract any necessary parameters from req.body
+    const { PetID } = req.body;
+
+    // Validate userId, startDate, and endDate inputs (customize as needed)
+    if (!PetID || typeof PetID !== "string") {
+      return res.status(400).json({ message: "Invalid userId." });
+    }
+
+    // Initialize parameters for the Directus API request
+    let params = {
+      // Add any required query parameters here
+      "filter[PetID][_eq]": PetID,
+      "fields[0]": "id",
+      "fields[1]": "PetID",
+      "fields[2]": "EventType",
+      "fields[3]": "EventTime",
+      "fields[4]": "Details",
+      // Add any other fields you need here
+      sort: "-id", // Sort by ID in descending order
+    };
+
+    // Make an HTTP GET request to fetch user activity
+    const response = await axios.get(`${baseApiDomain}items/scheduled_events`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: params,
+    });
+
+    const petEventsData = response.data.data;
+
+    // Check if user activity data is empty or not
+    if (!petEventsData || petEventsData.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Scheduled Events data for this pet was not found." });
+    }
+
+    res.status(200).json({ petEventsData: petEventsData });
+  } catch (error) {
+    console.error("Error fetching Scheduled Events:", error);
+    res.status(500).json({ message: "Failed to fetch Scheduled Events." });
+  }
+});
+
+/**
+ * @swagger
+ * /api/daily-items:
+ *   get:
+ *     summary: Fetch daily items for a user
+ *     description: Retrieve daily item data for a specific user.
+ *     parameters:
+ *       - in: query
+ *         name: userID
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user's unique identifier.
+ *     responses:
+ *       200:
+ *         description: A list of daily items for the specified user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   itemID:
+ *                     type: string
+ *                     description: The unique identifier of the daily item.
+ *                   itemName:
+ *                     type: string
+ *                     description: The name of the daily item.
+ *       500:
+ *         description: An error occurred while fetching daily items.
+ */
+
+app.get("/api/daily-items", async (req, res) => {
+  try {
+    const { userID } = req.query;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const response = await axios.get(`${baseApiDomain}items/user_items_daily`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      params: {
+        filter: {
+          UserID: { _eq: userID },
+        },
+        fields: ["*", "ItemID.*"],
+      },
+    });
+
+    const dailyItems = response.data.data;
+    res.status(200).json(dailyItems);
+  } catch (error) {
+    console.error("Error fetching daily items:", error);
+    res.status(500).json({ message: "Failed to fetch daily items." });
+  }
+});
+
+/**
+ * @swagger
+ * /api/initialize-daily-items:
+ *   post:
+ *     summary: Initialize daily items for a user
+ *     description: Initialize daily items for a specific user by picking 10 random items from the game items and inserting them into user_items_daily.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *                 description: The user's unique identifier.
+ *             example:
+ *               UserID: your_user_id_here
+ *     responses:
+ *       200:
+ *         description: Daily items successfully initialized for the user.
+ *       409:
+ *         description: User already has daily items.
+ *       500:
+ *         description: An error occurred while initializing daily items.
+ */
+app.post("/api/initialize-daily-items", async (req, res) => {
+  try {
+    const { UserID } = req.body;
+
+    // Check if user already has daily items
+    const existingItemsResponse = await axios.get(
+      `${baseApiDomain}items/user_items_daily`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { filter: { UserID: { _eq: UserID } } },
+      }
+    );
+
+    if (existingItemsResponse.data.data.length > 0) {
+      // User already has daily items
+      return res.status(409).json({ message: "User already has daily items." });
+    } else {
+      // Fetch all game items
+      const itemsResponse = await axios.get(
+        `${baseApiDomain}items/game_items`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      const allItems = itemsResponse.data.data;
+
+      // Pick 10 random items
+      const randomItems = allItems.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+      // Insert items into user_items_daily
+      for (const item of randomItems) {
+        await axios.post(
+          `${baseApiDomain}items/user_items_daily`,
+          {
+            UserID: UserID,
+            ItemID: item.id,
+            Date: Math.round(new Date().getTime()), // Round to the nearest whole number
+            IsPurchased: false,
+          },
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+      }
+
+      res.status(200).json({ message: "Daily items initialized for user." });
+    }
+  } catch (error) {
+    console.error("Error initializing daily items:", error);
+    res.status(500).json({ message: "Failed to initialize daily items." });
+  }
+});
 
 // Function to log activity in the activity_log table
 async function logActivity(userId, activityDetails) {
@@ -2407,6 +3661,7 @@ async function logActivity(userId, activityDetails) {
 // Define total interval hours for each event type
 const intervalHours = {
   Feeding: 6,
+  Drinking: 6,
   Cleaning: 24,
   Exercise: 12, // Assuming you will add this field to your Pet table
   HealthCheck: 48,
@@ -2418,6 +3673,7 @@ const intervalHours = {
 // Event type to Pet table field mapping
 const eventTypeToField = {
   Feeding: "HungerLevel",
+  Drink: "HydrationLevel",
   Cleaning: "CleanlinessLevel",
   Exercise: "ExerciseLevel", // Update this once you have the corresponding field in your Pet table
   HealthCheck: "HealthLevel",

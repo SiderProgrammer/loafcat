@@ -26,6 +26,15 @@ export class Preloader extends Scene {
     //  Load the assets for the game - Replace with your own assets
     this.load.setPath("assets");
 
+    this.load.image("mp_cs_tilemap_all", "mp_cs_tilemap_all.png");
+
+    this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
+
+    this.load.spritesheet(`loafcat`, `loafcat.png`, {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     this.load.image("logo", "logo.png");
     this.load.image("gearButton", "gearButton.png");
     this.load.image("coin", "coin.png");
@@ -46,9 +55,6 @@ export class Preloader extends Scene {
     this.load.image("levelFrame", "levelFrame.png");
     this.load.image("statsBoard", "statsBoard.png");
     this.load.image("blackBackground", "blackBackground.png");
-    // this.load.image("logo", "logo.png");
-    // this.load.image("logo", "logo.png");
-    // this.load.image("logo", "logo.png");
   }
 
   create() {

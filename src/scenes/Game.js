@@ -1,12 +1,10 @@
 import { Scene } from "phaser";
 import { GameModel } from "../models/GameModel";
+import { MAX_WIDTH, SAFE_GAME_WIDTH } from "../constants/viewport";
 
 export class Game extends Scene {
   constructor() {
     super("Game");
-
-    this.GAME_WIDTH = 480;
-    this.GAME_HEIGHT = 270;
   }
 
   create() {
@@ -19,8 +17,8 @@ export class Game extends Scene {
     const streetTileset = this.map.addTilesetImage("mp_cs_tilemap_all");
     this.map.createLayer("ground", streetTileset);
 
-    const loafcat = this.add
-      .sprite(this.game.config.width - 350, 200, "loafcat")
+    this.add
+      .sprite(this.game.config.width - 400, 180, "loafcat")
 
       .play("walk");
 
@@ -28,16 +26,13 @@ export class Game extends Scene {
       this.cameras.resize(gameSize.width, gameSize.height);
       GameModel.GAME_WIDTH = gameSize.width;
       GameModel.GAME_HEIGHT = gameSize.height;
-      //loafcat.x = gameSize.width - 50;
 
-      // this.cameras.main.centerOn(gameSize.width / 2, gameSize.height / 2);
-      // this.cameras.main.setViewport(
-      //   (gameSize.width - 480) / 2,
-      //   0,
-      //   gameSize.width,
-      //   gameSize.height
-      // );
-      // resize();
+      this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
+
+      this.cameras.main.centerOn(
+        SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2,
+        gameSize.height / 2
+      );
     });
   }
 }

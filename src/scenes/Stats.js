@@ -1,14 +1,17 @@
 import { Scene } from "phaser";
 import { fadeIn } from "../helpers/common";
+import ProgressBar from "../components/ProgressBar";
+import Button from "../components/Button";
 
 export class Stats extends Scene {
   constructor() {
     super("Stats");
   }
 
-  create({ parentScene }) {
+  create({ parentScene, petData }) {
     this.parentScene = parentScene;
-
+    this.petData = petData;
+    console.log(petData);
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
       this.game.config.height / 2
@@ -22,16 +25,53 @@ export class Stats extends Scene {
     this.hungerIcon = this.add.sprite(30, 0, "hungerIcon");
     this.cleanlinessIcon = this.add.sprite(30, 20, "hourGlassIcon");
 
-    this.healthBar = this.add.sprite(50, -40, "statsProgressBar");
+    this.healthBar = new ProgressBar({
+      scene: this,
+      x: 50,
+      y: -40,
+      maxFillValue: 100,
+      containerImage: "statsProgressBar",
+      fillImage: "statsProgressBarFill",
+    });
 
-    this.closeButton = this.add
-      .sprite(70, -60, "closeButton")
-      .setInteractive()
-      .on("pointerdown", async () => {
-        this.parentScene.scene.stop(this.scene.key);
-        fadeIn(this.parentScene, 250);
-      });
+    this.happinesBar = new ProgressBar({
+      scene: this,
+      x: 50,
+      y: -20,
+      maxFillValue: 100,
+      containerImage: "statsProgressBar",
+      fillImage: "statsProgressBarFill",
+    });
 
+    this.hungerBar = new ProgressBar({
+      scene: this,
+      x: 50,
+      y: 0,
+      maxFillValue: 100,
+      containerImage: "statsProgressBar",
+      fillImage: "statsProgressBarFill",
+    });
+
+    this.cleanlinessBar = new ProgressBar({
+      scene: this,
+      x: 50,
+      y: 20,
+      maxFillValue: 100,
+      containerImage: "statsProgressBar",
+      fillImage: "statsProgressBarFill",
+    });
+
+    this.healthBar.updateProgress(petData.HealthLevel);
+    this.happinesBar.updateProgress(petData.HappinessLevel);
+    this.hungerBar.updateProgress(petData.HungerLevel);
+    this.cleanlinessBar.updateProgress(petData.CleanlinessLevel);
+
+    this.closeButton = new Button(this, 70, -60, "closeButton");
+
+    this.closeButton.onClick(async () => {
+      this.parentScene.scene.stop(this.scene.key);
+      fadeIn(this.parentScene, 250);
+    });
     this.elementsContainer.add([
       this.board,
       this.loafcat,
@@ -40,8 +80,13 @@ export class Stats extends Scene {
       this.happinesIcon,
       this.hungerIcon,
       this.cleanlinessIcon,
-      this.healthBar,
+
       this.closeButton,
+
+      this.healthBar,
+      this.happinesBar,
+      this.hungerBar,
+      this.cleanlinessBar,
     ]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {

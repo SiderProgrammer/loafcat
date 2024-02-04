@@ -6,9 +6,14 @@ import { UI } from "./scenes/UI";
 import { Stats } from "./scenes/Stats";
 import { Shop } from "./scenes/Shop";
 import { Inventory } from "./scenes/Inventory";
-
-const GAME_WIDTH = 480; //ratio * 720;
-const GAME_HEIGHT = 270; //720;
+import {
+  MAX_HEIGHT,
+  MAX_WIDTH,
+  SAFE_GAME_HEIGHT,
+  SAFE_GAME_WIDTH,
+} from "./constants/viewport";
+import { Leaderboard } from "./scenes/Leaderboard";
+import { SignIn } from "./scenes/SignIn";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -22,19 +27,25 @@ const config = {
   scale: {
     mode: Phaser.Scale.NONE,
     // autoCenter: Phaser.Scale.CENTER_BOTH,
-    width: GAME_WIDTH,
-    height: GAME_HEIGHT,
+    width: SAFE_GAME_WIDTH,
+    height: SAFE_GAME_HEIGHT,
   },
-  scene: [Boot, Preloader, Game, UI, Stats, Shop, Inventory],
+  scene: [
+    Boot,
+    SignIn,
+    Preloader,
+    Game,
+    UI,
+    Stats,
+    Shop,
+    Inventory,
+    Leaderboard,
+  ],
   pixelArt: true,
   roundPixels: true,
 };
 
-const DEFAULT_WIDTH = 480;
-const DEFAULT_HEIGHT = 270;
-const MAX_WIDTH = 540;
-const MAX_HEIGHT = 270;
-let SCALE_MODE = "SMOOTH";
+//let SCALE_MODE = "SMOOTH";
 
 const game = new Phaser.Game(config);
 
@@ -43,11 +54,11 @@ window.addEventListener("load", () => {
     const w = window.innerWidth;
     const h = window.innerHeight;
 
-    let width = DEFAULT_WIDTH;
-    let height = DEFAULT_HEIGHT;
+    let width = SAFE_GAME_WIDTH;
+    let height = SAFE_GAME_HEIGHT;
     let maxWidth = MAX_WIDTH;
     let maxHeight = MAX_HEIGHT;
-    let scaleMode = SCALE_MODE;
+    // let scaleMode = SCALE_MODE;
 
     let scale = Math.min(w / width, h / height);
     let newWidth = Math.min(w / scale, maxWidth);
@@ -94,54 +105,8 @@ window.addEventListener("load", () => {
   });
 
   resize();
-  connectWallet();
 });
-
-var wallet;
-//const lamports_per_sol= solanaWeb3.LAMPORTS_PER_SOL;
-function connectWallet() {
-  (async () => {
-    try {
-      if (window.solana) {
-        window.solana.on("connect", () => console.log("connected"));
-        const resp = await window.solana.connect();
-        wallet = resp;
-      }
-
-      // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo
-    } catch (err) {
-      // { code: 4001, message: 'User rejected the request.' }
-    }
-  })();
-  //window.solana.on("connect", () => document.getElementById("status").innerText="Connected")
-}
 
 export default game;
 
-// A pet care game typically involves managing various aspects of a pet's life, such as feeding, grooming, playing, and health.
-
-// ### Game Elements:
-
-// 1. **Pet Stats:**
-//    - Hunger (0-100)
-//    - Happiness (0-100)
-//    - Health (0-100)
-//    - Cleanliness (0-100)
-
-// 2. **Actions:**
-//    - Feed
-//    - Play
-//    - Clean
-//    - Checkup (health)
-
-// 3. **Items:**
-//    - Food (different types)
-//    - Toys
-//    - Cleaning supplies
-//    - Medicine
-
-// 4. **Timers:**
-//    - Hunger increases over time
-//    - Happiness decreases over time
-//    - Health affected by hunger and cleanliness
-//    - Cleanliness decreases over time
+globalThis.__PHASER_GAME__ = game;

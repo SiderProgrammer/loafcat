@@ -3,33 +3,30 @@ import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
 
-export class Inventory extends Scene {
+export class Leaderboard extends Scene {
   constructor() {
-    super("Inventory");
+    super("Leaderboard");
   }
 
-  create({ parentScene }) {
+  create({ parentScene, leaderboardData }) {
     this.parentScene = parentScene;
+    this.leaderboardData = leaderboardData;
 
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
       this.game.config.height / 2
     );
-    // TODO : use api, slot indexes, quantity items stacking
+
     this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
 
-    this.addItem(GameModel.GAME_WIDTH / 2, GameModel.GAME_HEIGHT / 2, {
-      image: "loafcat",
+    leaderboardData.forEach((player, i) => {
+      this.addPlayer(
+        GameModel.GAME_WIDTH / 2,
+        GameModel.GAME_HEIGHT / 2 + i * 40,
+        player
+      );
     });
-    this.addItem(GameModel.GAME_WIDTH / 2 + 50, GameModel.GAME_HEIGHT / 2, {
-      image: "thunderIcon",
-    });
-    this.addItem(GameModel.GAME_WIDTH / 2 + 100, GameModel.GAME_HEIGHT / 2, {
-      image: "hearthIcon",
-    });
-    this.addItem(GameModel.GAME_WIDTH / 2, GameModel.GAME_HEIGHT / 2 + 50, {
-      image: "hearthIcon",
-    });
+
     this.closeButton = new Button(this, 70, -60, "closeButton");
 
     this.closeButton.onClick(async () => {
@@ -49,10 +46,14 @@ export class Inventory extends Scene {
 
   setSpritesPosition(gameWidth) {}
 
-  addItem(x, y, itemData) {
+  addPlayer(x, y, playerData) {
     const itemContainer = this.add.container(x, y);
-    itemContainer.frame = this.add.image(0, 0, "avatarFrame").setScale(0.5);
-    itemContainer.image = this.add.image(0, 0, itemData.image);
+    itemContainer.rank = this.add
+      .text(-50, 0, playerData.Rank)
+      .setOrigin(0, 0.5);
+    itemContainer.playerName = this.add
+      .text(-30, 0, playerData.UserID)
+      .setOrigin(0, 0.5);
     // itemContainer.title = this.add
     //   .text(-55, 0, itemData.title)
     //   .setOrigin(0, 0.5);
@@ -62,8 +63,9 @@ export class Inventory extends Scene {
     // itemContainer.purchaseButton = this.add.image(90, 0, "storeButton");
 
     itemContainer.add([
-      itemContainer.frame,
-      itemContainer.image,
+      itemContainer.rank,
+      itemContainer.playerName,
+
       //   itemContainer.title,
       //   itemContainer.cost,
       //   itemContainer.coin,

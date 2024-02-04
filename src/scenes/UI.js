@@ -1,5 +1,8 @@
 import { Scene } from "phaser";
 import { fadeOut } from "../helpers/common";
+import { UserModel } from "../models/UserModel";
+import axios from "axios";
+import Button from "../components/Button";
 
 export class UI extends Scene {
   constructor() {
@@ -44,39 +47,115 @@ export class UI extends Scene {
       this.game.config.height - 12,
       "gearButton"
     );
-    this.mainMenuButton = this.add
-      .sprite(0, this.game.config.height - 12, "mainMenuButton")
-      .setInteractive()
-      .on("pointerdown", async () => {
-        await fadeOut(this, 250);
-        this.scene.launch("Inventory", { parentScene: this });
+
+    this.mainMenuButton = new Button(
+      this,
+      0,
+      this.game.config.height - 12,
+      "mainMenuButton"
+    );
+    this.mainMenuButton.onClick(async () => {
+      const inventoryData = await axios({
+        method: "POST",
+        url: `http://localhost:3000/api/user-items/`,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          UserID: UserModel.USER_ID,
+        },
       });
-    this.storeButton = this.add
-      .sprite(0, this.game.config.height - 12, "storeButton")
-      .setInteractive()
-      .on("pointerdown", async () => {
-        await fadeOut(this, 250);
-        this.scene.launch("Shop", { parentScene: this });
+
+      const bgFadeOut = await fadeOut(this, 250);
+      console.log(inventoryData);
+      await Promise.all([inventoryData, bgFadeOut]);
+
+      this.scene.launch("Inventory", {
+        parentScene: this,
+        inventoryData: inventoryData.data,
       });
-    this.statsButton = this.add
-      .sprite(0, this.game.config.height - 12, "statsButton")
-      .setInteractive()
-      .on("pointerdown", async () => {
-        await fadeOut(this, 250);
-        this.scene.launch("Stats", { parentScene: this });
-      });
-    this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
-      this.cameras.resize(gameSize.width, gameSize.height);
-      this.setSpritesPosition(gameSize.width);
     });
 
-    this.leaderboardButton = this.add
-      .sprite(0, this.game.config.height - 12, "leaderboardButton")
-      .setInteractive()
-      .on("pointerdown", async () => {
-        await fadeOut(this, 250);
-        this.scene.launch("Leaderboard", { parentScene: this });
+    this.storeButton = new Button(
+      this,
+      0,
+      this.game.config.height - 12,
+      "storeButton"
+    );
+    this.storeButton.onClick(async () => {
+      // TODO : fix request URL to shop
+      const shopData = await axios({
+        method: "POST",
+        url: `http://localhost:3000/api/user-items/`,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          UserID: UserModel.USER_ID,
+        },
       });
+      const bgFadeOut = await fadeOut(this, 250);
+      console.log(shopData.data);
+      await Promise.all(shopData.data, bgFadeOut);
+      this.scene.launch("Shop", { parentScene: this });
+    });
+
+    this.statsButton = new Button(
+      this,
+      0,
+      this.game.config.height - 12,
+      "statsButton"
+    );
+    this.statsButton.onClick(async () => {
+      const petData = await axios({
+        method: "POST",
+        url: "http://localhost:3000/api/my-pet",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          UserID: UserModel.USER_ID,
+          PetID: "6",
+        },
+      });
+
+      const bgFadeOut = await fadeOut(this, 250);
+      await Promise.all([petData, bgFadeOut]);
+      this.scene.launch("Stats", {
+        parentScene: this,
+        petData: petData.data.pet,
+      });
+    });
+
+    this.leaderboardButton = new Button(
+      this,
+      0,
+      this.game.config.height - 12,
+      "leaderboardButton"
+    );
+    this.leaderboardButton.onClick(async () => {
+      const leaderboardData = await axios({
+        method: "POST",
+        url: "http://localhost:3000/api/leadersboard",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          UserID: UserModel.USER_ID,
+          limit: "50",
+        },
+      });
+      const bgFadeOut = fadeOut(this, 250);
+      await Promise.all([leaderboardData, bgFadeOut]);
+      this.scene.launch("Leaderboard", {
+        parentScene: this,
+        leaderboardData: leaderboardData.data.leadersBoard,
+      });
+    });
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);

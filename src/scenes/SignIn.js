@@ -3,41 +3,28 @@ import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
 
-export class Inventory extends Scene {
+export class SignIn extends Scene {
   constructor() {
-    super("Inventory");
+    super("SignIn");
   }
 
   create({ parentScene }) {
     this.parentScene = parentScene;
+    // TODO : create pet linking and pet naming, use API
+    if (window.solana.connect()) {
+      this.scene.start("Preloader");
+      return;
+    }
 
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
       this.game.config.height / 2
     );
-    // TODO : use api, slot indexes, quantity items stacking
-    this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
 
-    this.addItem(GameModel.GAME_WIDTH / 2, GameModel.GAME_HEIGHT / 2, {
-      image: "loafcat",
-    });
-    this.addItem(GameModel.GAME_WIDTH / 2 + 50, GameModel.GAME_HEIGHT / 2, {
-      image: "thunderIcon",
-    });
-    this.addItem(GameModel.GAME_WIDTH / 2 + 100, GameModel.GAME_HEIGHT / 2, {
-      image: "hearthIcon",
-    });
-    this.addItem(GameModel.GAME_WIDTH / 2, GameModel.GAME_HEIGHT / 2 + 50, {
-      image: "hearthIcon",
-    });
-    this.closeButton = new Button(this, 70, -60, "closeButton");
+    this.textContent = this.add.text(0, -50, "Sign In using the wallet");
+    this.walletStage();
 
-    this.closeButton.onClick(async () => {
-      this.parentScene.scene.stop(this.scene.key);
-      fadeIn(this.parentScene, 250);
-    });
-
-    this.elementsContainer.add([this.board, this.closeButton]);
+    this.elementsContainer.add([this.textContent, this.walletButton]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
@@ -45,6 +32,44 @@ export class Inventory extends Scene {
     });
 
     //  this.setSpritesPosition(this.game.config.width);
+  }
+
+  walletStage() {
+    this.walletButton = new Button(this, 0, 0, "loafcat");
+
+    this.walletButton.onClick(async () => {
+      await this.connectToWallet();
+      this.textContent.text = "Submit your name";
+      this.walletButton.destroy();
+      this.nameStage();
+    });
+  }
+
+  nameStage() {
+    this.nameButton = new Button(this, 0, 0, "coin");
+
+    this.nameButton.onClick(() => {
+      this.scene.start("Preloader");
+    });
+
+    this.elementsContainer.add(this.nameButton);
+  }
+
+  async connectToWallet() {
+    let wallet;
+    try {
+      if (window.solana) {
+        // window.solana.on("connect", () => {
+
+        // });
+        const resp = await window.solana.connect();
+        wallet = resp;
+      }
+
+      // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo
+    } catch (err) {
+      // { code: 4001, message: 'User rejected the request.' }
+    }
   }
 
   setSpritesPosition(gameWidth) {}

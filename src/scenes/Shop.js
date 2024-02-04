@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
+import Button from "../components/Button";
 
 export class Shop extends Scene {
   constructor() {
@@ -16,7 +17,7 @@ export class Shop extends Scene {
     );
 
     this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
-
+    // TODO : use shop API
     this.addItem(GameModel.GAME_HEIGHT / 2, {
       image: "loafcat",
       title: "kitty",
@@ -28,13 +29,12 @@ export class Shop extends Scene {
       cost: 999,
     });
 
-    this.closeButton = this.add
-      .sprite(70, -60, "closeButton")
-      .setInteractive()
-      .on("pointerdown", async () => {
-        this.parentScene.scene.stop(this.scene.key);
-        fadeIn(this.parentScene, 250);
-      });
+    this.closeButton = new Button(this, 70, -60, "closeButton");
+
+    this.closeButton.onClick(async () => {
+      this.parentScene.scene.stop(this.scene.key);
+      fadeIn(this.parentScene, 250);
+    });
 
     this.elementsContainer.add([this.board, this.closeButton]);
 
