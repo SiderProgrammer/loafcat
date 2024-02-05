@@ -17,7 +17,7 @@ app.use(express.json()); // For parsing application/json
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:8080",
+  "http://localhost:8081",
   "http://localhost:3001",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
@@ -689,10 +689,11 @@ app.post("/api/user-items/", async (req, res) => {
       // Ensure related item data exists
       const relatedItem = item.ItemID || {};
       return {
-        itemId: item.id,
+        id: item.id,
         index: item.Index,
         quantity: item.Quantity,
-        details: {
+        itemDetails: {
+          ItemID: relatedItem.id || "N/A", // Use fallback if undefined
           name: relatedItem.item_name || "N/A", // Use fallback if undefined
           description: relatedItem.Description || "N/A",
           pointValue: relatedItem.PointValue || "N/A",
@@ -2419,6 +2420,9 @@ function calculateNextEventTime(eventType) {
  *               PetID:
  *                 type: string
  *                 description: The ID of the pet (NFT ID).
+ *               PetName:
+ *                 type: string
+ *                 description: Any Name String.
  *     responses:
  *       201:
  *         description: Pet linked and default events created successfully.
@@ -2451,7 +2455,7 @@ function calculateNextEventTime(eventType) {
 // Express route handler to link a pet to a user and create default events
 app.post("/api/link-pet", async (req, res) => {
   try {
-    const { UserID, petType, PetID } = req.body;
+    const { UserID, petType, PetID, PetName } = req.body;
     const petIDString = String(PetID); // Convert PetID to string
 
     // Step 0: Check if the pet is already linked and is alive
@@ -2477,7 +2481,7 @@ app.post("/api/link-pet", async (req, res) => {
           .json({ message: "Pet exists but is not alive." });
       }
     }
-    const petName = await generateCatName();
+    const petName = PetName || (await generateCatName());
     // Step 1: Create a new pet in the 'pet' collection with default values
     const newPetData = {
       PetID: PetID, //PetID is the NFT ID that we will fetch from phantom wallet

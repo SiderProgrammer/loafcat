@@ -86,8 +86,8 @@ export class UI extends Scene {
     this.storeButton.onClick(async () => {
       // TODO : fix request URL to shop
       const shopData = await axios({
-        method: "POST",
-        url: `http://localhost:3000/api/user-items/`,
+        method: "GET",
+        url: `http://localhost:3000/api/daily-items`,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -99,7 +99,10 @@ export class UI extends Scene {
       const bgFadeOut = await fadeOut(this, 250);
       console.log(shopData.data);
       await Promise.all(shopData.data, bgFadeOut);
-      this.scene.launch("Shop", { parentScene: this });
+      this.scene.launch("Shop", {
+        parentScene: this,
+        itemsData: shopData.data,
+      });
     });
 
     this.statsButton = new Button(

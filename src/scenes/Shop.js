@@ -8,26 +8,25 @@ export class Shop extends Scene {
     super("Shop");
   }
 
-  create({ parentScene }) {
+  create({ parentScene, itemsData }) {
     this.parentScene = parentScene;
-
+    this.itemsData = itemsData;
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
       this.game.config.height / 2
     );
+    // TODO : add refresh button
+    // TODO : refresh every 24 hours
+
+    itemsData.forEach((itemData, i) => {
+      this.addItem(100 + i * 30, {
+        image: "loafcat", //itemData.item_name,
+        title: itemData.ItemID.item_name,
+        cost: itemData.ItemID.Price,
+      });
+    });
 
     this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
-    // TODO : use shop API
-    this.addItem(GameModel.GAME_HEIGHT / 2, {
-      image: "loafcat",
-      title: "kitty",
-      cost: 40,
-    });
-    this.addItem(GameModel.GAME_HEIGHT / 2 + 30, {
-      image: "thunderIcon",
-      title: "thunder",
-      cost: 999,
-    });
 
     this.closeButton = new Button(this, 70, -60, "closeButton");
 
