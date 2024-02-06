@@ -375,12 +375,10 @@ app.post("/api/users", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res
-        .status(500)
-        .json({
-          message:
-            "An error occurred while creating the user. Please try again later.",
-        });
+      res.status(500).json({
+        message:
+          "An error occurred while creating the user. Please try again later.",
+      });
     }
   }
 });
@@ -419,12 +417,10 @@ app.post("/api/process-deposits", async (req, res) => {
 
     // Check if there are deposits to process
     if (deposits.length === 0) {
-      return res
-        .status(200)
-        .json({
-          message:
-            "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
-        });
+      return res.status(200).json({
+        message:
+          "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
+      });
     }
     const logPromises = []; // Prepare an array to hold all log promises
 
@@ -461,11 +457,9 @@ app.post("/api/process-deposits", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res
-        .status(500)
-        .json({
-          message: "Failed to process deposits. Please try again later.",
-        });
+      res.status(500).json({
+        message: "Failed to process deposits. Please try again later.",
+      });
     }
   }
 });
@@ -2652,21 +2646,17 @@ app.post("/api/clean-wc", async (req, res) => {
       additionalDetails: `Cleaned WC for pet ${PetID}. ${actionType} level decreased.`,
     });
 
-    res
-      .status(200)
-      .json({
-        message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
-      });
+    res.status(200).json({
+      message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
+    });
   } catch (error) {
     console.error(
       `Error cleaning pets WC levels for ${actionType} for PetID: ${PetID}:`,
       error.response?.data || error
     );
-    res
-      .status(500)
-      .json({
-        message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
-      });
+    res.status(500).json({
+      message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
+    });
   }
 });
 
@@ -3056,12 +3046,10 @@ app.post("/api/my-pet", async (req, res) => {
     const pet = petData[0]; // Access the first item in the array
 
     if (!pet.is_a_live) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
-        });
+      return res.status(404).json({
+        message:
+          "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
+      });
     }
 
     res.status(200).json({ pet });

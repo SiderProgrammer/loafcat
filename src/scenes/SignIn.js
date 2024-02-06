@@ -35,7 +35,7 @@ export class SignIn extends Scene {
   }
 
   walletStage() {
-    this.walletButton = new Button(this, 0, 0, "loafcat");
+    this.walletButton = new Button(this, 0, 0, "loafcat2");
 
     this.walletButton.onClick(async () => {
       await this.connectToWallet();
@@ -49,7 +49,8 @@ export class SignIn extends Scene {
     this.nameButton = new Button(this, 0, 0, "coin");
 
     this.nameButton.onClick(() => {
-      this.scene.start("Preloader");
+      this.scene.start("YourPets")
+     // this.scene.start("Preloader");
     });
 
     this.elementsContainer.add(this.nameButton);

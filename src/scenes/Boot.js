@@ -8,7 +8,8 @@ export class Boot extends Scene {
   preload() {
     this.load.image("coin", "assets/coin.png");
     this.load.image("background", "assets/bg.png");
-    this.load.spritesheet(`loafcat`, `assets/loafcat.png`, {
+    this.load.image("inputBox", "assets/inputBox.png");
+    this.load.spritesheet(`loafcat2`, `assets/loafcat.png`, {
       frameWidth: 32,
       frameHeight: 32,
     });

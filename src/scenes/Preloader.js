@@ -31,8 +31,13 @@ export class Preloader extends Scene {
     this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
 
     this.load.spritesheet(`loafcat`, `loafcat.png`, {
+      frameWidth: 42,
+      frameHeight: 42,
+    });
+
+    this.load.spritesheet(`musical-nutes`, `effects/musical-nutes.png`, {
       frameWidth: 32,
-      frameHeight: 32,
+      frameHeight: 36,
     });
 
     this.load.image("logo", "logo.png");
@@ -57,23 +62,33 @@ export class Preloader extends Scene {
     this.load.image("blackBackground", "blackBackground.png");
   }
 
+  addLoafcatAnim(name, frames, row) {
+    const realFrames = frames.map((frame) => frame + 13 * row);
+
+    this.anims.create({
+      key: name,
+      frames: this.anims.generateFrameNumbers("loafcat", {
+        frames: realFrames,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+  }
+
   create() {
+    this.addLoafcatAnim("idle", [0, 1, 2], 0);
+    this.addLoafcatAnim("walk", [0, 1, 2, 3], 1);
+    this.addLoafcatAnim("dance", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 7);
+
     this.anims.create({
-      key: "idle",
-      frames: this.anims.generateFrameNumbers("loafcat", {
-        frames: [0, 1, 2],
+      key: "nutes-idle",
+      frames: this.anims.generateFrameNumbers("musical-nutes", {
+        frames: [0, 1, 2, 3, 4, 5, 6],
       }),
       frameRate: 8,
       repeat: -1,
     });
-    this.anims.create({
-      key: "walk",
-      frames: this.anims.generateFrameNumbers("loafcat", {
-        frames: [4, 5, 6, 7],
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
+
     //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
     //  For example, you can define global animations here, so we can use them in other scenes.
 

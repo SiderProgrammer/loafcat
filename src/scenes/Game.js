@@ -16,11 +16,13 @@ export class Game extends Scene {
     this.map = this.make.tilemap({ key: "streetMap" });
     const streetTileset = this.map.addTilesetImage("mp_cs_tilemap_all");
     this.map.createLayer("ground", streetTileset);
-
+    this.add
+      .sprite(this.game.config.width - 400, 180, "musical-nutes")
+      .play("nutes-idle");
     this.add
       .sprite(this.game.config.width - 400, 180, "loafcat")
 
-      .play("walk");
+      .play("dance");
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
