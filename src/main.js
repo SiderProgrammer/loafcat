@@ -15,6 +15,7 @@ import {
 import { Leaderboard } from "./scenes/Leaderboard";
 import { SignIn } from "./scenes/SignIn";
 import { YourPets } from "./scenes/YourPets";
+import { LinkedPets } from "./scenes/LinkedPets";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -42,6 +43,7 @@ const config = {
     Inventory,
     Leaderboard,
     YourPets,
+    LinkedPets,
   ],
   pixelArt: true,
   roundPixels: true,

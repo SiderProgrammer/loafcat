@@ -15,7 +15,12 @@ export class Game extends Scene {
 
     this.map = this.make.tilemap({ key: "streetMap" });
     const streetTileset = this.map.addTilesetImage("mp_cs_tilemap_all");
-    this.map.createLayer("ground", streetTileset);
+    this.map.createLayer("Background", streetTileset);
+    this.map.createLayer("Tile Layer 5", streetTileset);
+    this.map.createLayer("Tile Layer 2", streetTileset);
+    this.map.createLayer("Tile Layer 3", streetTileset);
+    this.map.createLayer("Tile Layer 4", streetTileset);
+
     this.add
       .sprite(this.game.config.width - 400, 180, "musical-nutes")
       .play("nutes-idle");

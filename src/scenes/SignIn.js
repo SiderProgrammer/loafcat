@@ -49,11 +49,29 @@ export class SignIn extends Scene {
     this.nameButton = new Button(this, 0, 0, "coin");
 
     this.nameButton.onClick(() => {
-      this.scene.start("YourPets")
-     // this.scene.start("Preloader");
+      this.cleanScreen();
+      this.linkedPetsButton = new Button(this, 0, -50, "coin");
+
+      this.linkedPetsButton.onClick(() => {
+        this.elementsContainer.add(this.linkedPetsButton);
+        this.scene.start("LinkedPets");
+      });
+
+      this.yourPetsButton = new Button(this, 0, 50, "coin");
+
+      this.yourPetsButton.onClick(() => {
+        this.elementsContainer.add(this.yourPetsButton);
+        this.scene.start("YourPets");
+      });
+
+      this.elementsContainer.add([this.linkedPetsButton, this.yourPetsButton]);
     });
 
     this.elementsContainer.add(this.nameButton);
+  }
+
+  cleanScreen() {
+    this.elementsContainer.removeAll(true);
   }
 
   async connectToWallet() {

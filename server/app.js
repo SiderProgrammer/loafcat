@@ -17,7 +17,7 @@ app.use(express.json()); // For parsing application/json
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:8081",
+  "http://localhost:8080",
   "http://localhost:3001",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
@@ -375,10 +375,12 @@ app.post("/api/users", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res.status(500).json({
-        message:
-          "An error occurred while creating the user. Please try again later.",
-      });
+      res
+        .status(500)
+        .json({
+          message:
+            "An error occurred while creating the user. Please try again later.",
+        });
     }
   }
 });
@@ -410,6 +412,7 @@ app.post("/api/users", async (req, res) => {
 app.post("/api/process-deposits", async (req, res) => {
   try {
     const userWallet = req.body.UserID;
+    const depositType = req.body.Type; // 'refresh-items' or other types of deposits
 
     // Retrieve all deposit records for the user with PointsFilled == false
     const deposits = await getDeposits(userWallet);
@@ -417,10 +420,12 @@ app.post("/api/process-deposits", async (req, res) => {
 
     // Check if there are deposits to process
     if (deposits.length === 0) {
-      return res.status(200).json({
-        message:
-          "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
-      });
+      return res
+        .status(200)
+        .json({
+          message:
+            "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
+        });
     }
     const logPromises = []; // Prepare an array to hold all log promises
 
@@ -431,7 +436,7 @@ app.post("/api/process-deposits", async (req, res) => {
       await markDepositAsFilled(deposit.id);
       // Log the deposit processing activity
       const logPromise = logActivity(userWallet, {
-        type: "deposit",
+        type: depositType,
         itemId: null,
         amountSpent: null,
         previousCredits: null,
@@ -457,9 +462,11 @@ app.post("/api/process-deposits", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res.status(500).json({
-        message: "Failed to process deposits. Please try again later.",
-      });
+      res
+        .status(500)
+        .json({
+          message: "Failed to process deposits. Please try again later.",
+        });
     }
   }
 });
@@ -910,7 +917,7 @@ app.post("/api/buy-item", async (req, res) => {
     res.status(200).json({ message: "Item purchased successfully" });
   } catch (error) {
     console.error("Error purchasing item:", error);
-    res.status(500).json({ message: "Failed to purchase item" });
+    res.status(500).json({ message: "Failed to purchase item." });
   }
 });
 
@@ -2646,17 +2653,21 @@ app.post("/api/clean-wc", async (req, res) => {
       additionalDetails: `Cleaned WC for pet ${PetID}. ${actionType} level decreased.`,
     });
 
-    res.status(200).json({
-      message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
-    });
+    res
+      .status(200)
+      .json({
+        message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
+      });
   } catch (error) {
     console.error(
       `Error cleaning pets WC levels for ${actionType} for PetID: ${PetID}:`,
       error.response?.data || error
     );
-    res.status(500).json({
-      message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
-    });
+    res
+      .status(500)
+      .json({
+        message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
+      });
   }
 });
 
@@ -3046,10 +3057,12 @@ app.post("/api/my-pet", async (req, res) => {
     const pet = petData[0]; // Access the first item in the array
 
     if (!pet.is_a_live) {
-      return res.status(404).json({
-        message:
-          "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
-      });
+      return res
+        .status(404)
+        .json({
+          message:
+            "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
+        });
     }
 
     res.status(200).json({ pet });
@@ -3550,6 +3563,199 @@ app.get("/api/daily-items", async (req, res) => {
   } catch (error) {
     console.error("Error fetching daily items:", error);
     res.status(500).json({ message: "Failed to fetch daily items." });
+  }
+});
+
+// Define the shuffle function Fisher-Yates (also known as Knuth) shuffle.perfectly random shuffle of an array.
+function shuffleArray(array) {
+  let shuffled = array.slice(); // Create a copy of the array
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+async function deductUserPoints(userId, amountToDeduct) {
+  try {
+    // Fetch user data
+    const playerResponse = await axios.get(
+      `${baseApiDomain}items/players_table`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { filter: { UserID: { _eq: userId } } },
+      }
+    );
+
+    const playerData = playerResponse.data.data[0];
+
+    if (!playerData) {
+      return false; // User not found
+    }
+
+    if (playerData.UserCredits < amountToDeduct) {
+      return false; // Not enough credits
+    }
+
+    // Deduct credits and update total spent
+    const newCredits = playerData.UserCredits - amountToDeduct;
+    const newTotalSpent = playerData.TotalSpent + amountToDeduct;
+
+    await axios.patch(
+      `${baseApiDomain}items/players_table/${playerData.id}`,
+      {
+        UserCredits: newCredits,
+        TotalSpent: newTotalSpent,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
+
+    return true; // Credits deducted successfully
+  } catch (error) {
+    console.error("Error deducting user points:", error);
+    return false; // Failed to deduct credits
+  }
+}
+
+/**
+ * @swagger
+ * /api/refresh-items:
+ *   post:
+ *     summary: Refresh daily items for a user
+ *     description: Refresh the daily items for a specific user by deducting 20 credits and replacing their current items with 10 new random items from the game items.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserID:
+ *                 type: string
+ *                 description: The unique identifier of the user.
+ *             example:
+ *               UserID: "user123"
+ *     responses:
+ *       200:
+ *         description: Items refreshed successfully.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Items refreshed successfully for user user123
+ *       400:
+ *         description: Not enough credits to refresh items.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: Not enough credits to refresh items. You need to deposit.
+ *       404:
+ *         description: No daily items found for the provided UserID.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: No daily items found for the provided UserID.
+ *       500:
+ *         description: Failed to refresh items for user due to an error.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: Failed to refresh items for user.
+ */
+
+// FOr single user if pay for refresh
+app.post("/api/refresh-items", async (req, res) => {
+  try {
+    const userWallet = req.body.UserID; // Get the user identifier from the request
+
+    // Fetch user's daily items
+    const userItemsResponse = await axios.get(
+      `${baseApiDomain}items/user_items_daily`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { filter: { UserID: { _eq: userWallet } } },
+      }
+    );
+    const currentUserDailyItems = userItemsResponse.data.data;
+    console.log("currentUserDailyItems", currentUserDailyItems);
+    console.log("body", userWallet);
+
+    // Deduct 20 credits for refresh-items
+    const creditsDeducted = await deductUserPoints(userWallet, 20);
+
+    if (!creditsDeducted) {
+      return res
+        .status(400)
+        .json({
+          message: "Not enough credits to refresh items. You need to deposit.",
+        });
+    }
+
+    if (currentUserDailyItems.length > 0) {
+      // Create a set of IDs for items already purchased by the user
+      const purchasedItemIds = new Set(
+        currentUserDailyItems
+          .filter((item) => item.IsPurchased)
+          .map((item) => item.ItemID)
+      );
+      // Fetch all game items
+      const allItemsResponse = await axios.get(
+        `${baseApiDomain}items/game_items`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          params: { limit: 4000 },
+        }
+      );
+      let availableItems = allItemsResponse.data.data;
+
+      // Exclude already purchased items from the available items
+      availableItems = availableItems.filter(
+        (item) => !purchasedItemIds.has(item.id)
+      );
+
+      // Shuffle and pick new items for the user
+      const randomItems = shuffleArray(availableItems).slice(0, 10);
+
+      // Delete all current items for the user using Promise.all
+      const deletePromises = currentUserDailyItems.map((item) => {
+        return axios.delete(
+          `${baseApiDomain}items/user_items_daily/${item.id}`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+      });
+      await Promise.all(deletePromises);
+
+      // Add new items for the user using Promise.all
+      const addPromises = randomItems.map((item) => {
+        return axios.post(
+          `${baseApiDomain}items/user_items_daily`,
+          {
+            UserID: userWallet,
+            ItemID: item.id,
+            Date: Date.now(),
+            IsPurchased: false,
+          },
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+      });
+      await Promise.all(addPromises);
+
+      res
+        .status(200)
+        .json({
+          message: "Items refreshed successfully for user " + userWallet,
+        });
+    } else {
+      return res
+        .status(404)
+        .json({ message: "No daily items found for the provided UserID." });
+    }
+  } catch (error) {
+    console.error("Error refreshing items for user :", error);
+    res.status(500).json({ error: "Failed to refresh items for user " });
   }
 });
 
