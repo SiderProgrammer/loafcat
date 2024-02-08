@@ -9,77 +9,63 @@ export class YourPets extends Scene {
   constructor() {
     super("YourPets");
   }
-  preload() {
-    this.load.plugin(
-      "rexinputtextplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js",
-      true
-    );
-  }
 
-  create() {
+  async create() {
+    const petsData = await axios({
+      method: "POST",
+      url: `http://localhost:3000/api/my-pets`,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      data: {
+        UserID: UserModel.USER_ID,
+      },
+    });
+
+    const nftsData = await axios({
+      method: "GET",
+      url: `http://localhost:3001/wallet-nfts/` + UserModel.USER_ID,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(petsData);
+    console.log(nftsData);
+
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
       this.game.config.height / 2
     );
 
-    this.name = "";
-    this.textContent = this.add.text(0, -50, "Your Pets");
-    this.nft = new Button(this, 0, 0, "loafcat2");
+    const petData = nftsData.data;
+    const petName = this.add.text(-150, -50, petData.name);
 
-    this.nft.onClick(async () => {
-      this.inputText = this.add
-        .rexInputText({
-          id: "nicknameInput",
-          x: this.game.config.width / 2,
-          y: 100,
-          width: 100,
-          height: 100,
-          type: "input",
-          placeholder: "Name",
-          fontSize: "30px",
-          fontFamily: "slkscr",
-          color: "#000000",
+    const petButton = new Button(this, 0, -50, "loafcat2");
 
-          align: "center",
-
-          maxLength: 10,
-        })
-        .resize(100, 100)
-        .on("textchange", ({ text }) => {
-          this.name = text;
-          //   const isNameValid = this.validateName(this.name);
-          //   isNameValid ? this.showNextButton() : this.hideNextButton();
-          //   gameData.nickname = this.name;
-        });
-
-      this.inputBox = this.add.image(0, 60, "inputBox");
-      this.inputBox.setDisplaySize(100, 50);
-
-      this.submit = new Button(this, 0, 0, "coin");
-      this.submit.onClick(async () => {
-        const linkPet = await axios({
-          method: "POST",
-          url: `http://localhost:3000/api/link-pet/`,
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          data: {
-            UserID: UserModel.USER_ID,
-            PetID: "samplePetID" + this.name,
-            PetName: this.name,
-            petType: "Nft",
-          },
-        });
-
-        this.scene.start("Preloader");
-      });
-
-      this.elementsContainer.add([this.inputText, this.inputBox, this.submit]);
+    petButton.onClick(async () => {
+      this.scene.start("Preloader");
     });
 
-    this.elementsContainer.add([this.textContent, this.nft]);
+    this.elementsContainer.add([petButton, petName]);
+
+    // nftsData.data.forEach((petData, i) => {
+    //   const petName = this.add.text(-150, -50 + i * 40, petData.name);
+    //   //const level = petData.Level ? petData.Level.LevelNumber : 1;
+    //   //const petLevel = this.add.text(50, -50 + i * 40, "Level " + level);
+    //   const petButton = new Button(this, 0, -50 + i * 40, "loafcat2");
+
+    //   petButton.onClick(async () => {
+    //     this.scene.start("Preloader");
+    //   });
+
+    //   this.elementsContainer.add([petButton, petName]);
+    // });
+
+    this.textContent = this.add.text(-50, -100, "Your NFTs");
+
+    this.elementsContainer.add([this.textContent]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);

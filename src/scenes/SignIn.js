@@ -83,6 +83,7 @@ export class SignIn extends Scene {
         // });
         const resp = await window.solana.connect();
         wallet = resp;
+        window.wallet = wallet;
       }
 
       // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo

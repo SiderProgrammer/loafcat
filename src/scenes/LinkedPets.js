@@ -9,13 +9,6 @@ export class LinkedPets extends Scene {
   constructor() {
     super("LinkedPets");
   }
-  preload() {
-    this.load.plugin(
-      "rexinputtextplugin",
-      "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js",
-      true
-    );
-  }
 
   async create() {
     const petsData = await axios({
@@ -47,10 +40,10 @@ export class LinkedPets extends Scene {
       this.elementsContainer.add([petButton, petName, petLevel]);
     });
 
-    this.elementsContainer = this.add.container(
-      this.game.config.width / 2,
-      this.game.config.height / 2
-    );
+    // this.elementsContainer = this.add.container(
+    //   this.game.config.width / 2,
+    //   this.game.config.height / 2
+    // );
 
     this.textContent = this.add.text(-50, -100, "Your Linked Pets");
 
