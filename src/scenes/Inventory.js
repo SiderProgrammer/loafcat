@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
+import { SAFE_GAME_HEIGHT, SAFE_GAME_WIDTH } from "../constants/viewport";
 
 export class Inventory extends Scene {
   constructor() {
@@ -35,18 +36,6 @@ export class Inventory extends Scene {
       this.slots[item.index].item = invItem;
     });
 
-    // this.addItem(GameModel.GAME_WIDTH / 2, GameModel.GAME_HEIGHT / 2, {
-    //   image: "loafcat",
-    // });
-    // this.addItem(GameModel.GAME_WIDTH / 2 + 50, GameModel.GAME_HEIGHT / 2, {
-    //   image: "thunderIcon",
-    // });
-    // this.addItem(GameModel.GAME_WIDTH / 2 + 100, GameModel.GAME_HEIGHT / 2, {
-    //   image: "hearthIcon",
-    // });
-    // this.addItem(GameModel.GAME_WIDTH / 2, GameModel.GAME_HEIGHT / 2 + 50, {
-    //   image: "hearthIcon",
-    // });
     this.closeButton = new Button(this, 70, -60, "closeButton");
 
     this.closeButton.onClick(async () => {
@@ -68,10 +57,41 @@ export class Inventory extends Scene {
 
   addItem(itemData, slot) {
     const { x, y } = this.slots[slot];
-    itemData.itemDetails.name = "loafcat";
+    itemData.itemDetails.name = "apple";
     const itemContainer = this.add.container(x, y);
-    itemContainer.frame = this.add.image(0, 0, "avatarFrame").setScale(0.5);
-    itemContainer.image = this.add.image(0, 0, itemData.itemDetails.name);
+    // itemContainer.frame = this.add.image(0, 0, "avatarFrame").setScale(0.5);
+    itemContainer.item = this.add.image(0, 0, itemData.itemDetails.name);
+    itemContainer.item.setInteractive();
+    // TODO : change main scene input to work with inventory instead add only call 1 method from main scene on pointerup
+    itemContainer.item.on("pointerdown", () => {
+      this.scene.sleep();
+      const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
+      const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
+      const app = GameModel.MAIN_SCENE.add
+        .image(
+          GameModel.MAIN_SCENE.input.activePointer.worldX + diffX,
+          GameModel.MAIN_SCENE.input.activePointer.worldY + diffY,
+          itemData.itemDetails.name
+        )
+        .setInteractive();
+
+      this.parentScene.blackOverlay.setVisible(false);
+      GameModel.MAIN_SCENE.setStateCatFeed();
+      GameModel.MAIN_SCENE.input.on("pointermove", () => {
+        app.setPosition(
+          GameModel.MAIN_SCENE.input.activePointer.worldX,
+          GameModel.MAIN_SCENE.input.activePointer.worldY
+        );
+      });
+
+      GameModel.MAIN_SCENE.input.on("pointerup", () => {
+        GameModel.MAIN_SCENE.setStateCatIdle();
+        app.destroy();
+        this.scene.wake();
+        this.parentScene.blackOverlay.setVisible(true);
+        this.slots[1].item.removeAll(true);
+      });
+    });
 
     // itemContainer.title = this.add
     //   .text(-55, 0, itemData.title)
@@ -82,8 +102,8 @@ export class Inventory extends Scene {
     // itemContainer.purchaseButton = this.add.image(90, 0, "storeButton");
 
     return itemContainer.add([
-      itemContainer.frame,
-      itemContainer.image,
+      //itemContainer.frame,
+      itemContainer.item,
       //   itemContainer.title,
       //   itemContainer.cost,
       //   itemContainer.coin,

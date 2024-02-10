@@ -5,13 +5,13 @@ export default class Button extends Phaser.GameObjects.Image {
     this.scene = scene;
 
     this.setInteractive();
-    this.on("pointerdown", () => {
-      this.setScale(0.95);
-    });
+    // this.on("pointerdown", () => {
+    //   this.setScale(0.95);
+    // });
 
-    this.on("pointerup", () => {
-      this.setScale(1);
-    });
+    // this.on("pointerup", () => {
+    //   this.setScale(1);
+    // });
   }
 
   onClick(callback) {

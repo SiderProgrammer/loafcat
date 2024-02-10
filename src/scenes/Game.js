@@ -1,6 +1,11 @@
 import { Scene } from "phaser";
 import { GameModel } from "../models/GameModel";
-import { MAX_WIDTH, SAFE_GAME_WIDTH } from "../constants/viewport";
+import {
+  MAX_HEIGHT,
+  MAX_WIDTH,
+  SAFE_GAME_HEIGHT,
+  SAFE_GAME_WIDTH,
+} from "../constants/viewport";
 
 export class Game extends Scene {
   constructor() {
@@ -8,6 +13,7 @@ export class Game extends Scene {
   }
 
   create() {
+    GameModel.MAIN_SCENE = this;
     this.scene.launch("UI");
     this.cameras.main.setBackgroundColor(0x00ff00);
 
@@ -21,14 +27,18 @@ export class Game extends Scene {
     this.map.createLayer("Tile Layer 3", streetTileset);
     this.map.createLayer("Tile Layer 4", streetTileset);
 
-    this.add
-      .sprite(this.game.config.width - 400, 180, "musical-nutes")
-      .play("nutes-idle");
-    this.add
-      .sprite(this.game.config.width - 400, 180, "loafcat")
+    // this.add
+    //   .sprite(this.game.config.width - 400, 180, "musical-nutes")
+    //   .play("nutes-idle");
 
-      .play("dance");
+    this.loafcat = this.add
+      .sprite(80, 275, "loafcat")
 
+      .play("walk");
+
+    this.moveLoafcatRandomly();
+
+    // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
       GameModel.GAME_WIDTH = gameSize.width;
@@ -38,8 +48,38 @@ export class Game extends Scene {
 
       this.cameras.main.centerOn(
         SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2,
-        gameSize.height / 2
+        //gameSize.height / 2
+        SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2
       );
     });
+  }
+
+  moveLoafcatRandomly() {
+    const newX = Phaser.Math.Between(
+      (MAX_WIDTH - SAFE_GAME_WIDTH) / 2,
+      SAFE_GAME_WIDTH
+    );
+    const pixelTravelTime = 50;
+
+    const duration = Math.abs(this.loafcat.x - newX) * pixelTravelTime;
+    const flipCat = this.loafcat.x - newX < 0 ? false : true;
+    this.loafcat.setFlipX(flipCat);
+    this.moveTween = this.tweens.add({
+      targets: this.loafcat,
+      x: newX,
+      duration,
+      onComplete: () => {
+        this.moveLoafcatRandomly();
+      },
+    });
+  }
+
+  setStateCatFeed() {
+    this.loafcat.play("feed-me");
+    this.moveTween.pause();
+  }
+  setStateCatIdle() {
+    this.moveTween.resume();
+    this.loafcat.play("walk");
   }
 }

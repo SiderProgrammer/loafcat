@@ -3,6 +3,7 @@ import { fadeOut } from "../helpers/common";
 import { UserModel } from "../models/UserModel";
 import axios from "axios";
 import Button from "../components/Button";
+import { GameModel } from "../models/GameModel";
 
 export class UI extends Scene {
   constructor() {
@@ -10,20 +11,18 @@ export class UI extends Scene {
   }
 
   create() {
-    this.loafcat = this.add.sprite(0, 0, "loafcat");
-
     this.avatarSection = this.add.container(20, 20);
     this.avatarFrame = this.add.sprite(0, 0, "avatarFrame");
     this.avatarImage = this.add.sprite(0, 0, "loafcat");
 
     this.coin = this.add.sprite(30, -10, "coin");
     this.coinsValue = this.add
-      .text(40, -10, "200", { fontSize: 10 })
+      .text(40, -10, "200", { fontSize: 10, fontFamily: "slkscr" })
       .setOrigin(0, 0.5);
-
+    //this.coinsValue.setResolution(2);
     this.levelFrame = this.add.sprite(30, 5, "levelFrame").setScale(0.5);
     this.levelValue = this.add
-      .text(23, 5, "13", { fontSize: 10 })
+      .text(23, 5, "13", { fontSize: 10, fontFamily: "slkscr" })
       .setOrigin(0, 0.5);
     this.levelBar = this.add
       .sprite(40, 5, "statsProgressBar")
@@ -42,18 +41,9 @@ export class UI extends Scene {
       this.levelBar,
     ]);
 
-    this.gearButton = this.add.sprite(
-      0,
-      this.game.config.height - 12,
-      "gearButton"
-    );
+    this.gearButton = this.add.sprite(0, 0, "gearButton");
 
-    this.mainMenuButton = new Button(
-      this,
-      0,
-      this.game.config.height - 12,
-      "mainMenuButton"
-    );
+    this.mainMenuButton = new Button(this, 0, 0, "mainMenuButton");
     this.mainMenuButton.onClick(async () => {
       const inventoryData = await axios({
         method: "POST",
@@ -68,6 +58,7 @@ export class UI extends Scene {
       });
 
       const bgFadeOut = await fadeOut(this, 250);
+
       console.log(inventoryData);
       await Promise.all([inventoryData, bgFadeOut]);
 
@@ -77,12 +68,7 @@ export class UI extends Scene {
       });
     });
 
-    this.storeButton = new Button(
-      this,
-      0,
-      this.game.config.height - 12,
-      "storeButton"
-    );
+    this.storeButton = new Button(this, 0, 0, "storeButton");
     this.storeButton.onClick(async () => {
       // TODO : fix request URL to shop
       const shopData = await axios({
@@ -105,12 +91,7 @@ export class UI extends Scene {
       });
     });
 
-    this.statsButton = new Button(
-      this,
-      0,
-      this.game.config.height - 12,
-      "statsButton"
-    );
+    this.statsButton = new Button(this, 0, 0, "statsButton");
     this.statsButton.onClick(async () => {
       const petData = await axios({
         method: "POST",
@@ -133,12 +114,7 @@ export class UI extends Scene {
       });
     });
 
-    this.leaderboardButton = new Button(
-      this,
-      0,
-      this.game.config.height - 12,
-      "leaderboardButton"
-    );
+    this.leaderboardButton = new Button(this, 0, 0, "leaderboardButton");
     this.leaderboardButton.onClick(async () => {
       const leaderboardData = await axios({
         method: "POST",
@@ -160,20 +136,28 @@ export class UI extends Scene {
       });
     });
 
-    this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
-      this.cameras.resize(gameSize.width, gameSize.height);
-      this.setSpritesPosition(gameSize.width);
+    this.scale.on("resize", () => {
+      this.cameras.resize(GameModel.GAME_WIDTH, GameModel.GAME_HEIGHT);
+      this.setSpritesPosition();
     });
 
-    this.setSpritesPosition(this.game.config.width);
+    this.setSpritesPosition();
   }
 
-  setSpritesPosition(gameWidth) {
-    this.loafcat.x = gameWidth - 50;
+  setSpritesPosition() {
+    const gameWidth = GameModel.GAME_WIDTH;
+    const gameHeight = GameModel.GAME_HEIGHT;
+
     this.gearButton.x = gameWidth - 12;
     this.mainMenuButton.x = gameWidth - 32;
     this.storeButton.x = gameWidth - 52;
     this.statsButton.x = gameWidth - 72;
     this.leaderboardButton.x = gameWidth - 92;
+
+    this.gearButton.y = gameHeight - 12;
+    this.mainMenuButton.y = gameHeight - 12;
+    this.storeButton.y = gameHeight - 12;
+    this.statsButton.y = gameHeight - 12;
+    this.leaderboardButton.y = gameHeight - 12;
   }
 }

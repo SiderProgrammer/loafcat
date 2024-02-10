@@ -40,6 +40,11 @@ export class Preloader extends Scene {
       frameHeight: 36,
     });
 
+    this.load.spritesheet(`pee`, `effects/pee.png`, {
+      frameWidth: 32,
+      frameHeight: 36,
+    });
+
     this.load.image("logo", "logo.png");
     this.load.image("gearButton", "gearButton.png");
     this.load.image("coin", "coin.png");
@@ -60,6 +65,7 @@ export class Preloader extends Scene {
     this.load.image("levelFrame", "levelFrame.png");
     this.load.image("statsBoard", "statsBoard.png");
     this.load.image("blackBackground", "blackBackground.png");
+    this.load.image("apple", "apple.png");
   }
 
   addLoafcatAnim(name, frames, row) {
@@ -79,6 +85,8 @@ export class Preloader extends Scene {
     this.addLoafcatAnim("idle", [0, 1, 2], 0);
     this.addLoafcatAnim("walk", [0, 1, 2, 3], 1);
     this.addLoafcatAnim("dance", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 7);
+    this.addLoafcatAnim("pee", [0, 1, 2, 3, 4, 5, 6, 7], 14);
+    this.addLoafcatAnim("feed-me", [0, 1, 2, 3], 11);
 
     this.anims.create({
       key: "nutes-idle",
@@ -88,7 +96,14 @@ export class Preloader extends Scene {
       frameRate: 8,
       repeat: -1,
     });
-
+    this.anims.create({
+      key: "pee-idle",
+      frames: this.anims.generateFrameNumbers("pee", {
+        frames: [0, 1, 2, 3, 4, 5, 6, 7],
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
     //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
     //  For example, you can define global animations here, so we can use them in other scenes.
 
