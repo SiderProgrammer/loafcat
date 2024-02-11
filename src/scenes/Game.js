@@ -6,13 +6,16 @@ import {
   SAFE_GAME_HEIGHT,
   SAFE_GAME_WIDTH,
 } from "../constants/viewport";
+import axios from "axios";
+import { UserModel } from "../models/UserModel";
+import Loafcat from "../components/Loafcat";
 
 export class Game extends Scene {
   constructor() {
     super("Game");
   }
 
-  create() {
+  async create() {
     GameModel.MAIN_SCENE = this;
     this.scene.launch("UI");
     this.cameras.main.setBackgroundColor(0x00ff00);
@@ -30,13 +33,8 @@ export class Game extends Scene {
     // this.add
     //   .sprite(this.game.config.width - 400, 180, "musical-nutes")
     //   .play("nutes-idle");
-
-    this.loafcat = this.add
-      .sprite(80, 275, "loafcat")
-
-      .play("walk");
-
-    this.moveLoafcatRandomly();
+    this.loafcat = new Loafcat(this, 80, 275, "loafcat");
+    this.loafcat.moveRandomly();
 
     // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
@@ -52,34 +50,49 @@ export class Game extends Scene {
         SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2
       );
     });
-  }
 
-  moveLoafcatRandomly() {
-    const newX = Phaser.Math.Between(
-      (MAX_WIDTH - SAFE_GAME_WIDTH) / 2,
-      SAFE_GAME_WIDTH
-    );
-    const pixelTravelTime = 50;
-
-    const duration = Math.abs(this.loafcat.x - newX) * pixelTravelTime;
-    const flipCat = this.loafcat.x - newX < 0 ? false : true;
-    this.loafcat.setFlipX(flipCat);
-    this.moveTween = this.tweens.add({
-      targets: this.loafcat,
-      x: newX,
-      duration,
-      onComplete: () => {
-        this.moveLoafcatRandomly();
+    this.petData = await axios({
+      method: "POST",
+      url: "http://localhost:3000/api/my-pet",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      data: {
+        UserID: UserModel.USER_ID,
+        PetID: "6",
       },
     });
+    console.log(this.petData.data.pet);
+    this.loafcat.checkAddNotification(this.petData.data.pet);
   }
 
   setStateCatFeed() {
-    this.loafcat.play("feed-me");
-    this.moveTween.pause();
+    this.loafcat.setStateCatFeed();
   }
   setStateCatIdle() {
-    this.moveTween.resume();
-    this.loafcat.play("walk");
+    this.loafcat.setStateCatIdle();
+  }
+
+  checkFeedPet(itemData) {
+    this.loafcat.feed(itemData.itemDetails.pointValue);
+
+    axios({
+      method: "POST",
+      url: "http://localhost:3000/api/feed-pet",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      data: {
+        UserID: UserModel.USER_ID,
+        PetID: "6",
+
+        ItemID: itemData.itemDetails.ItemID,
+
+        foodType: itemData.itemDetails.category,
+        quantity: 1,
+      },
+    });
   }
 }

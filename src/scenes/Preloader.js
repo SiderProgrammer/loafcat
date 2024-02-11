@@ -66,6 +66,7 @@ export class Preloader extends Scene {
     this.load.image("statsBoard", "statsBoard.png");
     this.load.image("blackBackground", "blackBackground.png");
     this.load.image("apple", "apple.png");
+    this.load.image("petPopup", "petPopup.png");
   }
 
   addLoafcatAnim(name, frames, row) {

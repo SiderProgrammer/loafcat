@@ -1,0 +1,14 @@
+- cloths on pet
+- pet action communicating
+- teleporting to maps
+- join animations
+- pet dying
+- update street map ground
+- pet pop up animation
+- pet backflip animation
+- script for bodies animation recreation
+
+What is point value in food?
+Upper,lower case in food categories
+How is point value related to calculateFood method in backend ?
+Dont keep item linked when quantity is 0

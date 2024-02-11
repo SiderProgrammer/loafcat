@@ -32,6 +32,7 @@ export class Inventory extends Scene {
     }
 
     inventoryData.forEach((item) => {
+      if (item.quantity === 0) return;
       const invItem = this.addItem(item, item.index);
       this.slots[item.index].item = invItem;
     });
@@ -85,6 +86,7 @@ export class Inventory extends Scene {
       });
 
       GameModel.MAIN_SCENE.input.on("pointerup", () => {
+        GameModel.MAIN_SCENE.checkFeedPet(itemData);
         GameModel.MAIN_SCENE.setStateCatIdle();
         app.destroy();
         this.scene.wake();
