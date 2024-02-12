@@ -70,7 +70,6 @@ export class UI extends Scene {
 
     this.storeButton = new Button(this, 0, 0, "storeButton");
     this.storeButton.onClick(async () => {
-      // TODO : fix request URL to shop
       const shopData = await axios({
         method: "GET",
         url: `http://localhost:3000/api/daily-items`,

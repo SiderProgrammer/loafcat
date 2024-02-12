@@ -27,8 +27,23 @@ export class Preloader extends Scene {
     this.load.setPath("assets");
 
     this.load.image("mp_cs_tilemap_all", "mp_cs_tilemap_all.png");
+    this.load.image(
+      "Kitchen Room",
+      "mp_house_interiors_tileset_pack/kitchen.png"
+    );
 
+    this.load.image("Bathroom", "mp_house_interiors_tileset_pack/bathroom.png");
+
+    this.load.image(
+      "Chill Room",
+      "mp_house_interiors_tileset_pack/living_room.png"
+    );
+    this.load.image(
+      "Background",
+      "mp_house_interiors_tileset_pack/walls_background.png"
+    );
     this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
+    this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
 
     this.load.spritesheet(`loafcat`, `loafcat.png`, {
       frameWidth: 42,
@@ -109,6 +124,6 @@ export class Preloader extends Scene {
     //  For example, you can define global animations here, so we can use them in other scenes.
 
     //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
-    this.scene.start("Game");
+    this.scene.start("Game", { map: "streetMap" });
   }
 }

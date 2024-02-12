@@ -10,7 +10,7 @@ export class SignIn extends Scene {
 
   create({ parentScene }) {
     this.parentScene = parentScene;
-    // TODO : create pet linking and pet naming, use API
+
     if (window.solana.connect()) {
       this.scene.start("Preloader");
       return;

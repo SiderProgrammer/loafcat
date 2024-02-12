@@ -2,6 +2,8 @@ import { Scene } from "phaser";
 import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
+import axios from "axios";
+import { UserModel } from "../models/UserModel";
 
 export class Shop extends Scene {
   constructor() {
@@ -11,22 +13,49 @@ export class Shop extends Scene {
   create({ parentScene, itemsData }) {
     this.parentScene = parentScene;
     this.itemsData = itemsData;
+
+    this.items = [];
+
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
       this.game.config.height / 2
     );
-    // TODO : add refresh button
-    // TODO : refresh every 24 hours
 
-    itemsData.forEach((itemData, i) => {
-      this.addItem(100 + i * 30, {
-        image: "loafcat", //itemData.item_name,
-        title: itemData.ItemID.item_name,
-        cost: itemData.ItemID.Price,
-      });
-    });
+    // TODO : refresh every 24 hours
+    // TODO : make buy button work
+
+    this.updateItems(itemsData);
 
     this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
+
+    this.refreshButton = new Button(this, 0, -70, "statsButton");
+    this.refreshButton.onClick(async () => {
+      await axios({
+        method: "POST",
+        url: "http://localhost:3000/api/refresh-items",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          UserID: UserModel.USER_ID,
+        },
+      });
+
+      const newItems = await axios({
+        method: "GET",
+        url: `http://localhost:3000/api/daily-items`,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        data: {
+          UserID: UserModel.USER_ID,
+        },
+      });
+
+      this.updateItems(newItems.data);
+    });
 
     this.closeButton = new Button(this, 70, -60, "closeButton");
 
@@ -35,7 +64,11 @@ export class Shop extends Scene {
       fadeIn(this.parentScene, 250);
     });
 
-    this.elementsContainer.add([this.board, this.closeButton]);
+    this.elementsContainer.add([
+      this.board,
+      this.closeButton,
+      this.refreshButton,
+    ]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
@@ -65,5 +98,26 @@ export class Shop extends Scene {
       itemContainer.coin,
       itemContainer.purchaseButton,
     ]);
+
+    return itemContainer;
+  }
+
+  updateItems(itemsData) {
+    if (this.items.length > 0) {
+      this.items.forEach((item) => {
+        item.removeAll(true);
+      });
+      this.items = [];
+    }
+
+    itemsData.forEach((itemData, i) => {
+      const item = this.addItem(100 + i * 30, {
+        image: "loafcat", //itemData.item_name,
+        title: itemData.ItemID.item_name,
+        cost: itemData.ItemID.Price,
+      });
+
+      this.items.push(item);
+    });
   }
 }

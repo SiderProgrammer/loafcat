@@ -66,6 +66,12 @@ export class Stats extends Scene {
     this.hungerBar.updateProgress(petData.HungerLevel);
     this.cleanlinessBar.updateProgress(petData.CleanlinessLevel);
 
+    this.hungerButton = new Button(this, 100, 0, "statsButton");
+    this.hungerButton.onClick(() => {
+      this.scene.stop();
+      this.scene.start("Game", { map: "kitchenMap" });
+    });
+
     this.closeButton = new Button(this, 70, -60, "closeButton");
 
     this.closeButton.onClick(async () => {
@@ -87,6 +93,8 @@ export class Stats extends Scene {
       this.happinesBar,
       this.hungerBar,
       this.cleanlinessBar,
+
+      this.hungerButton,
     ]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {

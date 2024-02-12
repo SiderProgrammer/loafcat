@@ -1,14 +1,17 @@
-- cloths on pet
+- cursors/soap/paper
+- import items assets
 - pet action communicating
 - teleporting to maps
-- join animations
-- pet dying
+- join animations with effects
+- pet action pop up animation
 - update street map ground
-- pet pop up animation
+- pet dying
+- fix assets glitching
+- working in office
+- cloths on pet
+- bitmap font
 - pet backflip animation
 - script for bodies animation recreation
+- in game stock market
+- bitcoin price on wall
 
-What is point value in food?
-Upper,lower case in food categories
-How is point value related to calculateFood method in backend ?
-Dont keep item linked when quantity is 0

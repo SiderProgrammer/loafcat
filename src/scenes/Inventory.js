@@ -17,24 +17,25 @@ export class Inventory extends Scene {
       this.game.config.width / 2,
       this.game.config.height / 2
     );
-    // TODO : quantity items stacking
+
     this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
     this.slots = [];
     let slotIndex = 0;
     for (let column = 0; column <= 5; column++) {
       for (let row = 0; row <= 5; row++) {
-        slotIndex++;
-        const x = 150 + column * 30;
-        const y = 100 + row * 30;
+        const x = 150 + row * 30;
+        const y = 100 + column * 30;
         this.slots[slotIndex] = { x, y, item: {} };
         this.add.image(x, y, "levelFrame");
+        slotIndex++;
       }
     }
 
-    inventoryData.forEach((item) => {
+    inventoryData.forEach((item, i) => {
       if (item.quantity === 0) return;
-      const invItem = this.addItem(item, item.index);
-      this.slots[item.index].item = invItem;
+      // TODO : later can use item.index instead
+      const invItem = this.addItem(item, i);
+      this.slots[i].item = invItem;
     });
 
     this.closeButton = new Button(this, 70, -60, "closeButton");
@@ -52,23 +53,34 @@ export class Inventory extends Scene {
     });
 
     //  this.setSpritesPosition(this.game.config.width);
+    this.addInputs();
   }
 
   setSpritesPosition(gameWidth) {}
 
   addItem(itemData, slot) {
     const { x, y } = this.slots[slot];
+
     itemData.itemDetails.name = "apple";
     const itemContainer = this.add.container(x, y);
     // itemContainer.frame = this.add.image(0, 0, "avatarFrame").setScale(0.5);
+    itemContainer.itemData = itemData;
     itemContainer.item = this.add.image(0, 0, itemData.itemDetails.name);
     itemContainer.item.setInteractive();
+    itemContainer.quantityText = this.add.text(5, 5, itemData.quantity, {
+      fontSize: 10,
+    });
+
     // TODO : change main scene input to work with inventory instead add only call 1 method from main scene on pointerup
     itemContainer.item.on("pointerdown", () => {
       this.scene.sleep();
+      this.parentScene.blackOverlay.setVisible(false);
+      GameModel.MAIN_SCENE.setStateCatFeed();
+
       const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
       const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
-      const app = GameModel.MAIN_SCENE.add
+
+      this.itemInUse = GameModel.MAIN_SCENE.add
         .image(
           GameModel.MAIN_SCENE.input.activePointer.worldX + diffX,
           GameModel.MAIN_SCENE.input.activePointer.worldY + diffY,
@@ -76,23 +88,7 @@ export class Inventory extends Scene {
         )
         .setInteractive();
 
-      this.parentScene.blackOverlay.setVisible(false);
-      GameModel.MAIN_SCENE.setStateCatFeed();
-      GameModel.MAIN_SCENE.input.on("pointermove", () => {
-        app.setPosition(
-          GameModel.MAIN_SCENE.input.activePointer.worldX,
-          GameModel.MAIN_SCENE.input.activePointer.worldY
-        );
-      });
-
-      GameModel.MAIN_SCENE.input.on("pointerup", () => {
-        GameModel.MAIN_SCENE.checkFeedPet(itemData);
-        GameModel.MAIN_SCENE.setStateCatIdle();
-        app.destroy();
-        this.scene.wake();
-        this.parentScene.blackOverlay.setVisible(true);
-        this.slots[1].item.removeAll(true);
-      });
+      this.itemInUse.slot = slot;
     });
 
     // itemContainer.title = this.add
@@ -106,10 +102,47 @@ export class Inventory extends Scene {
     return itemContainer.add([
       //itemContainer.frame,
       itemContainer.item,
+      itemContainer.quantityText,
       //   itemContainer.title,
       //   itemContainer.cost,
       //   itemContainer.coin,
       //   itemContainer.purchaseButton,
     ]);
+  }
+  itemUsed(slot) {
+    const item = this.slots[slot].item;
+    const quantity = --item.itemData.quantity;
+
+    if (quantity <= 0) {
+      item.removeAll(true);
+      item.destroy();
+      return;
+    }
+    item.quantityText.setText(quantity);
+  }
+
+  addInputs() {
+    GameModel.MAIN_SCENE.input.on("pointermove", () => {
+      if (!this.itemInUse) return;
+      this.itemInUse.setPosition(
+        GameModel.MAIN_SCENE.input.activePointer.worldX,
+        GameModel.MAIN_SCENE.input.activePointer.worldY
+      );
+    });
+
+    GameModel.MAIN_SCENE.input.on("pointerup", () => {
+      if (!this.itemInUse) return;
+
+      // TODO : check if mouse hovering pet
+      GameModel.MAIN_SCENE.checkFeedPet(
+        this.slots[this.itemInUse.slot].item.itemData
+      );
+      GameModel.MAIN_SCENE.setStateCatIdle();
+
+      this.itemInUse.destroy();
+      this.scene.wake();
+      this.parentScene.blackOverlay.setVisible(true);
+      this.itemUsed(this.itemInUse.slot);
+    });
   }
 }

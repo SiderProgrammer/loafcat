@@ -9,27 +9,22 @@ import {
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
+import { linkTilemaps } from "../helpers/linkTilemaps";
 
 export class Game extends Scene {
   constructor() {
     super("Game");
   }
 
-  async create() {
+  async create({ map }) {
+    this.mapKey = map;
     GameModel.MAIN_SCENE = this;
     this.scene.launch("UI");
     this.cameras.main.setBackgroundColor(0x00ff00);
 
-    this.add.image(512, 384, "background").setAlpha(0.5);
+    //this.add.image(512, 384, "background").setAlpha(0.5);
 
-    this.map = this.make.tilemap({ key: "streetMap" });
-    const streetTileset = this.map.addTilesetImage("mp_cs_tilemap_all");
-    this.map.createLayer("Background", streetTileset);
-    this.map.createLayer("Tile Layer 5", streetTileset);
-    this.map.createLayer("Tile Layer 2", streetTileset);
-    this.map.createLayer("Tile Layer 3", streetTileset);
-    this.map.createLayer("Tile Layer 4", streetTileset);
-
+    this.createMap();
     // this.add
     //   .sprite(this.game.config.width - 400, 180, "musical-nutes")
     //   .play("nutes-idle");
@@ -65,6 +60,11 @@ export class Game extends Scene {
     });
     console.log(this.petData.data.pet);
     this.loafcat.checkAddNotification(this.petData.data.pet);
+  }
+
+  createMap() {
+    this.map = this.make.tilemap({ key: this.mapKey });
+    linkTilemaps(this, this.mapKey);
   }
 
   setStateCatFeed() {
