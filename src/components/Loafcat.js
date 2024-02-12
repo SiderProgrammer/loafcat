@@ -92,4 +92,14 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     this.petData.HungerLevel += feedValue;
     this.checkRemoveNotification();
   }
+
+  listenMusic() {
+    this.character.play("listen-music");
+
+    this.notes = this.scene.add
+      .sprite(5, 5, "musical-nutes")
+      .play("nutes-idle");
+
+    this.add(this.notes);
+  }
 }

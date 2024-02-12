@@ -42,8 +42,13 @@ export class Preloader extends Scene {
       "Background",
       "mp_house_interiors_tileset_pack/walls_background.png"
     );
+    this.load.image(
+      "Play Room",
+      "mp_house_interiors_tileset_pack/kids_bedroom.png"
+    );
     this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
     this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
+    this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
 
     this.load.spritesheet(`loafcat`, `loafcat.png`, {
       frameWidth: 42,
@@ -92,7 +97,7 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("loafcat", {
         frames: realFrames,
       }),
-      frameRate: 8,
+      frameRate: 7,
       repeat: -1,
     });
   }
@@ -102,6 +107,7 @@ export class Preloader extends Scene {
     this.addLoafcatAnim("walk", [0, 1, 2, 3], 1);
     this.addLoafcatAnim("dance", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 7);
     this.addLoafcatAnim("pee", [0, 1, 2, 3, 4, 5, 6, 7], 14);
+    this.addLoafcatAnim("listen-music", [0, 1, 2, 3, 4, 5, 6, 7], 13);
     this.addLoafcatAnim("feed-me", [0, 1, 2, 3], 11);
 
     this.anims.create({
@@ -109,7 +115,7 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("musical-nutes", {
         frames: [0, 1, 2, 3, 4, 5, 6],
       }),
-      frameRate: 8,
+      frameRate: 7,
       repeat: -1,
     });
     this.anims.create({

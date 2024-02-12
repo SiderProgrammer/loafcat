@@ -1,15 +1,16 @@
 - cursors/soap/paper
+- tutorial pop up on every map start
 - import items assets
 - pet action communicating
 - teleporting to maps
 - join animations with effects
 - pet action pop up animation
-- update street map ground
+- update maps ground
 - pet dying
 - fix assets glitching
 - working in office
-- cloths on pet
 - bitmap font
+- cloths on pet
 - pet backflip animation
 - script for bodies animation recreation
 - in game stock market

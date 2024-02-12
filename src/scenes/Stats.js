@@ -71,6 +71,11 @@ export class Stats extends Scene {
       this.scene.stop();
       this.scene.start("Game", { map: "kitchenMap" });
     });
+    this.happinesButton = new Button(this, 100, -20, "statsButton");
+    this.happinesButton.onClick(() => {
+      this.scene.stop();
+      this.scene.start("Game", { map: "chillRoomMap" });
+    });
 
     this.closeButton = new Button(this, 70, -60, "closeButton");
 
@@ -95,6 +100,7 @@ export class Stats extends Scene {
       this.cleanlinessBar,
 
       this.hungerButton,
+      this.happinesButton,
     ]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {

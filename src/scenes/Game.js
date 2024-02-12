@@ -26,10 +26,10 @@ export class Game extends Scene {
 
     this.createMap();
     // this.add
-    //   .sprite(this.game.config.width - 400, 180, "musical-nutes")
-    //   .play("nutes-idle");
+
     this.loafcat = new Loafcat(this, 80, 275, "loafcat");
-    this.loafcat.moveRandomly();
+    this.loafcat.listenMusic();
+    // this.loafcat.moveRandomly();
 
     // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
@@ -59,7 +59,7 @@ export class Game extends Scene {
       },
     });
     console.log(this.petData.data.pet);
-    this.loafcat.checkAddNotification(this.petData.data.pet);
+    //this.loafcat.checkAddNotification(this.petData.data.pet);
   }
 
   createMap() {
@@ -75,7 +75,7 @@ export class Game extends Scene {
   }
 
   checkFeedPet(itemData) {
-    this.loafcat.feed(itemData.itemDetails.pointValue);
+    this.loafcat.feed(1); // itemData.itemDetails.pointValue
 
     axios({
       method: "POST",

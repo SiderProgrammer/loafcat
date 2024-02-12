@@ -352,12 +352,10 @@ app.post("/api/users", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res
-        .status(500)
-        .json({
-          message:
-            "An error occurred while creating the user. Please try again later.",
-        });
+      res.status(500).json({
+        message:
+          "An error occurred while creating the user. Please try again later.",
+      });
     }
   }
 });
@@ -373,12 +371,10 @@ app.post("/api/process-deposits", async (req, res) => {
 
     // Check if there are deposits to process
     if (deposits.length === 0) {
-      return res
-        .status(200)
-        .json({
-          message:
-            "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
-        });
+      return res.status(200).json({
+        message:
+          "You don't have any pending deposits. Please deposit LOAF or SOLANA.",
+      });
     }
     const logPromises = []; // Prepare an array to hold all log promises
 
@@ -415,11 +411,9 @@ app.post("/api/process-deposits", async (req, res) => {
       });
     } else {
       // Provide a generic error message in production mode
-      res
-        .status(500)
-        .json({
-          message: "Failed to process deposits. Please try again later.",
-        });
+      res.status(500).json({
+        message: "Failed to process deposits. Please try again later.",
+      });
     }
   }
 });
@@ -969,16 +963,16 @@ async function getCurrentFeedingEventTime(petId) {
 function calculateItemEffects(category, foodType, quantity) {
   // Define the impact values for each food type
   const foodImpactValues = {
-    fruit: { hunger: 2, fluffiness: 0, poop: 1 },
-    vegetable: { hunger: 3, fluffiness: 0, poop: 1 },
-    junkFood: { hunger: 5, fluffiness: 3, poop: 2 },
+    fruit: { hunger: 2, fluffiness: 0, poop: 1, hydration: 0, pee: 0 },
+    vegetable: { hunger: 3, fluffiness: 0, poop: 1, hydration: 0, pee: 0 },
+    junkFood: { hunger: 5, fluffiness: 3, poop: 2, hydration: 0, pee: 0 },
     // Add other food types as needed
   };
 
   // Define the impact values for each liquid type
   const liquidImpactValues = {
-    water: { hydration: 5, pee: 1 },
-    soda: { hydration: 3, pee: 2 },
+    water: { hydration: 5, pee: 1, hunger: 0, fluffiness: 0, poop: 0 },
+    soda: { hydration: 3, pee: 2, hunger: 0, fluffiness: 0, poop: 0 },
     // Add other liquid types as needed
   };
 
@@ -988,9 +982,17 @@ function calculateItemEffects(category, foodType, quantity) {
       hunger: 1,
       fluffiness: 1,
       poop: 1,
+      hydration: 0,
+      pee: 0,
     };
   } else if (category === "liquid") {
-    impactValues = liquidImpactValues[foodType] || { hydration: 1, pee: 1 };
+    impactValues = liquidImpactValues[foodType] || {
+      hydration: 1,
+      pee: 1,
+      hunger: 0,
+      fluffiness: 0,
+      poop: 0,
+    };
   }
 
   // Calculate the total impact based on quantity
@@ -1003,8 +1005,8 @@ function calculateItemEffects(category, foodType, quantity) {
 }
 
 // Example usage
-let category = "liquid";
-let foodType = "water";
+let category = "food";
+let foodType = "fruit";
 let quantity = 3;
 
 let effects = calculateItemEffects(category, foodType, quantity);
@@ -1103,12 +1105,23 @@ app.post("/api/feed-pet", async (req, res) => {
         let currentHungerLevel = petResponse.data.data.HungerLevel || 0;
         let currentHydrationLevel = petResponse.data.data.HydrationLevel || 0;
         let currentFluffinessLevel = petResponse.data.data.FluffinessLevel || 0;
+        let currentPoopLevel = petResponse.data.data.PoopLevel || 0;
+        let currentPeeLevel = petResponse.data.data.PeeLevel || 0;
 
         // This function now returns two values: hunger increase and fluffiness increase
-        let { hungerIncrease, fluffinessIncrease } =
-          calculateFeedingAndFluffiness(foodType, quantity);
+        //let { hungerIncrease, fluffinessIncrease } = calculateFeedingAndFluffiness(foodType, quantity);
+        let effects = calculateItemEffects(category, foodType, quantity);
+        // effects.hunger
+        // effects.fluffiness
+        // effects.poop
+        // effects.hydration
+        // effects.pee
+        let newPoopLevel = currentPoopLevel + effects.poop;
+        let newPeeLevel = currentPeeLevel + effects.pee;
+        let newHydrationLevel = currentHydrationLevel + effects.hydration;
+        let fluffinessIncrease = effects.fluffiness;
 
-        let newHungerLevel = currentHungerLevel + hungerIncrease;
+        let newHungerLevel = currentHungerLevel + effects.hunger;
         // Cap the hunger level at 100 and calculate the excess for fluffiness
         if (newHungerLevel > 99) {
           fluffinessIncrease += newHungerLevel - 99; // Add excess hunger to fluffiness
@@ -1117,6 +1130,7 @@ app.post("/api/feed-pet", async (req, res) => {
         let newFluffinessLevel = currentFluffinessLevel + fluffinessIncrease;
 
         // Round the levels
+
         newHungerLevel = Math.round(newHungerLevel);
         newFluffinessLevel = Math.round(newFluffinessLevel);
 
@@ -1126,6 +1140,9 @@ app.post("/api/feed-pet", async (req, res) => {
 
         // Initialize update data object
         let updateData = {
+          PeeLevel: newPeeLevel,
+          PoopLevel: newPoopLevel,
+          HydrationLevel: newHydrationLevel,
           FluffinessLevel: newFluffinessLevel,
           LastUpdateTime: new Date().getTime(),
         };
@@ -1135,7 +1152,7 @@ app.post("/api/feed-pet", async (req, res) => {
           let originalIntervalHours = 6; // Original interval for Feeding (6 hours)
           additionalTime = calculateAdditionalTime(
             currentHungerLevel,
-            hungerIncrease,
+            effects.hunger,
             originalIntervalHours
           );
         }
@@ -1953,21 +1970,17 @@ app.post("/api/clean-wc", async (req, res) => {
       additionalDetails: `Cleaned WC for pet ${PetID}. ${actionType} level decreased.`,
     });
 
-    res
-      .status(200)
-      .json({
-        message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
-      });
+    res.status(200).json({
+      message: `Pets WC levels cleaned for ${actionType} successfully for PetID: ${PetID}.`,
+    });
   } catch (error) {
     console.error(
       `Error cleaning pets WC levels for ${actionType} for PetID: ${PetID}:`,
       error.response?.data || error
     );
-    res
-      .status(500)
-      .json({
-        message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
-      });
+    res.status(500).json({
+      message: `Failed to clean pets WC levels for ${actionType} for PetID: ${PetID}.`,
+    });
   }
 });
 
@@ -2198,12 +2211,10 @@ app.post("/api/my-pet", async (req, res) => {
     const pet = petData[0]; // Access the first item in the array
 
     if (!pet.is_a_live) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
-        });
+      return res.status(404).json({
+        message:
+          "Pet was found but it's dead. You can revive your pet by visiting our '9 Lives' Page where you can bring it back to life!",
+      });
     }
 
     res.status(200).json({ pet });
@@ -2500,11 +2511,9 @@ app.post("/api/refresh-items", async (req, res) => {
     const creditsDeducted = await deductUserPoints(userWallet, 20);
 
     if (!creditsDeducted) {
-      return res
-        .status(400)
-        .json({
-          message: "Not enough credits to refresh items. You need to deposit.",
-        });
+      return res.status(400).json({
+        message: "Not enough credits to refresh items. You need to deposit.",
+      });
     }
 
     if (currentUserDailyItems.length > 0) {
@@ -2560,11 +2569,9 @@ app.post("/api/refresh-items", async (req, res) => {
       });
       await Promise.all(addPromises);
 
-      res
-        .status(200)
-        .json({
-          message: "Items refreshed successfully for user " + userWallet,
-        });
+      res.status(200).json({
+        message: "Items refreshed successfully for user " + userWallet,
+      });
     } else {
       return res
         .status(404)
