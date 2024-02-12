@@ -903,15 +903,21 @@ async function getFeedingEventIdForPet(petId) {
 // Function to calculate feeding amount based on food type and quantity
 function calculateFeedingAmount(foodType, quantity) {
   const foodValues = {
-    fruit: 5, // Each fruit increases hunger by 5%
-    vegetable: 4, // Each vegetable increases hunger by 4%
-    junkFood: 3, // Each junk food increases hunger by 3%
-    junkLiquid: 2, // Each junk liquid increases hunger by 2%
+    fruit: 2, // Each fruit increases hunger by 5%
+    vegetable: 3, // Each vegetable increases hunger by 4%
+    junkFood: 5, // Each junk food increases hunger by 3%
+    junkLiquid: 5, // Each junk liquid increases hunger by 2%
     drink: 1,
     // Add other food types as needed
   };
 
   let feedingValue = foodValues[foodType] || 0;
+  console.log(
+    "foodType, quantity***********",
+    foodType,
+    quantity,
+    feedingValue
+  );
   return quantity * feedingValue; // Total increase in hunger level
 }
 
@@ -959,6 +965,52 @@ async function getCurrentFeedingEventTime(petId) {
     throw error;
   }
 }
+
+function calculateItemEffects(category, foodType, quantity) {
+  // Define the impact values for each food type
+  const foodImpactValues = {
+    fruit: { hunger: 2, fluffiness: 0, poop: 1 },
+    vegetable: { hunger: 3, fluffiness: 0, poop: 1 },
+    junkFood: { hunger: 5, fluffiness: 3, poop: 2 },
+    // Add other food types as needed
+  };
+
+  // Define the impact values for each liquid type
+  const liquidImpactValues = {
+    water: { hydration: 5, pee: 1 },
+    soda: { hydration: 3, pee: 2 },
+    // Add other liquid types as needed
+  };
+
+  let impactValues;
+  if (category === "food") {
+    impactValues = foodImpactValues[foodType] || {
+      hunger: 1,
+      fluffiness: 1,
+      poop: 1,
+    };
+  } else if (category === "liquid") {
+    impactValues = liquidImpactValues[foodType] || { hydration: 1, pee: 1 };
+  }
+
+  // Calculate the total impact based on quantity
+  let effects = {};
+  for (const effect in impactValues) {
+    effects[effect] = quantity * impactValues[effect];
+  }
+
+  return effects;
+}
+
+// Example usage
+let category = "liquid";
+let foodType = "water";
+let quantity = 3;
+
+let effects = calculateItemEffects(category, foodType, quantity);
+
+// Now, effects will contain the total increase in hunger, fluffiness, and poop
+console.log(effects); // { hunger: 6, fluffiness: 0, poop: 3 }
 
 app.post("/api/feed-pet", async (req, res) => {
   try {
@@ -1024,7 +1076,12 @@ app.post("/api/feed-pet", async (req, res) => {
         );
         // Update the user experience
         if (feedingExperiencePoints > 0) {
-          await updateUserExperience(UserID, feedingExperiencePoints, "feed");
+          await updateUserExperience(
+            UserID,
+            userItem,
+            feedingExperiencePoints,
+            "feed"
+          );
         }
         // Fetch the correct pet ID from the database
         const petIdResponse = await axios.get(`${baseApiDomain}items/pet`, {
@@ -1042,33 +1099,26 @@ app.post("/api/feed-pet", async (req, res) => {
           }),
           //getFeedingEventIdForPet(PetID)
         ]);
-
+        console.log("petResponse", petResponse);
         let currentHungerLevel = petResponse.data.data.HungerLevel || 0;
         let currentHydrationLevel = petResponse.data.data.HydrationLevel || 0;
         let currentFluffinessLevel = petResponse.data.data.FluffinessLevel || 0;
-        let increaseAmount = calculateFeedingAmount(foodType, quantity);
-        // Calculate the increased hunger level
-        let newHungerLevel = currentHungerLevel + increaseAmount;
-        let newHydrationLevel = currentHydrationLevel + 1;
 
-        let fluffinessIncrease = 0; // You will define how much to increase FluffinessLevel by
+        // This function now returns two values: hunger increase and fluffiness increase
+        let { hungerIncrease, fluffinessIncrease } =
+          calculateFeedingAndFluffiness(foodType, quantity);
 
-        // If the new hunger level is greater than 99, set it to 100, otherwise round it
+        let newHungerLevel = currentHungerLevel + hungerIncrease;
+        // Cap the hunger level at 100 and calculate the excess for fluffiness
         if (newHungerLevel > 99) {
-          // If the HungerLevel is over 100, cap it at 100 and increase the FluffinessLevel
-          fluffinessIncrease = newHungerLevel - 100; // Calculate excess hunger as fluffiness increase
-          newHungerLevel = 100;
-        } else {
-          newHungerLevel = Math.round(newHungerLevel);
+          fluffinessIncrease += newHungerLevel - 99; // Add excess hunger to fluffiness
+          newHungerLevel = 99; // Cap HungerLevel at 99 to prevent going to 100 without increasing fluffiness
         }
+        let newFluffinessLevel = currentFluffinessLevel + fluffinessIncrease;
 
-        // Calculate the new FluffinessLevel if there is an increase
-        let newFluffinessLevel = 0;
-        if (fluffinessIncrease > 0) {
-          newFluffinessLevel = Math.round(
-            currentFluffinessLevel + fluffinessIncrease
-          );
-        }
+        // Round the levels
+        newHungerLevel = Math.round(newHungerLevel);
+        newFluffinessLevel = Math.round(newFluffinessLevel);
 
         // Fetch the current event time from the database for the feeding event
         let currentEventTime = await getCurrentFeedingEventTime(PetID); // Fetch this from the database based on `feedingEventId`
@@ -1085,7 +1135,7 @@ app.post("/api/feed-pet", async (req, res) => {
           let originalIntervalHours = 6; // Original interval for Feeding (6 hours)
           additionalTime = calculateAdditionalTime(
             currentHungerLevel,
-            increaseAmount,
+            hungerIncrease,
             originalIntervalHours
           );
         }
@@ -1140,7 +1190,41 @@ app.post("/api/feed-pet", async (req, res) => {
   }
 });
 
-async function updateUserExperience(userId, pointsEarned, activityType) {
+function calculateFeedingAndFluffiness(foodType, quantity) {
+  const foodValues = {
+    fruit: { hunger: 2, fluffiness: 0 },
+    vegetable: { hunger: 3, fluffiness: 0 },
+    junkFood: { hunger: 5, fluffiness: 3 }, // Increases fluffiness
+    junkLiquid: { hunger: 5, fluffiness: 3 }, // Increases fluffiness
+    drink: { hunger: 1, fluffiness: 0 },
+    // Add other food types as needed
+  };
+
+  let feedingValue = foodValues[foodType] ? foodValues[foodType].hunger : 0;
+  let fluffinessValue = foodValues[foodType]
+    ? foodValues[foodType].fluffiness
+    : 0;
+
+  console.log(
+    "foodType, quantity",
+    foodType,
+    quantity,
+    feedingValue,
+    fluffinessValue
+  );
+
+  return {
+    hungerIncrease: quantity * feedingValue, // Total increase in hunger level
+    fluffinessIncrease: quantity * fluffinessValue, // Total increase in fluffiness level
+  };
+}
+
+async function updateUserExperience(
+  userId,
+  userItem,
+  pointsEarned,
+  activityType
+) {
   const playerResponse = await axios.get(
     `${baseApiDomain}items/players_table`,
     {
@@ -1164,19 +1248,22 @@ async function updateUserExperience(userId, pointsEarned, activityType) {
     levels
   );
   let newExperience = playerData.CurrentExperience + activityPoints;
+  let newPoints = playerData.UserPoints + userItem.ItemID.PointValue; // Assuming you have a CurrentPoints field
 
   // Check for level up
   const nextLevel = levels.find(
     (level) => level.LevelNumber === playerData.CurrentLevel + 1
   );
-  if (nextLevel && newExperience >= nextLevel.ExperienceThreshold) {
+
+  if (nextLevel && newExperience >= nextLevel.experience_threshold) {
     // Update the player's level
     await axios.patch(
       `${baseApiDomain}items/players_table/${playerData.id}`,
       {
         CurrentLevel: playerData.CurrentLevel + 1,
-        // Reset experience points or keep accumulating, depending on your game design
-        CurrentExperience: newExperience - nextLevel.ExperienceThreshold,
+        // disabled for now : Reset experience points or keep accumulating, depending on your game design
+        CurrentExperience: newExperience,
+        UserPoints: newPoints,
       },
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -1188,6 +1275,7 @@ async function updateUserExperience(userId, pointsEarned, activityType) {
       `${baseApiDomain}items/players_table/${playerData.id}`,
       {
         CurrentExperience: newExperience,
+        UserPoints: newPoints,
       },
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -2315,9 +2403,9 @@ app.post("/api/events-times", async (req, res) => {
   }
 });
 
-app.get("/api/daily-items", async (req, res) => {
+app.post("/api/daily-items", async (req, res) => {
   try {
-    const { userID } = req.query;
+    const { UserID, PetID } = req.body;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -2326,7 +2414,7 @@ app.get("/api/daily-items", async (req, res) => {
       headers: { Authorization: `Bearer ${accessToken}` },
       params: {
         filter: {
-          UserID: { _eq: userID },
+          UserID: { _eq: UserID },
         },
         fields: ["*", "ItemID.*"],
       },

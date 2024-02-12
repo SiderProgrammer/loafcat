@@ -71,7 +71,7 @@ export class UI extends Scene {
     this.storeButton = new Button(this, 0, 0, "storeButton");
     this.storeButton.onClick(async () => {
       const shopData = await axios({
-        method: "GET",
+        method: "POST",
         url: `http://localhost:3000/api/daily-items`,
         headers: {
           Accept: "application/json",

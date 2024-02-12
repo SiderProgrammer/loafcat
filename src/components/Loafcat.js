@@ -66,10 +66,20 @@ export default class Loafcat extends Phaser.GameObjects.Container {
       this.removeNotification = () => {
         this.remove([popUp, hungerIcon]);
       };
-      // this.scene.time.delayedCall(5000, () => {
-      //   this.removeNotification();
-      // });
+
+      // this.setNotificationsInterval()
     }
+  }
+  // TODO : fix it
+  setNotificationsInterval() {
+    this.scene.time.addEvent({
+      repeat: -1,
+      onRepeat: () => {
+        this.scene.time.delayedCall(5000, () => {
+          this.removeNotification();
+        });
+      },
+    });
   }
 
   checkRemoveNotification() {

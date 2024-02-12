@@ -1,4 +1,3 @@
-
 /**
  * @swagger
  * /api/process-deposits:
@@ -26,12 +25,10 @@
  *         description: Internal server error
  */
 
-
-
 /**
  * @swagger
  * /api/user-items/:
- *   post: 
+ *   post:
  *     tags:
  *       - Game-Items
  *     summary: Get user items with details.
@@ -163,8 +160,6 @@
  *                   example: Failed to purchase item.
  */
 
-
-
 /**
  * @swagger
  * /api/daily-purchases:
@@ -213,7 +208,6 @@
  *                   example: Failed to fetch daily purchases.
  */
 
-
 /**
  * @swagger
  * /api/total-purchases:
@@ -257,7 +251,6 @@
  *                   description: Error message.
  *                   example: Failed to fetch total purchases.
  */
-
 
 /**
  * @swagger
@@ -340,7 +333,6 @@
  *                   description: An error message indicating that the feeding process failed.
  *                   example: "Failed to feed pet."
  */
-
 
 /**
  * @swagger
@@ -487,7 +479,6 @@
  *                   example: "Login failed"
  */
 
-
 /**
  * @swagger
  * /api/start-game:
@@ -535,7 +526,6 @@
  *                   description: An error message indicating that the game session failed to start.
  *                   example: "Failed to start the game"
  */
-
 
 /**
  * @swagger
@@ -596,8 +586,6 @@
  *                   example: "Failed to end the game"
  */
 
-
-
 /**
  * @swagger
  * /api/daily-spent:
@@ -647,7 +635,6 @@
  *                   example: "Failed to update daily spent"
  */
 
-
 /**
  * @swagger
  * /api/update-playtime:
@@ -694,7 +681,6 @@
  *                   description: An error message indicating that the total playtime failed to update.
  *                   example: "Failed to update total playtime"
  */
-
 
 /**
  * @swagger
@@ -745,8 +731,6 @@
  *                   example: "Failed to update total care activities"
  */
 
-
-
 /**
  * @swagger
  * /api/update-total-care-special-activities:
@@ -795,8 +779,6 @@
  *                   description: An error message indicating that the total special care activities failed to update.
  *                   example: "Failed to update total special care activities"
  */
-
-
 
 /**
  * @swagger
@@ -855,8 +837,6 @@
  *                   type: string
  */
 
-
-
 /**
  * @swagger
  * /api/clean-wc:
@@ -911,8 +891,6 @@
  *                   type: string
  */
 
-
-
 /**
  * @swagger
  * /api/update-wc:
@@ -942,9 +920,6 @@
  *                   type: string
  */
 
-
-
-
 /**
  * @swagger
  * /api/get-game-items:
@@ -966,7 +941,7 @@
  *                 type: string
  *     responses:
  *       200:
- *         description: Successfully retrieved game items. 
+ *         description: Successfully retrieved game items.
  *         content:
  *           application/json:
  *             schema:
@@ -988,7 +963,6 @@
  *                 message:
  *                   type: string
  */
-
 
 /**
  * @swagger
@@ -1039,7 +1013,6 @@
  *                   type: string
  */
 
-
 /**
  * @swagger
  * /api/my-pet:
@@ -1088,8 +1061,6 @@
  *                 message:
  *                   type: string
  */
-
-
 
 /**
  * @swagger
@@ -1156,8 +1127,6 @@
  *                   type: string
  *                   description: A message indicating a server error.
  */
-
-
 
 /**
  * @swagger
@@ -1261,8 +1230,6 @@
  *                   description: Error message indicating a server error.
  */
 
-
-
 /**
  * @swagger
  * /api/events-times:
@@ -1346,11 +1313,10 @@
  *                   description: Error message indicating a server error.
  */
 
-
 /**
  * @swagger
  * /api/daily-items:
- *   get:
+ *   post:
  *     tags:
  *       - Game-Items
  *     summary: Fetch daily items for a user
@@ -1381,7 +1347,6 @@
  *       500:
  *         description: An error occurred while fetching daily items.
  */
-
 
 /**
  * @swagger
@@ -1429,8 +1394,6 @@
  *             example:
  *               error: Failed to refresh items for user.
  */
-
-
 
 /**
  * @swagger

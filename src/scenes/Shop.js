@@ -43,7 +43,7 @@ export class Shop extends Scene {
       });
 
       const newItems = await axios({
-        method: "GET",
+        method: "POST",
         url: `http://localhost:3000/api/daily-items`,
         headers: {
           Accept: "application/json",
