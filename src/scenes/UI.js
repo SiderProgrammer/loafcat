@@ -16,14 +16,26 @@ export class UI extends Scene {
     this.avatarImage = this.add.sprite(0, 0, "loafcat");
 
     this.coin = this.add.sprite(30, -10, "coin");
+
     this.coinsValue = this.add
-      .text(40, -10, "200", { fontSize: 10, fontFamily: "slkscr" })
+      .bitmapText(40, -10, "WhitePeaberry", "200")
+
       .setOrigin(0, 0.5);
+
+    // this.coinsValue = this.add
+    //   .text(40, -10, "2000", { fontFamily: "slkscr" })
+    //   .setOrigin(0, 0.5);
+
     //this.coinsValue.setResolution(2);
     this.levelFrame = this.add.sprite(30, 5, "levelFrame").setScale(0.5);
     this.levelValue = this.add
-      .text(23, 5, "13", { fontSize: 10, fontFamily: "slkscr" })
+      .bitmapText(23, 5, "WhitePeaberry", "13")
       .setOrigin(0, 0.5);
+
+    // this.levelValue = this.add
+    //   .text(23, 5, "13", { fontFamily: "slkscr", fontSize: 12 })
+    //   .setOrigin(0, 0.5);
+
     this.levelBar = this.add
       .sprite(40, 5, "statsProgressBar")
       .setOrigin(0, 0.5)
@@ -145,8 +157,9 @@ export class UI extends Scene {
 
   setSpritesPosition() {
     const gameWidth = GameModel.GAME_WIDTH;
+    // GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2; //GameModel.GAME_WIDTH;
     const gameHeight = GameModel.GAME_HEIGHT;
-
+    //  GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2;
     this.gearButton.x = gameWidth - 12;
     this.mainMenuButton.x = gameWidth - 32;
     this.storeButton.x = gameWidth - 52;

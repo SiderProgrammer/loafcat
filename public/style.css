@@ -5,3 +5,11 @@ body {
   background-color: #000000;
   overflow-y: hidden;
 }
+
+html {
+  overflow-y: hidden;
+}
+
+body {
+  overflow-y: hidden;
+}

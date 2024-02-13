@@ -16,6 +16,7 @@ import { Leaderboard } from "./scenes/Leaderboard";
 import { SignIn } from "./scenes/SignIn";
 import { YourPets } from "./scenes/YourPets";
 import { LinkedPets } from "./scenes/LinkedPets";
+import { GameModel } from "./models/GameModel";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -47,6 +48,7 @@ const config = {
   ],
   pixelArt: true,
   roundPixels: true,
+
   dom: {
     createContainer: true,
   },
@@ -67,33 +69,50 @@ window.addEventListener("load", () => {
     let maxHeight = MAX_HEIGHT;
     // let scaleMode = SCALE_MODE;
 
-    let scale = Math.min(w / width, h / height);
+    let scale = Number(Math.min(w / width, h / height));
     let newWidth = Math.min(w / scale, maxWidth);
     let newHeight = Math.min(h / scale, maxHeight);
 
-    // let defaultRatio = DEFAULT_WIDTH / DEFAULT_HEIGHT;
-    // let maxRatioWidth = MAX_WIDTH / DEFAULT_HEIGHT;
-    // let maxRatioHeight = DEFAULT_WIDTH / MAX_HEIGHT;
-
-    // // smooth scaling
-    // let smooth = 1;
-    // if (scaleMode === "SMOOTH") {
-    //   const maxSmoothScale = 1.15;
-    //   const normalize = (value, min, max) => {
-    //     return (value - min) / (max - min);
-    //   };
-    //   if (width / height < w / h) {
-    //     smooth =
-    //       -normalize(newWidth / newHeight, defaultRatio, maxRatioWidth) /
-    //         (1 / (maxSmoothScale - 1)) +
-    //       maxSmoothScale;
-    //   } else {
-    //     smooth =
-    //       -normalize(newWidth / newHeight, defaultRatio, maxRatioHeight) /
-    //         (1 / (maxSmoothScale - 1)) +
-    //       maxSmoothScale;
-    //   }
+    // if (
+    //   Math.abs(newWidth - GameModel.GAME_WIDTH) < 16 &&
+    //   Math.abs(newHeight - GameModel.GAME_HEIGHT) < 16
+    // ) {
+    //   return;
     // }
+
+    // let defaultRatio = SAFE_GAME_WIDTH / SAFE_GAME_HEIGHT;
+    // let maxRatioWidth = MAX_WIDTH / SAFE_GAME_HEIGHT;
+    // let maxRatioHeight = SAFE_GAME_WIDTH / MAX_HEIGHT;
+
+    // // // smooth scaling
+    // let smooth = 1;
+
+    // const maxSmoothScale = 1.15;
+    // const normalize = (value, min, max) => {
+    //   return (value - min) / (max - min);
+    // };
+    // if (width / height < w / h) {
+    //   smooth =
+    //     -normalize(newWidth / newHeight, defaultRatio, maxRatioWidth) /
+    //       (1 / (maxSmoothScale - 1)) +
+    //     maxSmoothScale;
+    // } else {
+    //   smooth =
+    //     -normalize(newWidth / newHeight, defaultRatio, maxRatioHeight) /
+    //       (1 / (maxSmoothScale - 1)) +
+    //     maxSmoothScale;
+    // }
+    window.oldW = newWidth;
+
+    // let oldW = newWidth;
+    newWidth = Math.round(newWidth);
+    newHeight = Math.round(newHeight);
+    if (newWidth >= SAFE_GAME_WIDTH) {
+      newWidth = Math.floor(newWidth / 16) * 16 + 16;
+    }
+    if (newHeight >= SAFE_GAME_HEIGHT) {
+      newHeight = Math.floor(newHeight / 16) * 16 + 16;
+    }
 
     // resize the game
     game.scale.resize(newWidth, newHeight);
@@ -103,9 +122,11 @@ window.addEventListener("load", () => {
     game.canvas.style.height = newHeight * scale + "px";
 
     // center the game with css margin
-
+    window.testScale = scale;
     game.canvas.style.marginTop = `${(h - newHeight * scale) / 2}px`;
-    game.canvas.style.marginLeft = `${(w - newWidth * scale) / 2}px`;
+    game.canvas.style.marginLeft = `${
+      (w - newWidth * scale) / 2 // + (MAX_WIDTH - oldW) / 2
+    }px`;
   };
   window.addEventListener("resize", (event) => {
     resize();

@@ -67,9 +67,15 @@ export class Inventory extends Scene {
     itemContainer.itemData = itemData;
     itemContainer.item = this.add.image(0, 0, itemData.itemDetails.name);
     itemContainer.item.setInteractive();
-    itemContainer.quantityText = this.add.text(5, 5, itemData.quantity, {
-      fontSize: 10,
-    });
+    itemContainer.quantityText = this.add.bitmapText(
+      5,
+      5,
+      "WhitePeaberry",
+      itemData.quantity
+    );
+    // itemContainer.quantityText = this.add.text(5, 5, itemData.quantity, {
+    //   fontSize: 10,
+    // });
 
     // TODO : change main scene input to work with inventory instead add only call 1 method from main scene on pointerup
     itemContainer.item.on("pointerdown", () => {

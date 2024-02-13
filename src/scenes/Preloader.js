@@ -87,6 +87,12 @@ export class Preloader extends Scene {
     this.load.image("blackBackground", "blackBackground.png");
     this.load.image("apple", "apple.png");
     this.load.image("petPopup", "petPopup.png");
+
+    this.load.bitmapFont(
+      "WhitePeaberry",
+      "WhitePeaberry.png",
+      "WhitePeaberry.xml"
+    );
   }
 
   addLoafcatAnim(name, frames, row) {
