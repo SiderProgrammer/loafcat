@@ -102,7 +102,8 @@ window.addEventListener("load", () => {
     //       (1 / (maxSmoothScale - 1)) +
     //     maxSmoothScale;
     // }
-    window.oldW = newWidth;
+    window.realWidth = newWidth;
+    window.realHeight = newHeight;
 
     // let oldW = newWidth;
     newWidth = Math.round(newWidth);

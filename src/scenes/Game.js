@@ -33,10 +33,10 @@ export class Game extends Scene {
     // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
-      GameModel.GAME_WIDTH =
-        window.innerWidth / window.testScale < MAX_WIDTH
-          ? window.innerWidth / window.testScale
-          : MAX_WIDTH;
+      GameModel.GAME_WIDTH = gameSize.width;
+      // window.innerWidth / window.testScale < MAX_WIDTH
+      //   ? window.innerWidth / window.testScale
+      //   : MAX_WIDTH;
       GameModel.GAME_HEIGHT = gameSize.height;
       this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
       this.cameras.main.centerOn(
