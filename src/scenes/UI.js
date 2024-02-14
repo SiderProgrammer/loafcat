@@ -17,6 +17,21 @@ export class UI extends Scene {
 
     this.coin = this.add.sprite(30, -10, "coin");
 
+    // // button.innerHTML = "Click me!";
+    // button.style.position = "absolute";
+
+    // button.style.left = document.querySelector("canvas").style.marginLeft;
+    // button.style.top = document.querySelector("canvas").style.marginTop;
+    // button.style.width = "100px";
+    // button.style.height = "30px";
+    // this.b = button;
+    // document.getElementById("game-container").appendChild(button);
+
+    this.avatarSectionPhaser = this.add
+      .dom(50, 50)
+      .createFromCache("avatarSection");
+
+    var avatarSection = document.getElementById("avatarSection");
     this.coinsValue = this.add
       .bitmapText(40, -10, "WhitePeaberry", "200")
 
@@ -27,7 +42,7 @@ export class UI extends Scene {
     //   .setOrigin(0, 0.5);
 
     //this.coinsValue.setResolution(2);
-    this.levelFrame = this.add.sprite(30, 5, "levelFrame").setScale(0.5);
+    this.levelFrame = this.add.sprite(30, 5, "levelFrame");
     this.levelValue = this.add
       .bitmapText(23, 5, "WhitePeaberry", "13")
       .setOrigin(0, 0.5);
@@ -52,6 +67,8 @@ export class UI extends Scene {
       this.levelValue,
       this.levelBar,
     ]);
+
+    this.avatarSection.setVisible(false);
 
     this.gearButton = this.add.sprite(0, 0, "gearButton");
 
@@ -150,6 +167,22 @@ export class UI extends Scene {
     this.scale.on("resize", () => {
       this.cameras.resize(GameModel.GAME_WIDTH, GameModel.GAME_HEIGHT);
       this.setSpritesPosition();
+
+      // avatarSection.style.left =
+      //   parseFloat(document.querySelector("canvas").style.marginLeft) +
+      //   Math.round((GameModel.GAME_WIDTH - window.realWidth) / 2) *
+      //     window.testScale +
+      //   35 +
+      //   "px";
+      // avatarSection.style.top =
+      //   parseFloat(document.querySelector("canvas").style.marginTop) +
+      //   Math.round((GameModel.GAME_HEIGHT - window.realHeight) / 2) *
+      //     window.testScale +
+      //   35 +
+      //   "px";
+
+      //this.test.setScale(window.testScale)
+      avatarSection.style.scale = window.testScale;
     });
 
     this.setSpritesPosition();
@@ -160,11 +193,18 @@ export class UI extends Scene {
     // GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2; //GameModel.GAME_WIDTH;
     const gameHeight = GameModel.GAME_HEIGHT;
     //  GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2;
+    this.avatarSectionPhaser.x =
+      20 + ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
+
+    this.avatarSectionPhaser.y =
+      20 + ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
 
     this.avatarSection.x =
       20 + Math.round((GameModel.GAME_WIDTH - window.realWidth) / 2);
     this.avatarSection.y =
       20 + Math.round((GameModel.GAME_HEIGHT - window.realHeight) / 2);
+
+    console.log(this.avatarSectionPhaser.x, this.avatarSection.x);
     this.gearButton.x = gameWidth - 12; //+ (GameModel.GAME_WIDTH - window.realWidth) / 2;
     this.mainMenuButton.x = gameWidth - 32;
     this.storeButton.x = gameWidth - 52;

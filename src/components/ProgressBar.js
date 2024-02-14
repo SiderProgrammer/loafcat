@@ -1,3 +1,5 @@
+import Phaser from "phaser";
+
 export default class ProgressBar extends Phaser.GameObjects.Container {
   constructor({ scene, x, y, maxFillValue, containerImage, fillImage }) {
     super(scene, x, y);

@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 export default class Button extends Phaser.GameObjects.Image {
   constructor(scene, x, y, image) {
     super(scene, x, y, image);

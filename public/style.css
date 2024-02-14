@@ -13,3 +13,56 @@ html {
 body {
   overflow-y: hidden;
 }
+
+#testB {
+  position: absolute;
+  scale: 5;
+  image-rendering: pixelated;
+  background: none;
+  border: none;
+  padding: 0;
+}
+#avatarSection {
+  position: absolute;
+  scale: 5;
+  image-rendering: pixelated;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/*make a class with absolute style */
+
+#levelFrame,
+#levelValue,
+#coinIcon,
+#coinValue,
+#coinSection,
+#levelSection,
+#characterAvatarSection,
+#avatarFrame,
+#avatarImage {
+  position: absolute;
+}
+#avatarImage {
+  transform: translate(50%, 50%);
+}
+#levelSection {
+  left: 50px;
+  transform: scale(0.5);
+  top: 20px;
+  #levelValue {
+    transform: translateY(50%);
+  }
+}
+
+#coinSection {
+  left: 50px;
+  transform: scale(0.5);
+  #coinIcon {
+    transform: translateX(50%);
+  }
+  #coinValue {
+    padding-left: 30px;
+  }
+}
