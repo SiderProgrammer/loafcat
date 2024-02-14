@@ -108,10 +108,10 @@ window.addEventListener("load", () => {
     // let oldW = newWidth;
     newWidth = Math.round(newWidth);
     newHeight = Math.round(newHeight);
-    if (newWidth >= SAFE_GAME_WIDTH) {
+    if (newWidth > SAFE_GAME_WIDTH) {
       newWidth = Math.floor(newWidth / 16) * 16 + 16;
     }
-    if (newHeight >= SAFE_GAME_HEIGHT) {
+    if (newHeight > SAFE_GAME_HEIGHT) {
       newHeight = Math.floor(newHeight / 16) * 16 + 16;
     }
 

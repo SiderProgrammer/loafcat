@@ -161,10 +161,10 @@ export class UI extends Scene {
     const gameHeight = GameModel.GAME_HEIGHT;
     //  GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2;
 
-    // this.avatarSection.x = 20;
-    // +Math.round((GameModel.GAME_WIDTH - window.realWidth) / 2);
-    // this.avatarSection.y = 20;
-    // +Math.round((GameModel.GAME_HEIGHT - window.realHeight) / 2);
+    this.avatarSection.x =
+      20 + Math.round((GameModel.GAME_WIDTH - window.realWidth) / 2);
+    this.avatarSection.y =
+      20 + Math.round((GameModel.GAME_HEIGHT - window.realHeight) / 2);
     this.gearButton.x = gameWidth - 12; //+ (GameModel.GAME_WIDTH - window.realWidth) / 2;
     this.mainMenuButton.x = gameWidth - 32;
     this.storeButton.x = gameWidth - 52;

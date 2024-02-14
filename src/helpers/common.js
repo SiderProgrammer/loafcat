@@ -11,6 +11,7 @@ export async function fadeOut(scene, duration = 1000) {
         )
         .setDepth(99999)
         .setAlpha(0)
+        .setVisible(false)
         .setDisplaySize(GameModel.GAME_WIDTH, GameModel.GAME_HEIGHT);
     }
 

@@ -2,7 +2,12 @@ import { Scene } from "phaser";
 import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
-import { SAFE_GAME_HEIGHT, SAFE_GAME_WIDTH } from "../constants/viewport";
+import {
+  MAX_HEIGHT,
+  MAX_WIDTH,
+  SAFE_GAME_HEIGHT,
+  SAFE_GAME_WIDTH,
+} from "../constants/viewport";
 
 export class Inventory extends Scene {
   constructor() {
@@ -48,7 +53,12 @@ export class Inventory extends Scene {
     this.elementsContainer.add([this.board, this.closeButton]);
 
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
-      this.cameras.resize(gameSize.width, gameSize.height);
+      // this.cameras.resize(gameSize.width, gameSize.height);
+      // this.cameras.main.centerOn(
+      //   Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
+      //   Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2)
+      // );
+      //  this.elementsContainer.x = GameModel.GAME_WIDTH/2 // gameSize.width / 2;
       // this.setSpritesPosition(gameSize.width);
     });
 
