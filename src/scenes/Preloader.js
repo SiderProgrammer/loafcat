@@ -25,6 +25,7 @@ export class Preloader extends Scene {
   preload() {
     //  Load the assets for the game - Replace with your own assets
     this.load.html("avatarSection", "./UI/avatarSection.html");
+    this.load.html("bottomButtonsSection", "./UI/bottomButtonsSection.html");
     this.load.setPath("assets");
 
     this.load.image("mp_cs_tilemap_all", "mp_cs_tilemap_all.png");

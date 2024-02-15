@@ -37,8 +37,14 @@ export class Game extends Scene {
       // window.innerWidth / window.testScale < MAX_WIDTH
       //   ? window.innerWidth / window.testScale
       //   : MAX_WIDTH;
+      document.getElementById("game-container").children[0].style.width =
+        document.querySelector("canvas").style.width;
+      document.getElementById("game-container").children[0].style.height =
+        document.querySelector("canvas").style.height;
+
       GameModel.GAME_HEIGHT = gameSize.height;
       this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
+      // TODO : fix it
       this.cameras.main.centerOn(
         Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
         Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2) +

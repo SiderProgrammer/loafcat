@@ -17,39 +17,28 @@ export class UI extends Scene {
 
     this.coin = this.add.sprite(30, -10, "coin");
 
-    // // button.innerHTML = "Click me!";
-    // button.style.position = "absolute";
-
-    // button.style.left = document.querySelector("canvas").style.marginLeft;
-    // button.style.top = document.querySelector("canvas").style.marginTop;
-    // button.style.width = "100px";
-    // button.style.height = "30px";
-    // this.b = button;
-    // document.getElementById("game-container").appendChild(button);
-
     this.avatarSectionPhaser = this.add
       .dom(50, 50)
       .createFromCache("avatarSection");
 
-    var avatarSection = document.getElementById("avatarSection");
+    this.avatarSectionHTML = document.getElementById("avatarSection");
+
+    this.bottomButtonsSectionPhaser = this.add
+      .dom(350, 350)
+      .createFromCache("bottomButtonsSection");
+    this.bottomButtonsSectionHTML = document.getElementById(
+      "bottomButtonsSection"
+    );
+
     this.coinsValue = this.add
       .bitmapText(40, -10, "WhitePeaberry", "200")
 
       .setOrigin(0, 0.5);
 
-    // this.coinsValue = this.add
-    //   .text(40, -10, "2000", { fontFamily: "slkscr" })
-    //   .setOrigin(0, 0.5);
-
-    //this.coinsValue.setResolution(2);
     this.levelFrame = this.add.sprite(30, 5, "levelFrame");
     this.levelValue = this.add
       .bitmapText(23, 5, "WhitePeaberry", "13")
       .setOrigin(0, 0.5);
-
-    // this.levelValue = this.add
-    //   .text(23, 5, "13", { fontFamily: "slkscr", fontSize: 12 })
-    //   .setOrigin(0, 0.5);
 
     this.levelBar = this.add
       .sprite(40, 5, "statsProgressBar")
@@ -182,7 +171,8 @@ export class UI extends Scene {
       //   "px";
 
       //this.test.setScale(window.testScale)
-      avatarSection.style.scale = window.testScale;
+      this.avatarSectionHTML.style.scale = window.testScale;
+      this.bottomButtonsSectionHTML.style.scale = window.testScale;
     });
 
     this.setSpritesPosition();
@@ -194,17 +184,29 @@ export class UI extends Scene {
     const gameHeight = GameModel.GAME_HEIGHT;
     //  GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2;
     this.avatarSectionPhaser.x =
-      20 + ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
+      window.testScale * 25 +
+      ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
 
     this.avatarSectionPhaser.y =
-      20 + ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
+      window.testScale * 25 +
+      ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
+
+    this.bottomButtonsSectionPhaser.x =
+      gameWidth * window.testScale -
+      100 * window.testScale -
+      ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; //+
+    // ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
+
+    this.bottomButtonsSectionPhaser.y =
+      gameHeight * window.testScale -
+      window.testScale * 25 -
+      ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
 
     this.avatarSection.x =
       20 + Math.round((GameModel.GAME_WIDTH - window.realWidth) / 2);
     this.avatarSection.y =
       20 + Math.round((GameModel.GAME_HEIGHT - window.realHeight) / 2);
 
-    console.log(this.avatarSectionPhaser.x, this.avatarSection.x);
     this.gearButton.x = gameWidth - 12; //+ (GameModel.GAME_WIDTH - window.realWidth) / 2;
     this.mainMenuButton.x = gameWidth - 32;
     this.storeButton.x = gameWidth - 52;
