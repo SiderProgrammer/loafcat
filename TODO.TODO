@@ -1,9 +1,26 @@
+DETAIL TODO:
+- start game with own wallet
+- fix all pre game screens 
+- hide canvas overflow-y
+- make HTMl UI buttons work
+- refactor UI code
+- update backend code
+- add eat animation
+- add listen to music action starter
+- use treat-pet api to update pet stats on listen to music
+- add pet cleaning in bathroom map and send api to update cleanless stat
+- make progress bars working
+- update level, progress bars - connect with API
+- make coins deposit work
+
+TODO:
 - cursors/soap/paper
 - tutorial pop up on every map start
 - import items assets
 - pet action communicating
 - teleporting to maps
 - join animations with effects
+- progress bar
 - pet action pop up animation
 - update maps ground
 - pet dying
@@ -14,5 +31,10 @@
 - pet backflip animation
 - script for bodies animation recreation
 - in game stock market
-- bitcoin price on wall
+- bitcoin/loafcat price on wall
+- different pointers
+- remove redundant code
+- make doors working
+- refactor
+
 
