@@ -27,18 +27,20 @@ export class LinkedPets extends Scene {
       this.game.config.width / 2,
       this.game.config.height / 2
     );
-    petsData.data.pets.forEach((petData, i) => {
-      const petName = this.add.text(-150, -50 + i * 40, petData.Name);
-      const level = petData.Level ? petData.Level.LevelNumber : 1;
-      const petLevel = this.add.text(50, -50 + i * 40, "Level " + level);
-      const petButton = new Button(this, 0, -50 + i * 40, "loafcat2");
+    console.log(petsData);
+    petsData.data.length &&
+      petsData.data.pets.forEach((petData, i) => {
+        const petName = this.add.text(-150, -50 + i * 40, petData.Name);
+        const level = petData.Level ? petData.Level.LevelNumber : 1;
+        const petLevel = this.add.text(50, -50 + i * 40, "Level " + level);
+        const petButton = new Button(this, 0, -50 + i * 40, "loafcat2");
 
-      petButton.onClick(async () => {
-        this.scene.start("Preloader");
+        petButton.onClick(async () => {
+          this.scene.start("Preloader");
+        });
+
+        this.elementsContainer.add([petButton, petName, petLevel]);
       });
-
-      this.elementsContainer.add([petButton, petName, petLevel]);
-    });
 
     // this.elementsContainer = this.add.container(
     //   this.game.config.width / 2,

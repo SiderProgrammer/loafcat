@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { fadeIn } from "../helpers/common";
 import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
+import { UserModel } from "../models/UserModel";
 
 export class SignIn extends Scene {
   constructor() {
@@ -11,10 +12,10 @@ export class SignIn extends Scene {
   create({ parentScene }) {
     this.parentScene = parentScene;
 
-    if (window.solana.connect()) {
-      this.scene.start("Preloader");
-      return;
-    }
+    // if (window.solana.connect()) {
+    //   this.scene.start("Preloader");
+    //   return;
+    // }
 
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
@@ -39,35 +40,36 @@ export class SignIn extends Scene {
 
     this.walletButton.onClick(async () => {
       await this.connectToWallet();
-      this.textContent.text = "Submit your name";
+      UserModel.USER_ID = window.solana.publicKey.toString();
+      // this.textContent.text = "Submit your name";
       this.walletButton.destroy();
       this.nameStage();
     });
   }
 
   nameStage() {
-    this.nameButton = new Button(this, 0, 0, "coin");
+    //this.nameButton = new Button(this, 0, 0, "coin");
 
-    this.nameButton.onClick(() => {
-      this.cleanScreen();
-      this.linkedPetsButton = new Button(this, 0, -50, "coin");
+    // this.nameButton.onClick(() => {
+    this.cleanScreen();
+    this.linkedPetsButton = new Button(this, 0, -50, "coin");
 
-      this.linkedPetsButton.onClick(() => {
-        this.elementsContainer.add(this.linkedPetsButton);
-        this.scene.start("LinkedPets");
-      });
-
-      this.yourPetsButton = new Button(this, 0, 50, "coin");
-
-      this.yourPetsButton.onClick(() => {
-        this.elementsContainer.add(this.yourPetsButton);
-        this.scene.start("YourPets");
-      });
-
-      this.elementsContainer.add([this.linkedPetsButton, this.yourPetsButton]);
+    this.linkedPetsButton.onClick(() => {
+      this.elementsContainer.add(this.linkedPetsButton);
+      this.scene.start("LinkedPets");
     });
 
-    this.elementsContainer.add(this.nameButton);
+    this.yourPetsButton = new Button(this, 0, 50, "coin");
+
+    this.yourPetsButton.onClick(() => {
+      this.elementsContainer.add(this.yourPetsButton);
+      this.scene.start("YourPets");
+    });
+
+    this.elementsContainer.add([this.linkedPetsButton, this.yourPetsButton]);
+    // });
+
+    // this.elementsContainer.add(this.nameButton);
   }
 
   cleanScreen() {
@@ -84,6 +86,7 @@ export class SignIn extends Scene {
         const resp = await window.solana.connect();
         wallet = resp;
         window.wallet = wallet;
+        console.log("connected wallet", wallet);
       }
 
       // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo

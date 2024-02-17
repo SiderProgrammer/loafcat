@@ -38,6 +38,8 @@ export class YourPets extends Scene {
       this.game.config.width / 2,
       this.game.config.height / 2
     );
+    // TODO : filter linked pets from not linked and label them as "linked" / "not linked"
+    // TODO : to do it, needs ID in NFTs metadata
 
     const petData = nftsData.data;
     const petName = this.add.text(-150, -50, petData.name);
@@ -45,6 +47,20 @@ export class YourPets extends Scene {
     const petButton = new Button(this, 0, -50, "loafcat2");
 
     petButton.onClick(async () => {
+      // await axios({
+      //   method: "GET",
+      //   url: `http://localhost:3001/link-pet`,
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   data: {
+      //     UserID: UserModel.USER_ID,
+      //     petType: nftsData.data.model,
+      //     PetID: 309,
+      //     PetName: "Bobby",
+      //   },
+      // });
       this.scene.start("Preloader");
     });
 
@@ -97,3 +113,48 @@ export class YourPets extends Scene {
     ]);
   }
 }
+// this.load.plugin(
+//   "rexinputtextplugin",
+//   "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexinputtextplugin.min.js",
+//   true
+// );
+// // }
+
+// async create() {
+// const petsData = await axios({
+//   method: "POST",
+//   url: `http://localhost:3000/api/my-pets`,
+//   headers: {
+//     Accept: "application/json",
+//     "Content-Type": "application/json",
+//   },
+//   data: {
+//     UserID: UserModel.USER_ID,
+//   },
+// });
+
+// this.elementsContainer = this.add.container(
+//   this.game.config.width / 2,
+//   this.game.config.height / 2
+// );
+// petsData.data.pets.forEach((petData, i) => {
+//   const petName = this.add.text(-150, -50 + i * 40, petData.Name);
+//   const level = petData.Level ? petData.Level.LevelNumber : 1;
+//   const petLevel = this.add.text(50, -50 + i * 40, "Level " + level);
+//   const petButton = new Button(this, 0, -50 + i * 40, "loafcat2");
+
+//   petButton.onClick(async () => {
+//     this.scene.start("Preloader");
+//   });
+
+//   this.elementsContainer.add([petButton, petName, petLevel]);
+// });
+
+// this.elementsContainer = this.add.container(
+//   this.game.config.width / 2,
+//   this.game.config.height / 2
+// );
+
+// this.textContent = this.add.text(-50, -100, "Your Linked Pets");
+
+// this.elementsContainer.add([this.textContent]);

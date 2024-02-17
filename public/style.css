@@ -25,6 +25,7 @@ body {
 
   image-rendering: pixelated;
   cursor: default;
+  pointer-events: none;
 }
 
 #avatarSection {
