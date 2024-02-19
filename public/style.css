@@ -112,9 +112,6 @@ body {
 
 .statistic {
   display: flex;
-  img {
-    animation: pulse 2s infinite;
-  }
 }
 
 @keyframes pulse {

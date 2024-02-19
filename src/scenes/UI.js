@@ -33,6 +33,8 @@ export class UI extends Scene {
     this.bottomButtonsSectionHTML = document.getElementById(
       "bottomButtonsSection"
     );
+    document.querySelector("#hunger").children[1].style.animation =
+      "pulse 2s infinite";
     if (!this.listenersAttached) {
       this.getHTMLButtons();
       this.addHTMLButtonsEvents();

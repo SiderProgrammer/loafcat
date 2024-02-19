@@ -66,7 +66,7 @@ export class Game extends Scene {
     //   },
     // });
     // console.log(this.petData.data.pet);
-    //this.loafcat.checkAddNotification(this.petData.data.pet);
+    //this.loafcat.checkAddNotification(this.petData.data.pet);\
   }
 
   createMap() {
