@@ -83,6 +83,7 @@ body {
     position: absolute;
   }
 }
+
 .dropbtn {
   background-color: red;
 
@@ -93,8 +94,7 @@ body {
 }
 
 .dropdown {
-  position: relative;
-  display: inline-block;
+  position: absolute;
 }
 .dropdown-content {
   display: none;
@@ -107,10 +107,12 @@ body {
 
 .dropdown:hover .dropdown-content {
   display: block;
+  cursor: url("./assets/pointer.png"), pointer;
 }
 
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
+  cursor: url("./assets/pointer.png"), pointer;
 }
 
 .dropdown-content {

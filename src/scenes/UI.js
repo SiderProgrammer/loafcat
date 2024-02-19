@@ -66,7 +66,7 @@ export class UI extends Scene {
       ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
 
     this.statsDropDownMenuPhaser.x =
-      window.testScale * 32 +
+      window.testScale * 25 +
       ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
 
     this.statsDropDownMenuPhaser.y =
