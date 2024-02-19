@@ -1,4 +1,5 @@
 import { MAX_WIDTH, SAFE_GAME_WIDTH } from "../constants/viewport";
+import { Async } from "../utils/Async";
 
 export default class Loafcat extends Phaser.GameObjects.Container {
   constructor(scene, x, y, sprite) {
@@ -88,9 +89,19 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
   }
 
-  feed(feedValue) {
-    this.petData.HungerLevel += feedValue;
-    this.checkRemoveNotification();
+  async feed(feedValue) {
+    // this.petData.HungerLevel += feedValue;
+    this.character.play("eat");
+    // await Async.delay(2000);
+    //this.fart();
+    // this.checkRemoveNotification();
+  }
+
+  fart() {
+    this.character.play("fart");
+    this.fartImage = this.scene.add.sprite(-25, 5, "fart").play("fart-idle");
+
+    this.add(this.fartImage);
   }
 
   listenMusic() {

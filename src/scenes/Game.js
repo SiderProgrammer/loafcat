@@ -11,6 +11,7 @@ import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
 import { linkTilemaps } from "../helpers/linkTilemaps";
 import { houseRoomsPlacement } from "../constants/houseRooms";
+import { MapInteractionSystem } from "../systems/MapInteractionSystem";
 
 export class Game extends Scene {
   constructor() {
@@ -24,12 +25,12 @@ export class Game extends Scene {
     this.cameras.main.setBackgroundColor(0x00ff00);
 
     //this.add.image(512, 384, "background").setAlpha(0.5);
-
+    this.mapInteractionSystem = new MapInteractionSystem(this);
     this.createMap();
 
-    this.loafcat = new Loafcat(this, 80, 275, "loafcat");
-    this.loafcat.listenMusic();
-    // this.loafcat.moveRandomly();
+    this.loafcat = new Loafcat(this, 80, 271.5, "loafcat");
+    //this.loafcat.listenMusic();
+    this.loafcat.moveRandomly();
 
     // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
@@ -83,6 +84,9 @@ export class Game extends Scene {
       houseRoomsPlacement[this.mapKey].nextFloor,
       true
     );
+
+    this.mapInteractionSystem.addInteractiveZones();
+    this.mapInteractionSystem.addPointingArrows();
   }
 
   setStateCatFeed() {
@@ -94,23 +98,23 @@ export class Game extends Scene {
 
   checkFeedPet(itemData) {
     this.loafcat.feed(1); // itemData.itemDetails.pointValue
+    
+    // axios({
+    //   method: "POST",
+    //   url: "http://localhost:3000/api/feed-pet",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   data: {
+    //     UserID: UserModel.USER_ID,
+    //     PetID: UserModel.PET_ID,
 
-    axios({
-      method: "POST",
-      url: "http://localhost:3000/api/feed-pet",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      data: {
-        UserID: UserModel.USER_ID,
-        PetID: UserModel.PET_ID,
+    //     ItemID: itemData.itemDetails.ItemID,
 
-        ItemID: itemData.itemDetails.ItemID,
-
-        foodType: itemData.itemDetails.category,
-        quantity: 1,
-      },
-    });
+    //     foodType: itemData.itemDetails.category,
+    //     quantity: 1,
+    //   },
+    // });
   }
 }

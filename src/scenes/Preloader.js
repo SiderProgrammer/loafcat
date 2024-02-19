@@ -54,8 +54,8 @@ export class Preloader extends Scene {
     this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
 
     this.load.spritesheet(`loafcat`, `loafcat.png`, {
-      frameWidth: 42,
-      frameHeight: 42,
+      frameWidth: 34,
+      frameHeight: 36,
     });
 
     this.load.spritesheet(`musical-nutes`, `effects/musical-nutes.png`, {
@@ -65,6 +65,10 @@ export class Preloader extends Scene {
 
     this.load.spritesheet(`pee`, `effects/pee.png`, {
       frameWidth: 32,
+      frameHeight: 36,
+    });
+    this.load.spritesheet(`fart`, `effects/fart.png`, {
+      frameWidth: 36,
       frameHeight: 36,
     });
 
@@ -90,6 +94,7 @@ export class Preloader extends Scene {
     this.load.image("blackBackground", "blackBackground.png");
     this.load.image("apple", "apple.png");
     this.load.image("petPopup", "petPopup.png");
+    this.load.image("arrow", "arrow.png");
 
     this.load.bitmapFont(
       "WhitePeaberry",
@@ -98,8 +103,8 @@ export class Preloader extends Scene {
     );
   }
 
-  addLoafcatAnim(name, frames, row) {
-    const realFrames = frames.map((frame) => frame + 13 * row);
+  addLoafcatAnim(name, frames, row, loop = true) {
+    const realFrames = frames.map((frame) => frame + 14 * row);
 
     this.anims.create({
       key: name,
@@ -107,7 +112,7 @@ export class Preloader extends Scene {
         frames: realFrames,
       }),
       frameRate: 7,
-      repeat: -1,
+      repeat: loop ? -1 : 0,
     });
   }
 
@@ -118,6 +123,8 @@ export class Preloader extends Scene {
     this.addLoafcatAnim("pee", [0, 1, 2, 3, 4, 5, 6, 7], 14);
     this.addLoafcatAnim("listen-music", [0, 1, 2, 3, 4, 5, 6, 7], 13);
     this.addLoafcatAnim("feed-me", [0, 1, 2, 3], 11);
+    this.addLoafcatAnim("fart", [0, 1, 2, 3, 4, 5, 6, 7, 8], 18, false);
+    this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
 
     this.anims.create({
       key: "nutes-idle",
@@ -134,6 +141,14 @@ export class Preloader extends Scene {
       }),
       frameRate: 8,
       repeat: -1,
+    });
+
+    this.anims.create({
+      key: "fart-idle",
+      frames: this.anims.generateFrameNumbers("fart", {
+        frames: [0, 1, 2, 3, 4, 5, 6, 7],
+      }),
+      frameRate: 8,
     });
     //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
     //  For example, you can define global animations here, so we can use them in other scenes.

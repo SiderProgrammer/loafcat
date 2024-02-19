@@ -8,6 +8,7 @@ import {
   SAFE_GAME_HEIGHT,
   SAFE_GAME_WIDTH,
 } from "../constants/viewport";
+import { Async } from "../utils/Async";
 
 export class Inventory extends Scene {
   constructor() {
@@ -90,7 +91,7 @@ export class Inventory extends Scene {
     // TODO : change main scene input to work with inventory instead add only call 1 method from main scene on pointerup
     itemContainer.item.on("pointerdown", () => {
       this.scene.sleep();
-      this.parentScene.blackOverlay.setVisible(false);
+      // this.parentScene.blackOverlay.setVisible(false);
       GameModel.MAIN_SCENE.setStateCatFeed();
 
       const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
@@ -146,18 +147,19 @@ export class Inventory extends Scene {
       );
     });
 
-    GameModel.MAIN_SCENE.input.on("pointerup", () => {
+    GameModel.MAIN_SCENE.input.on("pointerup", async () => {
       if (!this.itemInUse) return;
 
       // TODO : check if mouse hovering pet
       GameModel.MAIN_SCENE.checkFeedPet(
         this.slots[this.itemInUse.slot].item.itemData
       );
+      this.itemInUse.destroy();
+      await Async.delay(2000);
       GameModel.MAIN_SCENE.setStateCatIdle();
 
-      this.itemInUse.destroy();
       this.scene.wake();
-      this.parentScene.blackOverlay.setVisible(true);
+      //  this.parentScene.blackOverlay.setVisible(true);
       this.itemUsed(this.itemInUse.slot);
     });
   }
