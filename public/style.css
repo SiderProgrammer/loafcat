@@ -100,7 +100,7 @@ body {
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-
+  width: 100%;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
@@ -108,6 +108,25 @@ body {
 .dropdown:hover .dropdown-content {
   display: block;
   cursor: url("./assets/pointer.png"), pointer;
+}
+
+.statistic {
+  display: flex;
+  img {
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .dropdown:hover .dropbtn {
