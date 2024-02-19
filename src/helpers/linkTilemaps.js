@@ -1,18 +1,19 @@
-export function linkTilemaps(scene, map) {
+export function linkTilemaps(tilemap, map, nextFloor = false) {
+  const y = nextFloor ? -150 : 0;
   if (map === "streetMap") {
-    const streetTileset = scene.map.addTilesetImage("mp_cs_tilemap_all");
-    scene.map.createLayer("Background", streetTileset);
-    scene.map.createLayer("Tile Layer 5", streetTileset);
-    scene.map.createLayer("Tile Layer 2", streetTileset);
+    const streetTileset = tilemap.addTilesetImage("mp_cs_tilemap_all");
+    tilemap.createLayer("Background", streetTileset);
+    tilemap.createLayer("Tile Layer 5", streetTileset);
+    tilemap.createLayer("Tile Layer 2", streetTileset);
 
-    scene.map.createLayer("Tile Layer 3", streetTileset);
-    scene.map.createLayer("Tile Layer 4", streetTileset);
+    tilemap.createLayer("Tile Layer 3", streetTileset);
+    tilemap.createLayer("Tile Layer 4", streetTileset);
   } else if (map === "kitchenMap") {
-    const kitchenTileset = scene.map.addTilesetImage("Kitchen Room");
-    const kitchenTileset2 = scene.map.addTilesetImage("Bathroom");
-    const kitchenTileset3 = scene.map.addTilesetImage("Chill Room");
-    const kitchenTileset4 = scene.map.addTilesetImage("Background");
-    const kitchenTileset5 = scene.map.addTilesetImage("mp_cs_tilemap_all");
+    const kitchenTileset = tilemap.addTilesetImage("Kitchen Room");
+    const kitchenTileset2 = tilemap.addTilesetImage("Bathroom");
+    const kitchenTileset3 = tilemap.addTilesetImage("Chill Room");
+    const kitchenTileset4 = tilemap.addTilesetImage("Background");
+    const kitchenTileset5 = tilemap.addTilesetImage("mp_cs_tilemap_all");
     const tilesets = [
       kitchenTileset,
       kitchenTileset2,
@@ -20,16 +21,19 @@ export function linkTilemaps(scene, map) {
       kitchenTileset4,
       kitchenTileset5,
     ];
-    scene.map.createLayer("Tile Layer 1", tilesets);
-    scene.map.createLayer("Tile Layer 2", tilesets);
-    scene.map.createLayer("Tile Layer 3", tilesets);
-    scene.map.createLayer("Tile Layer 4", tilesets);
+
+    !nextFloor && tilemap.createLayer("Ground", tilesets, 0, y);
+
+    tilemap.createLayer("Tile Layer 1", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 3", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 4", tilesets, 0, y);
   } else if (map === "chillRoomMap") {
-    const kitchenTileset2 = scene.map.addTilesetImage("Bathroom");
-    const kitchenTileset3 = scene.map.addTilesetImage("Chill Room");
-    const kitchenTileset4 = scene.map.addTilesetImage("Background");
-    const kitchenTileset5 = scene.map.addTilesetImage("mp_cs_tilemap_all");
-    const kitchenTileset1 = scene.map.addTilesetImage("Play Room");
+    const kitchenTileset2 = tilemap.addTilesetImage("Bathroom");
+    const kitchenTileset3 = tilemap.addTilesetImage("Chill Room");
+    const kitchenTileset4 = tilemap.addTilesetImage("Background");
+    const kitchenTileset5 = tilemap.addTilesetImage("mp_cs_tilemap_all");
+    const kitchenTileset1 = tilemap.addTilesetImage("Play Room");
     const tilesets = [
       kitchenTileset1,
       kitchenTileset2,
@@ -37,15 +41,17 @@ export function linkTilemaps(scene, map) {
       kitchenTileset4,
       kitchenTileset5,
     ];
-    scene.map.createLayer("Tile Layer 1", tilesets);
 
-    scene.map.createLayer("Tile Layer 4", tilesets);
-    scene.map.createLayer("Tile Layer 5", tilesets);
-    scene.map.createLayer("Tile Layer 6", tilesets);
-    scene.map.createLayer("Tile Layer 7", tilesets);
-    scene.map.createLayer("Tile Layer 8", tilesets);
-    scene.map.createLayer("Tile Layer 9", tilesets);
-    scene.map.createLayer("Tile Layer 2", tilesets);
-    scene.map.createLayer("Tile Layer 3", tilesets);
+    !nextFloor && tilemap.createLayer("Ground", tilesets, 0, y);
+
+    tilemap.createLayer("Tile Layer 1", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 4", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 5", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 6", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 7", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 8", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 9", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 3", tilesets, 0, y);
   }
 }

@@ -10,6 +10,7 @@ import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
 import { linkTilemaps } from "../helpers/linkTilemaps";
+import { houseRoomsPlacement } from "../constants/houseRooms";
 
 export class Game extends Scene {
   constructor() {
@@ -61,7 +62,7 @@ export class Game extends Scene {
     //   },
     //   data: {
     //     UserID: UserModel.USER_ID,
-    //     PetID: "6",
+    //     PetID: UserModel.PET_ID,
     //   },
     // });
     // console.log(this.petData.data.pet);
@@ -70,7 +71,18 @@ export class Game extends Scene {
 
   createMap() {
     this.map = this.make.tilemap({ key: this.mapKey });
-    linkTilemaps(this, this.mapKey);
+    linkTilemaps(this.map, this.mapKey);
+
+    if (!houseRoomsPlacement[this.mapKey]) return;
+
+    this.nextFloor = this.make.tilemap({
+      key: houseRoomsPlacement[this.mapKey].nextFloor,
+    });
+    linkTilemaps(
+      this.nextFloor,
+      houseRoomsPlacement[this.mapKey].nextFloor,
+      true
+    );
   }
 
   setStateCatFeed() {
@@ -92,7 +104,7 @@ export class Game extends Scene {
       },
       data: {
         UserID: UserModel.USER_ID,
-        PetID: "6",
+        PetID: UserModel.PET_ID,
 
         ItemID: itemData.itemDetails.ItemID,
 

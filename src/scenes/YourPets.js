@@ -57,7 +57,7 @@ export class YourPets extends Scene {
       //   data: {
       //     UserID: UserModel.USER_ID,
       //     petType: nftsData.data.model,
-      //     PetID: 309,
+      //     PetID: UserModel.PET_ID,
       //     PetName: "Bobby",
       //   },
       // });

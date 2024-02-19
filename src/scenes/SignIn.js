@@ -12,10 +12,10 @@ export class SignIn extends Scene {
   create({ parentScene }) {
     this.parentScene = parentScene;
 
-    // if (window.solana.connect()) {
-    //   this.scene.start("Preloader");
-    //   return;
-    // }
+    if (window.solana.connect()) {
+      this.scene.start("Preloader");
+      return;
+    }
 
     this.elementsContainer = this.add.container(
       this.game.config.width / 2,
@@ -40,7 +40,7 @@ export class SignIn extends Scene {
 
     this.walletButton.onClick(async () => {
       await this.connectToWallet();
-      UserModel.USER_ID = window.solana.publicKey.toString();
+      UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
       // this.textContent.text = "Submit your name";
       this.walletButton.destroy();
       this.nameStage();

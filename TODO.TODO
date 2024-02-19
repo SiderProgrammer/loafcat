@@ -1,8 +1,9 @@
 DETAIL TODO:
+- new action alert system
+- new rooms system
 - pet naming in YourPets
 - start game with own wallet
 - hide canvas overflow-y
-- make HTMl UI buttons work
 - refactor UI code
 - update backend code
 - add eat animation
