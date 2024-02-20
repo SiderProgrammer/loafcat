@@ -107,6 +107,7 @@ export class Preloader extends Scene {
     this.load.image("apple", "apple.png");
     this.load.image("petPopup", "petPopup.png");
     this.load.image("arrow", "arrow.png");
+    this.load.image("nurse", "nurse.png");
 
     this.load.bitmapFont(
       "WhitePeaberry",

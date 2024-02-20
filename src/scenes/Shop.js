@@ -27,6 +27,7 @@ export class Shop extends Scene {
     this.board = this.add.sprite(0, 0, "shopPopup");
     const shopTab = this.add.sprite(-122, -106, "shopTab");
     const timeTab = this.add.sprite(-22, -105, "timeTab");
+    const nurse = this.add.sprite(-22, -105, "nurse");
     const whiteBox = new Button(this, 107, 20, "whiteBox");
 
     const buyButton = new Button(this, 107, 75, "greyButton");
@@ -76,6 +77,7 @@ export class Shop extends Scene {
       whiteBox,
 
       buyButton,
+      nurse,
     ]);
     this.updateItems(itemsData);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
