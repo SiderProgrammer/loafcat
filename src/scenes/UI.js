@@ -35,6 +35,9 @@ export class UI extends Scene {
     );
     document.querySelector("#hunger").children[1].style.animation =
       "pulse 2s infinite";
+    document.querySelector("#hunger").children[1].style.display = "block";
+
+    document.querySelector("#alertIcon").style.animation = "pulse 2s infinite";
     if (!this.listenersAttached) {
       this.getHTMLButtons();
       this.addHTMLButtonsEvents();

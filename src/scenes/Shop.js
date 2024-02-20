@@ -24,11 +24,14 @@ export class Shop extends Scene {
     // TODO : refresh every 24 hours
     // TODO : make buy button work
 
-    this.updateItems(itemsData);
+    this.board = this.add.sprite(0, 0, "shopPopup");
+    const shopTab = this.add.sprite(-122, -106, "shopTab");
+    const timeTab = this.add.sprite(-22, -105, "timeTab");
+    const whiteBox = new Button(this, 107, 20, "whiteBox");
 
-    this.board = this.add.sprite(0, 0, "statsBoard").setScale(10);
+    const buyButton = new Button(this, 107, 75, "greyButton");
 
-    this.refreshButton = new Button(this, 0, -70, "statsButton");
+    this.refreshButton = new Button(this, -58, 75, "chocolateButton");
     this.refreshButton.onClick(async () => {
       await axios({
         method: "POST",
@@ -68,8 +71,13 @@ export class Shop extends Scene {
       this.board,
       this.closeButton,
       this.refreshButton,
-    ]);
+      shopTab,
+      timeTab,
+      whiteBox,
 
+      buyButton,
+    ]);
+    this.updateItems(itemsData);
     this.scale.on("resize", (gameSize, baseSize, displaySize, resolution) => {
       this.cameras.resize(gameSize.width, gameSize.height);
       // this.setSpritesPosition(gameSize.width);
@@ -80,23 +88,31 @@ export class Shop extends Scene {
 
   setSpritesPosition(gameWidth) {}
 
-  addItem(y, itemData) {
-    const itemContainer = this.add.container(GameModel.GAME_WIDTH / 2, y);
-    itemContainer.image = this.add.image(-80, 0, itemData.image);
+  addItem(x, y, itemData) {
+    const itemContainer = this.add.container(x, y);
+    const box = this.add.image(0, 0, "itemBox");
+    const priceBox = this.add.image(0, 40, "chocolateButtonSmall");
+    itemContainer.image = this.add.image(0, 5, itemData.image);
     itemContainer.title = this.add
-      .text(-55, 0, itemData.title)
-      .setOrigin(0, 0.5);
-    itemContainer.cost = this.add.text(30, 0, itemData.cost).setOrigin(0, 0.5);
-    itemContainer.coin = this.add.image(70, 0, "coin");
+      .text(-55, -15, itemData.title, { fontFamily: "slkscr" })
+      .setOrigin(0, 0.5)
+      .setScale(0.5);
+    itemContainer.cost = this.add
+      .text(0, 40, itemData.cost, { fontFamily: "slkscr" })
+      .setOrigin(0, 0.5)
+      .setScale(0.5);
+    // itemContainer.coin = this.add.image(70, 0, "coin");
 
-    itemContainer.purchaseButton = this.add.image(90, 0, "storeButton");
+    // itemContainer.purchaseButton = this.add.image(90, 0, "storeButton");
 
     itemContainer.add([
+      box,
+      priceBox,
       itemContainer.image,
       itemContainer.title,
       itemContainer.cost,
-      itemContainer.coin,
-      itemContainer.purchaseButton,
+      // itemContainer.coin,
+      // itemContainer.purchaseButton,
     ]);
 
     return itemContainer;
@@ -111,13 +127,18 @@ export class Shop extends Scene {
     }
 
     itemsData.forEach((itemData, i) => {
-      const item = this.addItem(100 + i * 30, {
+      // TODO : set limit on backend to 6
+      if (i >= 1) return;
+
+      const item = this.addItem(-120, -60, {
         image: "loafcat", //itemData.item_name,
         title: itemData.ItemID.item_name,
         cost: itemData.ItemID.Price,
       });
 
       this.items.push(item);
+
+      this.elementsContainer.add(item);
     });
   }
 }

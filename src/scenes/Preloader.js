@@ -22,6 +22,18 @@ export class Preloader extends Scene {
     });
   }
 
+  loadUI() {
+    this.load.setPath("./assets/ui/shop");
+    this.load.image("shopPopup", "shopPopup.png");
+    this.load.image("itemBox", "itemBox.png");
+    this.load.image("chocolateButton", "chocolateButton.png");
+    this.load.image("greyButton", "greyButton.png");
+    this.load.image("shopTab", "shopTab.png");
+    this.load.image("chocolateButtonSmall", "chocolateButtonSmall.png");
+    this.load.image("timeTab", "timeTab.png");
+    this.load.image("whiteBox", "whiteBox.png");
+  }
+
   preload() {
     //  Load the assets for the game - Replace with your own assets
     this.load.html("avatarSection", "./UI/avatarSection.html");
@@ -68,7 +80,7 @@ export class Preloader extends Scene {
       frameHeight: 36,
     });
     this.load.spritesheet(`fart`, `effects/fart.png`, {
-      frameWidth: 36,
+      frameWidth: 32,
       frameHeight: 36,
     });
 
@@ -101,6 +113,8 @@ export class Preloader extends Scene {
       "WhitePeaberry.png",
       "WhitePeaberry.xml"
     );
+
+    this.loadUI();
   }
 
   addLoafcatAnim(name, frames, row, loop = true) {

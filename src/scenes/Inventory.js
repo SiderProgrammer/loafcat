@@ -150,12 +150,13 @@ export class Inventory extends Scene {
     GameModel.MAIN_SCENE.input.on("pointerup", async () => {
       if (!this.itemInUse) return;
 
-      // TODO : check if mouse hovering pet
-      GameModel.MAIN_SCENE.checkFeedPet(
+      this.itemInUse.destroy();
+
+      // TODO : add check if mouse hovering pet
+      await GameModel.MAIN_SCENE.checkFeedPet(
         this.slots[this.itemInUse.slot].item.itemData
       );
-      this.itemInUse.destroy();
-      await Async.delay(2000);
+
       GameModel.MAIN_SCENE.setStateCatIdle();
 
       this.scene.wake();

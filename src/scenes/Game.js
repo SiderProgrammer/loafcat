@@ -96,9 +96,9 @@ export class Game extends Scene {
     this.loafcat.setStateCatIdle();
   }
 
-  checkFeedPet(itemData) {
-    this.loafcat.feed(1); // itemData.itemDetails.pointValue
-    
+  async checkFeedPet(itemData) {
+    await this.loafcat.feed(1); // itemData.itemDetails.pointValue
+
     // axios({
     //   method: "POST",
     //   url: "http://localhost:3000/api/feed-pet",

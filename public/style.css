@@ -4,6 +4,7 @@ body {
   color: rgba(255, 255, 255, 0.87);
   background-color: #000000;
   overflow-y: hidden;
+  font-family: "slkscr";
 }
 
 html {
@@ -88,9 +89,12 @@ body {
   background-color: red;
 
   color: white;
-  padding: 8px 16px;
+
   font-size: 16px;
   border: none;
+  img {
+    image-rendering: pixelated;
+  }
 }
 
 .dropdown {
@@ -135,4 +139,8 @@ body {
   img {
     image-rendering: pixelated;
   }
+}
+
+.plus {
+  display: none;
 }

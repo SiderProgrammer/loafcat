@@ -1,5 +1,6 @@
 import { MAX_WIDTH, SAFE_GAME_WIDTH } from "../constants/viewport";
 import { Async } from "../utils/Async";
+import { MathUtils } from "../utils/Math";
 
 export default class Loafcat extends Phaser.GameObjects.Container {
   constructor(scene, x, y, sprite) {
@@ -27,8 +28,8 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
     const duration = Math.abs(this.x - newX) * pixelTravelTime;
     const flipCat = this.x - newX < 0 ? false : true;
-
-    this.character.setFlipX(flipCat);
+    this.setScale(flipCat ? -1 : 1, 1);
+    // this.setFlipX(flipCat);
 
     this.moveTween = this.scene.tweens.add({
       targets: this,
@@ -92,14 +93,18 @@ export default class Loafcat extends Phaser.GameObjects.Container {
   async feed(feedValue) {
     // this.petData.HungerLevel += feedValue;
     this.character.play("eat");
-    // await Async.delay(2000);
-    //this.fart();
+    await Async.delay(2000);
+    if (MathUtils.chance(30)) {
+      this.fart();
+      await Async.delay(2000);
+    }
+
     // this.checkRemoveNotification();
   }
 
   fart() {
     this.character.play("fart");
-    this.fartImage = this.scene.add.sprite(-25, 5, "fart").play("fart-idle");
+    this.fartImage = this.scene.add.sprite(0, 0, "fart").play("fart-idle");
 
     this.add(this.fartImage);
   }
@@ -108,7 +113,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     this.character.play("listen-music");
 
     this.notes = this.scene.add
-      .sprite(5, 5, "musical-nutes")
+      .sprite(-35, 5, "musical-nutes")
       .play("nutes-idle");
 
     this.add(this.notes);

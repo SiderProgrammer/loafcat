@@ -5,7 +5,6 @@ DETAIL TODO:
 - hide canvas overflow-y
 - refactor UI code
 - update backend code
-- add eat animation
 - add listen to music action starter
 - use treat-pet api to update pet stats on listen to music
 - add pet cleaning in bathroom map and send api to update cleanless stat
