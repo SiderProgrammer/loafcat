@@ -5,13 +5,14 @@ body {
   background-color: #000000;
   overflow-y: hidden;
   font-family: "slkscr";
+  overflow: hidden;
 }
 
 html {
   overflow-y: hidden;
   /* pointer-events: none; */
   user-select: none;
-
+  overflow: hidden;
   cursor: url("./assets/pointer.png"), pointer;
 }
 img {
@@ -143,4 +144,7 @@ body {
 
 .plus {
   display: none;
+}
+#alertIcon {
+  visibility: hidden;
 }

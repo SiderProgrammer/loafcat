@@ -15,7 +15,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     this.character = this.scene.add
       .sprite(0, 0, this.sprite)
 
-      .play("walk");
+      .play("idle");
     this.add(this.character);
   }
 
@@ -49,57 +49,13 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     this.moveTween.resume();
   }
 
-  // updateNotifications(petData) {
-  //   this.checkAddNotification(petData)
-  //   this.checkRemoveNotification(petData)
-
-  // }
-
-  checkAddNotification(petData) {
-    this.petData = petData;
-
-    if (petData.HungerLevel < 50) {
-      // const popupContainer = this.scene.add.container(0,0,[])
-      const popUp = this.scene.add.image(0, -20, "petPopup").setScale(1.5);
-      const hungerIcon = this.scene.add.image(0, -20, "hungerIcon");
-
-      this.add([popUp, hungerIcon]);
-      //popupContainer.add([popUp, hungerIcon]);
-      this.removeNotification = () => {
-        this.remove([popUp, hungerIcon]);
-      };
-
-      // this.setNotificationsInterval()
-    }
-  }
-  // TODO : fix it
-  setNotificationsInterval() {
-    this.scene.time.addEvent({
-      repeat: -1,
-      onRepeat: () => {
-        this.scene.time.delayedCall(5000, () => {
-          this.removeNotification();
-        });
-      },
-    });
-  }
-
-  checkRemoveNotification() {
-    if (this.petData.HungerLevel > 50) {
-      this.removeNotification();
-    }
-  }
-
   async feed(feedValue) {
-    // this.petData.HungerLevel += feedValue;
     this.character.play("eat");
     await Async.delay(2000);
     if (MathUtils.chance(30)) {
       this.fart();
       await Async.delay(2000);
     }
-
-    // this.checkRemoveNotification();
   }
 
   fart() {
@@ -117,5 +73,15 @@ export default class Loafcat extends Phaser.GameObjects.Container {
       .play("nutes-idle");
 
     this.add(this.notes);
+  }
+
+  pee() {
+    this.character.play("front-pee");
+
+    this.peeSprite = this.scene.add
+      .sprite(-35, 5, "front-pee")
+      .play("front-pee-idle");
+
+    this.add(this.peeSprite);
   }
 }

@@ -114,7 +114,7 @@ window.addEventListener("load", () => {
     if (newHeight > SAFE_GAME_HEIGHT) {
       newHeight = Math.floor(newHeight / 16) * 16 + 16;
     }
-
+    console.log(newHeight);
     // resize the game
     game.scale.resize(newWidth, newHeight);
     //game.scale.autoCenter

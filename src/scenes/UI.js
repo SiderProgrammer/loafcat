@@ -33,11 +33,7 @@ export class UI extends Scene {
     this.bottomButtonsSectionHTML = document.getElementById(
       "bottomButtonsSection"
     );
-    document.querySelector("#hunger").children[1].style.animation =
-      "pulse 2s infinite";
-    document.querySelector("#hunger").children[1].style.display = "block";
 
-    document.querySelector("#alertIcon").style.animation = "pulse 2s infinite";
     if (!this.listenersAttached) {
       this.getHTMLButtons();
       this.addHTMLButtonsEvents();
@@ -46,50 +42,53 @@ export class UI extends Scene {
     }
 
     this.scale.on("resize", () => {
-      this.cameras.resize(GameModel.GAME_WIDTH, GameModel.GAME_HEIGHT);
-      this.setSpritesPosition();
-
-      this.avatarSectionHTML.style.scale = window.testScale;
-      this.bottomButtonsSectionHTML.style.scale = window.testScale;
-      this.statsDropDownMenuHTML.style.scale = window.testScale;
+      this.resize();
     });
+    this.resize();
+  }
 
+  resize() {
+    this.cameras.resize(GameModel.GAME_WIDTH, GameModel.GAME_HEIGHT);
     this.setSpritesPosition();
+
+    this.avatarSectionHTML.style.scale = window.testScale;
+    this.bottomButtonsSectionHTML.style.scale = window.testScale;
+    this.statsDropDownMenuHTML.style.scale = window.testScale;
   }
 
   setSpritesPosition() {
+    let scale = window.testScale;
+
     const gameWidth = GameModel.GAME_WIDTH;
     // GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2; //GameModel.GAME_WIDTH;
     const gameHeight = GameModel.GAME_HEIGHT;
     //  GameModel.GAME_WIDTH - (GameModel.GAME_WIDTH - window.oldW) / 2;
     this.avatarSectionPhaser.x =
-      window.testScale * 25 +
-      ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
+      scale * 25 + ((GameModel.GAME_WIDTH - window.realWidth) / 2) * scale; // + 50;
 
     this.avatarSectionPhaser.y =
-      window.testScale * 25 +
-      ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
+      scale * 25 + ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * scale; //0; // document.getElementById("game-container").children[0].style.height
+    // scale * 0 + ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * scale; //+ 50;
 
     this.statsDropDownMenuPhaser.x =
-      window.testScale * 25 +
-      ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
+      scale * 25 + ((GameModel.GAME_WIDTH - window.realWidth) / 2) * scale; // + 50;
 
     this.statsDropDownMenuPhaser.y =
-      window.testScale * 55 +
-      ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
+      scale * 55 + ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * scale; //+ 50;
 
     // TODO : try anchoring it from left side, this can fix overflow-y caused by big UI div
     // TODO : fix positioning
     this.bottomButtonsSectionPhaser.x =
-      gameWidth * window.testScale -
-      67 * window.testScale -
-      ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; //+
+      gameWidth * scale -
+      67 * scale -
+      ((GameModel.GAME_WIDTH - window.realWidth) / 2) * scale; //+
+
     // ((GameModel.GAME_WIDTH - window.realWidth) / 2) * window.testScale; // + 50;
 
     this.bottomButtonsSectionPhaser.y =
-      gameHeight * window.testScale -
-      window.testScale * 10 -
-      ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * window.testScale; //+ 50;
+      gameHeight * scale -
+      scale * 10 -
+      ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * scale; //+ 50;
   }
 
   getHTMLButtons() {

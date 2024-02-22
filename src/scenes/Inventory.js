@@ -152,16 +152,20 @@ export class Inventory extends Scene {
 
       this.itemInUse.destroy();
 
-      // TODO : add check if mouse hovering pet
-      await GameModel.MAIN_SCENE.checkFeedPet(
+      const isPetFed = await GameModel.MAIN_SCENE.checkFeedPet(
         this.slots[this.itemInUse.slot].item.itemData
       );
 
       GameModel.MAIN_SCENE.setStateCatIdle();
 
       this.scene.wake();
+
+      if (isPetFed) {
+        this.itemUsed(this.itemInUse.slot);
+        this.itemInUse = null;
+      }
+
       //  this.parentScene.blackOverlay.setVisible(true);
-      this.itemUsed(this.itemInUse.slot);
     });
   }
 }
