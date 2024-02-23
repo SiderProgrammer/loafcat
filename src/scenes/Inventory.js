@@ -61,6 +61,16 @@ export class Inventory extends Scene {
       // );
       //  this.elementsContainer.x = GameModel.GAME_WIDTH/2 // gameSize.width / 2;
       // this.setSpritesPosition(gameSize.width);
+      // const sc =
+      //   this.scale.displaySize.height > window.innerHeight
+      //     ? this.scale.displaySize.height - window.innerHeight
+      //     : 0;
+      // let min = sc / window.innerHeight;
+      // console.log(min);
+      // this.elementsContainer.setScale(1 - min);
+      // if (this.scale.displaySize.height > window.innerHeight) {
+      //   this.elementsContainer.setScale(0.6);
+      // }
     });
 
     //  this.setSpritesPosition(this.game.config.width);

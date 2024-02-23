@@ -118,7 +118,9 @@ export class UI extends Scene {
         : innerHeight -
           (window.innerHeight - this.scale.displaySize.height) / 2;
 
-    this.bottomButtonsSectionPhaser.y = this.scale.displayScale.y * y2;
+    this.bottomButtonsSectionPhaser.y = this.scale.displayScale.y * y2 - 10;
+
+    this.bottomButtonsSectionPhaser.x = this.scale.width - 100;
   }
 
   getHTMLButtons() {
