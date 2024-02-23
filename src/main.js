@@ -18,20 +18,26 @@ import { YourPets } from "./scenes/YourPets";
 import { LinkedPets } from "./scenes/LinkedPets";
 import { GameModel } from "./models/GameModel";
 
-//  Find out more information about the Game Config at:
-//  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
   type: Phaser.AUTO,
-
-  // height: GAME_HEIGHT,
-
+  //autoRound: true,
   parent: "game-container",
   backgroundColor: "#028af8",
+  canvasStyle: "",
   scale: {
-    mode: Phaser.Scale.NONE,
-    // autoCenter: Phaser.Scale.CENTER_BOTH,
+    mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     width: SAFE_GAME_WIDTH,
     height: SAFE_GAME_HEIGHT,
+
+    // min: {
+    //   width: MAX_WIDTH,
+    //   height: MAX_HEIGHT,
+    // },
+    max: {
+      width: MAX_WIDTH * 4,
+      height: MAX_HEIGHT * 4,
+    },
   },
   scene: [
     Boot,
@@ -106,16 +112,19 @@ window.addEventListener("load", () => {
     window.realHeight = newHeight;
 
     // let oldW = newWidth;
-    newWidth = Math.round(newWidth);
-    newHeight = Math.round(newHeight);
+    // newWidth = Math.round(newWidth);
+
+    // newHeight = Math.round(newHeight);
+    let c = 16;
     if (newWidth > SAFE_GAME_WIDTH) {
-      newWidth = Math.floor(newWidth / 16) * 16 + 16;
+      newWidth = Math.floor(newWidth / c) * c + c;
+      //   newHeight = Math.floor(newHeight / c) * c + c * 0.5625;
     }
+
     if (newHeight > SAFE_GAME_HEIGHT) {
-      newHeight = Math.floor(newHeight / 16) * 16 + 16;
+      newHeight = Math.floor(newHeight / c) * c + c;
     }
-    console.log(newHeight);
-    // resize the game
+
     game.scale.resize(newWidth, newHeight);
     //game.scale.autoCenter
     // scale the width and height of the css
@@ -130,10 +139,10 @@ window.addEventListener("load", () => {
     }px`;
   };
   window.addEventListener("resize", (event) => {
-    resize();
+    //  resize();
   });
 
-  resize();
+  // resize();
 });
 
 export default game;

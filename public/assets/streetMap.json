@@ -182,7 +182,7 @@
         {
          "columns":32,
          "firstgid":1,
-         "image":"mp_cs_tilemap_all.png",
+         "image":"mp_city_street_tileset_pack\/mp_cs_tilemap_all.png",
          "imageheight":1024,
          "imagewidth":512,
          "margin":0,

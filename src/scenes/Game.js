@@ -21,6 +21,8 @@ export class Game extends Scene {
   }
 
   async create({ map }) {
+    // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
+    // this.scale.refresh();
     this.mapKey = map;
     GameModel.MAIN_SCENE = this;
     this.scene.launch("UI");
@@ -34,14 +36,25 @@ export class Game extends Scene {
     this.pet = new Loafcat(this, 80, 271.5, "loafcat");
     //this.pet.listenMusic();
     this.pet.moveRandomly();
-    this.pet.pee();
+    // this.pet.pee();
 
     // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", () => {
-      this.resize();
+      document.getElementById("game-container").children[0].style.width =
+        document.querySelector("canvas").style.width;
+      document.getElementById("game-container").children[0].style.height =
+        document.querySelector("canvas").style.height;
+
+      // this.resize();
+      this.cameras.main.setBounds(0, -20, MAX_WIDTH, MAX_HEIGHT);
+      this.cameras.main.centerOn(
+        Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
+        MAX_HEIGHT
+        //  Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2)
+      );
     });
 
-    this.resize();
+    // this.resize();
 
     this.petData = await axios({
       method: "POST",

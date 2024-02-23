@@ -20,6 +20,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
   }
 
   moveRandomly() {
+    this.character.play("walk");
     const newX = Phaser.Math.Between(
       (MAX_WIDTH - SAFE_GAME_WIDTH) / 2,
       SAFE_GAME_WIDTH
@@ -79,9 +80,10 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     this.character.play("front-pee");
 
     this.peeSprite = this.scene.add
-      .sprite(-35, 5, "front-pee")
+      .sprite(0, 0, "front-pee")
       .play("front-pee-idle");
 
     this.add(this.peeSprite);
+    this.swap(this.peeSprite, this.character);
   }
 }

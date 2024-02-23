@@ -1,4 +1,6 @@
 DETAIL TODO:
+- update grounds in rooms
+- apple eating stop, remove pointing eat anim
 - bathing
 - front pee
 - pet naming in YourPets
@@ -11,6 +13,9 @@ DETAIL TODO:
 - make coins deposit work
 
 TODO:
+- see other loafs
+- loaf size
+- scale envelop / width controls height / drop UI to canvas instead of html
 - cursors/soap/paper
 - tutorial pop up on every map start
 - import items assets
