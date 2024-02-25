@@ -33,28 +33,19 @@ export class Game extends Scene {
     this.mapInteractionSystem = new MapInteractionSystem(this);
     this.createMap();
 
-    this.pet = new Loafcat(this, 80, 271.5, "loafcat");
-    //this.pet.listenMusic();
+    this.pet = new Loafcat(this, 80, 275, "loafcat");
     this.pet.moveRandomly();
+
+    //this.pet.listenMusic();
+
     // this.pet.pee();
+    //this.pet.bathing();
 
-    // this.add.sprite(73, 182, "pee").play("pee-idle").setFlipX(true);
     this.scale.on("resize", () => {
-      document.getElementById("game-container").children[0].style.width =
-        document.querySelector("canvas").style.width;
-      document.getElementById("game-container").children[0].style.height =
-        document.querySelector("canvas").style.height;
-
-      // this.resize();
-      this.cameras.main.setBounds(0, -20, MAX_WIDTH, MAX_HEIGHT);
-      this.cameras.main.centerOn(
-        Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
-        MAX_HEIGHT
-        //  Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2)
-      );
+      this.resize();
     });
 
-    // this.resize();
+    this.resize();
 
     this.petData = await axios({
       method: "POST",
@@ -73,6 +64,14 @@ export class Game extends Scene {
     this.alertSystem.updateAlerts();
 
     console.log(this.petData.data.pet);
+
+    this.input.on("pointermove", () => {
+      if (!this.itemInUse) return;
+      this.itemInUse.setPosition(
+        this.input.activePointer.worldX,
+        this.input.activePointer.worldY
+      );
+    });
   }
 
   createMap() {
@@ -92,13 +91,6 @@ export class Game extends Scene {
 
     this.mapInteractionSystem.addInteractiveZones();
     this.mapInteractionSystem.addPointingArrows();
-  }
-
-  setStateCatFeed() {
-    this.pet.setStateCatFeed();
-  }
-  setStateCatIdle() {
-    this.pet.setStateCatIdle();
   }
 
   async checkFeedPet(itemData) {
@@ -149,26 +141,126 @@ export class Game extends Scene {
     PetModel.PET_DATA = data;
   }
 
+  setState(state) {
+    // TODO : should be pipeline for all pet states?
+    switch (state) {
+      case "bath":
+        // this.itemInUse = this.add
+        //   .image(
+        //     this.input.activePointer.worldX,
+        //     this.input.activePointer.worldY,
+        //     "soapImage"
+        //   )
+        //   .setDepth(3);
+        this.map.getLayer("Bath").tilemapLayer.setDepth(2);
+        this.pet.setState("bath");
+        this.pet.character.setInteractive();
+        let soapIn = false;
+        let lastEventPoint = {
+          x: this.input.activePointer.worldX,
+          y: this.input.activePointer.worldY,
+        };
+        let dc = null;
+        let counter = 0;
+        // TODO : set cursor to soap, reset animation frames to first, check zooming in
+        this.pet.character.on("pointerover", () => {
+          const pointerPos = {
+            x: this.input.activePointer.worldX,
+            y: this.input.activePointer.worldY,
+          };
+          if (
+            Phaser.Math.Distance.BetweenPoints(pointerPos, lastEventPoint) < 10
+          )
+            return;
+          if (counter == 20) {
+            console.log("bathed");
+          }
+          lastEventPoint = {
+            x: this.input.activePointer.worldX,
+            y: this.input.activePointer.worldY,
+          };
+
+          if (!dc) {
+            console.log("create");
+            this.pet.soap.anims.resume();
+            this.pet.character.anims.resume();
+            dc = setTimeout(() => {
+              console.log("callback");
+              this.pet.soap.anims.pause();
+              this.pet.character.anims.pause();
+              dc = null;
+            }, 1000);
+          } else if (dc) {
+            console.log("in progress");
+            clearTimeout(dc);
+            dc = setTimeout(() => {
+              console.log("callback");
+              this.pet.soap.anims.pause();
+              this.pet.character.anims.pause();
+              dc = null;
+            }, 1000);
+          }
+        });
+
+        // this.pet.character.on("pointerout", () => {
+
+        //  // soapIn = false;
+        //   this.pet.soap.anims.pause();
+        //   this.pet.character.anims.pause();
+        // });
+
+        // this.cameras.main.zoomTo(2, 500);
+        // const tweenData = {
+        //   scrollX: this.cameras.main.scrollX,
+        //   scrollY: this.cameras.main.scrollY,
+        // };
+        // this.tweens.add({
+        //   targets: tweenData,
+        //   scrollX: 120,
+        //   scrollY: 200,
+        //   duration: 500,
+        //   onUpdate: () => {
+        //     this.cameras.main.setScroll(tweenData.scrollX, tweenData.scrollY);
+        //     //   this.cameras.main.centerOn(tweenData.centerX, tweenData.centerY);
+        //   },
+        // });
+
+        break;
+    }
+  }
+
   resize() {
-    GameModel.GAME_WIDTH = this.scale.width;
-    GameModel.GAME_HEIGHT = this.scale.height;
-
-    this.cameras.resize(this.scale.width, this.scale.height);
-
     document.getElementById("game-container").children[0].style.width =
       document.querySelector("canvas").style.width;
     document.getElementById("game-container").children[0].style.height =
       document.querySelector("canvas").style.height;
 
-    // this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
-    // // TODO : fix it
-
-    this.cameras.main.setBounds(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    // this.resize();
+    this.cameras.main.setBounds(0, -20, MAX_WIDTH, MAX_HEIGHT);
     this.cameras.main.centerOn(
       Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
-      Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2) +
-        3.5
+      MAX_HEIGHT
+      //  Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2)
     );
+    // GameModel.GAME_WIDTH = this.scale.width;
+    // GameModel.GAME_HEIGHT = this.scale.height;
+
+    // this.cameras.resize(this.scale.width, this.scale.height);
+
+    // document.getElementById("game-container").children[0].style.width =
+    //   document.querySelector("canvas").style.width;
+    // document.getElementById("game-container").children[0].style.height =
+    //   document.querySelector("canvas").style.height;
+
+    // // this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
+    // // // TODO : fix it
+
+    // this.cameras.main.setBounds(0, 0, MAX_WIDTH, MAX_HEIGHT);
+    // this.cameras.main.centerOn(
+    //   Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
+    //   Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2) +
+    //     3.5
+    // );
   }
 }
 

@@ -4,10 +4,13 @@ import { UserModel } from "../models/UserModel";
 export class MapInteractionSystem {
   constructor(scene) {
     this.scene = scene;
+    this.canInteract = true;
     this.zones = [];
   }
   addInteractiveZones() {
-    this.scene.map.getObjectLayer("interactive").objects.forEach((area) => {
+    const zones = this.scene.map.getObjectLayer("interactive");
+    if (!zones) return;
+    zones.objects.forEach((area) => {
       const zone = this.scene.add
         .zone(area.x, area.y, area.width, area.height)
         .setInteractive()
@@ -17,6 +20,7 @@ export class MapInteractionSystem {
 
       zone.on("pointerdown", () => {
         console.log(area);
+        zone.arrow.destroy();
         this.startInteraction(area.name);
       });
     });
@@ -34,12 +38,20 @@ export class MapInteractionSystem {
         yoyo: true,
         repeat: -1,
       });
+
+      zone.arrow = arrow;
     });
   }
   startInteraction(elementName) {
+    if (!this.canInteract) return;
+    this.canInteract = false;
     switch (elementName) {
       case "fridge":
         this.interactFridge();
+        break;
+      case "bath":
+        this.interactBath();
+        break;
     }
   }
 
@@ -60,5 +72,9 @@ export class MapInteractionSystem {
       parentScene: this.scene,
       inventoryData: inventoryData.data,
     });
+  }
+
+  async interactBath() {
+    this.scene.setState("bath");
   }
 }

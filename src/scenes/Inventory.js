@@ -74,6 +74,7 @@ export class Inventory extends Scene {
     });
 
     //  this.setSpritesPosition(this.game.config.width);
+
     this.addInputs();
   }
 
@@ -102,7 +103,7 @@ export class Inventory extends Scene {
     itemContainer.item.on("pointerdown", () => {
       this.scene.sleep();
       // this.parentScene.blackOverlay.setVisible(false);
-      GameModel.MAIN_SCENE.setStateCatFeed();
+      GameModel.MAIN_SCENE.pet.setState("feed");
 
       const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
       const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
@@ -166,7 +167,7 @@ export class Inventory extends Scene {
         this.slots[this.itemInUse.slot].item.itemData
       );
 
-      GameModel.MAIN_SCENE.setStateCatIdle();
+      GameModel.MAIN_SCENE.pet.setState("walk");
 
       this.scene.wake();
 

@@ -53,5 +53,20 @@ export function linkTilemaps(tilemap, map, nextFloor = false) {
     tilemap.createLayer("Tile Layer 9", tilesets, 0, y);
     tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
     tilemap.createLayer("Tile Layer 3", tilesets, 0, y);
+  } else if (map === "bathroomMap") {
+    const kitchenTileset2 = tilemap.addTilesetImage("Bathroom");
+    const kitchenTileset3 = tilemap.addTilesetImage("Background");
+
+    const kitchenTileset5 = tilemap.addTilesetImage("mp_cs_tilemap_all");
+
+    const tilesets = [kitchenTileset2, kitchenTileset3, kitchenTileset5];
+
+    !nextFloor && tilemap.createLayer("Ground", tilesets, 0, y);
+
+    tilemap.createLayer("Tile Layer 1", tilesets, 0, y);
+    tilemap.createLayer("Tile Layer 4", tilesets, 0, y);
+
+    tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
+    tilemap.createLayer("Bath", tilesets, 0, y);
   }
 }

@@ -20,7 +20,6 @@ export default class Loafcat extends Phaser.GameObjects.Container {
   }
 
   moveRandomly() {
-    this.character.play("walk");
     const newX = Phaser.Math.Between(
       (MAX_WIDTH - SAFE_GAME_WIDTH) / 2,
       SAFE_GAME_WIDTH
@@ -40,14 +39,36 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.moveRandomly();
       },
     });
+
+    this.setState("walk");
+  }
+  setState(state) {
+    switch (state) {
+      case "idle":
+        this.setStateCatIdle();
+        break;
+      case "walk":
+        this.setStateCatWalk();
+        break;
+      case "feed":
+        this.setStateCatFeed();
+        break;
+      case "bath":
+        this.setStateBathing();
+        break;
+    }
   }
   setStateCatFeed() {
+    this.setStateCatIdle();
     this.character.play("feed-me");
-    this.moveTween.pause();
   }
-  setStateCatIdle() {
+  setStateCatWalk() {
     this.character.play("walk");
     this.moveTween.resume();
+  }
+  setStateCatIdle() {
+    this.character.play("idle");
+    this.moveTween.stop();
   }
 
   async feed(feedValue) {
@@ -85,5 +106,16 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
     this.add(this.peeSprite);
     this.swap(this.peeSprite, this.character);
+  }
+
+  setStateBathing() {
+    this.setStateCatIdle();
+    this.x = 369;
+    this.y = 272;
+    this.character.play("bathing");
+
+    this.soap = this.scene.add.sprite(0, 0, "soap").play("soap-idle");
+
+    this.add(this.soap);
   }
 }

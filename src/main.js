@@ -35,8 +35,8 @@ const config = {
     //   height: MAX_HEIGHT,
     // },
     max: {
-      width: MAX_WIDTH * 4,
-      height: MAX_HEIGHT * 4,
+      width: SAFE_GAME_WIDTH * 4,
+      height: SAFE_GAME_HEIGHT * 4,
     },
   },
   scene: [
@@ -54,7 +54,8 @@ const config = {
   ],
   pixelArt: true,
   roundPixels: true,
-
+  antialias: false,
+  antialiasGL: false,
   dom: {
     createContainer: true,
   },

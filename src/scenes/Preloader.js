@@ -61,9 +61,11 @@ export class Preloader extends Scene {
       "Play Room",
       "mp_house_interiors_tileset_pack/kids_bedroom.png"
     );
+
     this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
     this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
     this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
+    this.load.tilemapTiledJSON("bathroomMap", `bathroomMap.json`);
 
     this.load.spritesheet(`loafcat`, `loafcat.png`, {
       frameWidth: 34,
@@ -87,7 +89,10 @@ export class Preloader extends Scene {
       frameWidth: 32,
       frameHeight: 36,
     });
-
+    this.load.spritesheet(`soap`, `effects/soap.png`, {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
     this.load.image("logo", "logo.png");
     this.load.image("gearButton", "gearButton.png");
     this.load.image("coin", "coin.png");
@@ -112,6 +117,7 @@ export class Preloader extends Scene {
     this.load.image("petPopup", "petPopup.png");
     this.load.image("arrow", "arrow.png");
     this.load.image("nurse", "nurse.png");
+    this.load.image("soapImage", "soapImage.png");
 
     this.load.bitmapFont(
       "WhitePeaberry",
@@ -145,6 +151,7 @@ export class Preloader extends Scene {
     this.addLoafcatAnim("fart", [0, 1, 2, 3, 4, 5, 6, 7, 8], 18, false);
     this.addLoafcatAnim("front-pee", [0, 1, 2, 3, 4, 5, 6, 7], 19);
     this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
+    this.addLoafcatAnim("bathing", [0, 1, 2, 3, 4, 5, 6, 7], 23);
 
     this.anims.create({
       key: "nutes-idle",
@@ -178,10 +185,15 @@ export class Preloader extends Scene {
       frameRate: 8,
       repeat: -1,
     });
-    //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
-    //  For example, you can define global animations here, so we can use them in other scenes.
+    this.anims.create({
+      key: "soap-idle",
+      frames: this.anims.generateFrameNumbers("soap", {
+        frames: [0, 1, 2, 3, 4, 5, 6, 7],
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
 
-    //  Move to the MainMenu. You could also swap this for a Scene Transition, such as a camera fade.
     this.scene.start("Game", { map: "streetMap" });
   }
 }
