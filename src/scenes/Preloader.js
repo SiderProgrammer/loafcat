@@ -33,7 +33,16 @@ export class Preloader extends Scene {
     this.load.image("timeTab", "timeTab.png");
     this.load.image("whiteBox", "whiteBox.png");
   }
-
+  loadStats() {
+    this.load.setPath("./assets/stats");
+    this.load.image("happines", "Happines.png");
+    this.load.image("health", "Health.png");
+    this.load.image("hungry", "Hungry.png");
+    this.load.image("hydration", "Hydration.png");
+    this.load.image("pee", "Pee.png");
+    this.load.image("soap", "Soap.png");
+    this.load.image("statBox", "statBox.png");
+  }
   preload() {
     //  Load the assets for the game - Replace with your own assets
     this.load.html("avatarSection", "./UI/avatarSection.html");
@@ -126,6 +135,7 @@ export class Preloader extends Scene {
     );
 
     this.loadUI();
+    this.loadStats();
   }
 
   addLoafcatAnim(name, frames, row, loop = true) {

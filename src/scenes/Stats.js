@@ -116,6 +116,6 @@ export class Stats extends Scene {
 
     //  this.setSpritesPosition(this.game.config.width);
   }
-
+  addStatistic() {}
   setSpritesPosition(gameWidth) {}
 }

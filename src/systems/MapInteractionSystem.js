@@ -52,6 +52,9 @@ export class MapInteractionSystem {
       case "bath":
         this.interactBath();
         break;
+      case "toilet":
+        this.interactToilet();
+        break;
     }
   }
 
@@ -74,7 +77,11 @@ export class MapInteractionSystem {
     });
   }
 
-  async interactBath() {
+  interactBath() {
     this.scene.setState("bath");
+  }
+
+  interactToilet() {
+    this.scene.setState("toilet");
   }
 }

@@ -24,6 +24,7 @@ const config = {
   parent: "game-container",
   backgroundColor: "#028af8",
   canvasStyle: "",
+  autoRound: true,
   scale: {
     mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

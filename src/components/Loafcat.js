@@ -6,10 +6,13 @@ export default class Loafcat extends Phaser.GameObjects.Container {
   constructor(scene, x, y, sprite) {
     super(scene, x, y);
     scene.add.existing(this);
-
+    this.baseY = y;
     this.sprite = sprite;
 
     this.addLoafcatSprite();
+  }
+  setBaseY() {
+    this.y = this.baseY;
   }
   addLoafcatSprite() {
     this.character = this.scene.add
@@ -68,18 +71,33 @@ export default class Loafcat extends Phaser.GameObjects.Container {
   }
   setStateCatIdle() {
     this.character.play("idle");
-    this.moveTween.stop();
+    this.moveTween.pause();
   }
 
   async feed(feedValue) {
     this.character.play("eat");
     await Async.delay(2000);
+    // should be only when food is not liquid
     if (MathUtils.chance(30)) {
       this.fart();
       await Async.delay(2000);
+      // should be only when food is liquid
     }
+
+    this.cleanEffects();
   }
 
+  cleanEffects() {
+    if (this.fartImage) {
+      this.remove(this.fartImage);
+      this.fartImage.destroy();
+    }
+
+    if (this.peeSprite) {
+      this.remove(this.peeSprite);
+      this.peeSprite.destroy();
+    }
+  }
   fart() {
     this.character.play("fart");
     this.fartImage = this.scene.add.sprite(0, 0, "fart").play("fart-idle");
@@ -98,6 +116,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
   }
 
   pee() {
+    this.setStateCatIdle();
     this.character.play("front-pee");
 
     this.peeSprite = this.scene.add
@@ -110,11 +129,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
   setStateBathing() {
     this.setStateCatIdle();
+    this.moveTween.destroy();
     this.x = 369;
     this.y = 272;
-    this.character.play("bathing");
+    //this.character.play("bathing");
 
-    this.soap = this.scene.add.sprite(0, 0, "soap").play("soap-idle");
+    this.soap = this.scene.add.sprite(0, 0, "soap"); //.play("soap-idle");
 
     this.add(this.soap);
   }

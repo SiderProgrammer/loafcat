@@ -1,3 +1,6 @@
+.customCursor {
+  /* cursor: url("./assets/pointer.png"), pointer; */
+}
 body {
   margin: 0;
   padding: 0;
@@ -13,7 +16,6 @@ html {
   /* pointer-events: none; */
   user-select: none;
   overflow: hidden;
-  cursor: url("./assets/pointer.png"), pointer;
 }
 img {
   -webkit-user-drag: none;

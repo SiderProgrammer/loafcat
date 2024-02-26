@@ -1,5 +1,15 @@
-export function linkTilemaps(tilemap, map, nextFloor = false) {
-  const y = nextFloor ? -150 : 0;
+export function linkTilemaps(
+  tilemap,
+  map,
+  nextFloor = false,
+  previousFloor = false
+) {
+  let y = 0;
+  if (nextFloor) {
+    y = -110;
+  } else if (previousFloor) {
+    y = 291;
+  }
   if (map === "streetMap") {
     const streetTileset = tilemap.addTilesetImage("mp_cs_tilemap_all");
     tilemap.createLayer("Background", streetTileset);

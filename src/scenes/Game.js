@@ -21,6 +21,7 @@ export class Game extends Scene {
   }
 
   async create({ map }) {
+    this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
     // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
     // this.scale.refresh();
     this.mapKey = map;
@@ -34,6 +35,7 @@ export class Game extends Scene {
     this.createMap();
 
     this.pet = new Loafcat(this, 80, 275, "loafcat");
+    this.pet.setDepth(1);
     this.pet.moveRandomly();
 
     //this.pet.listenMusic();
@@ -78,16 +80,31 @@ export class Game extends Scene {
     this.map = this.make.tilemap({ key: this.mapKey });
     linkTilemaps(this.map, this.mapKey);
 
-    if (!houseRoomsPlacement[this.mapKey]) return;
+    //if (!houseRoomsPlacement[this.mapKey]) return;
+    // change name to: roomAbove
+    if (houseRoomsPlacement[this.mapKey]) {
+      this.nextFloor = this.make.tilemap({
+        key: houseRoomsPlacement[this.mapKey].nextFloor,
+      });
+      linkTilemaps(
+        this.nextFloor,
+        houseRoomsPlacement[this.mapKey].nextFloor,
+        true
+      );
+    }
 
-    this.nextFloor = this.make.tilemap({
-      key: houseRoomsPlacement[this.mapKey].nextFloor,
-    });
-    linkTilemaps(
-      this.nextFloor,
-      houseRoomsPlacement[this.mapKey].nextFloor,
-      true
-    );
+    let roomBelow;
+    for (const room in houseRoomsPlacement) {
+      if (houseRoomsPlacement[room].nextFloor === this.mapKey) roomBelow = room;
+    }
+
+    if (roomBelow) {
+      this.roomBelow = this.make.tilemap({
+        key: roomBelow,
+      });
+
+      linkTilemaps(this.roomBelow, roomBelow, false, true);
+    }
 
     this.mapInteractionSystem.addInteractiveZones();
     this.mapInteractionSystem.addPointingArrows();
@@ -145,86 +162,10 @@ export class Game extends Scene {
     // TODO : should be pipeline for all pet states?
     switch (state) {
       case "bath":
-        // this.itemInUse = this.add
-        //   .image(
-        //     this.input.activePointer.worldX,
-        //     this.input.activePointer.worldY,
-        //     "soapImage"
-        //   )
-        //   .setDepth(3);
-        this.map.getLayer("Bath").tilemapLayer.setDepth(2);
-        this.pet.setState("bath");
-        this.pet.character.setInteractive();
-        let soapIn = false;
-        let lastEventPoint = {
-          x: this.input.activePointer.worldX,
-          y: this.input.activePointer.worldY,
-        };
-        let dc = null;
-        let counter = 0;
-        // TODO : set cursor to soap, reset animation frames to first, check zooming in
-        this.pet.character.on("pointerover", () => {
-          const pointerPos = {
-            x: this.input.activePointer.worldX,
-            y: this.input.activePointer.worldY,
-          };
-          if (
-            Phaser.Math.Distance.BetweenPoints(pointerPos, lastEventPoint) < 10
-          )
-            return;
-          if (counter == 20) {
-            console.log("bathed");
-          }
-          lastEventPoint = {
-            x: this.input.activePointer.worldX,
-            y: this.input.activePointer.worldY,
-          };
-
-          if (!dc) {
-            console.log("create");
-            this.pet.soap.anims.resume();
-            this.pet.character.anims.resume();
-            dc = setTimeout(() => {
-              console.log("callback");
-              this.pet.soap.anims.pause();
-              this.pet.character.anims.pause();
-              dc = null;
-            }, 1000);
-          } else if (dc) {
-            console.log("in progress");
-            clearTimeout(dc);
-            dc = setTimeout(() => {
-              console.log("callback");
-              this.pet.soap.anims.pause();
-              this.pet.character.anims.pause();
-              dc = null;
-            }, 1000);
-          }
-        });
-
-        // this.pet.character.on("pointerout", () => {
-
-        //  // soapIn = false;
-        //   this.pet.soap.anims.pause();
-        //   this.pet.character.anims.pause();
-        // });
-
-        // this.cameras.main.zoomTo(2, 500);
-        // const tweenData = {
-        //   scrollX: this.cameras.main.scrollX,
-        //   scrollY: this.cameras.main.scrollY,
-        // };
-        // this.tweens.add({
-        //   targets: tweenData,
-        //   scrollX: 120,
-        //   scrollY: 200,
-        //   duration: 500,
-        //   onUpdate: () => {
-        //     this.cameras.main.setScroll(tweenData.scrollX, tweenData.scrollY);
-        //     //   this.cameras.main.centerOn(tweenData.centerX, tweenData.centerY);
-        //   },
-        // });
-
+        this.bathAction();
+        break;
+      case "toilet":
+        this.toiletAction();
         break;
     }
   }
@@ -261,6 +202,107 @@ export class Game extends Scene {
     //   Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2) +
     //     3.5
     // );
+  }
+
+  toiletAction() {}
+  bathAction() {
+    // this.itemInUse = this.add
+    //   .image(
+    //     this.input.activePointer.worldX,
+    //     this.input.activePointer.worldY,
+    //     "soapImage"
+    //   )
+    //   .setDepth(3);
+    this.input.setDefaultCursor('url("./assets/soapImage.png"), pointer');
+    this.map.getLayer("Bath").tilemapLayer.setDepth(2);
+    this.pet.setState("bath");
+
+    this.pet.character.setInteractive();
+    let soapIn = false;
+    let lastEventPoint = {
+      x: this.input.activePointer.worldX,
+      y: this.input.activePointer.worldY,
+    };
+    let dc = null;
+    let counter = 0;
+    // TODO : soap too big in some scales, bigger hitbox, check zooming in
+    this.pet.character.on("pointerover", () => {
+      const pointerPos = {
+        x: this.input.activePointer.worldX,
+        y: this.input.activePointer.worldY,
+      };
+      if (Phaser.Math.Distance.BetweenPoints(pointerPos, lastEventPoint) < 5)
+        return;
+
+      if (counter == 25) {
+        this.stopBathAction();
+        clearTimeout(dc);
+        return;
+      }
+      lastEventPoint = {
+        x: this.input.activePointer.worldX,
+        y: this.input.activePointer.worldY,
+      };
+
+      if (!dc) {
+        if (counter === 0) {
+          this.pet.character.play("bathing");
+          this.pet.soap.play("soap-idle");
+        }
+
+        this.pet.soap.anims.resume();
+        this.pet.character.anims.resume();
+        dc = setTimeout(() => {
+          this.pet.soap.anims.restart();
+          this.pet.character.anims.restart();
+          this.pet.soap.anims.pause();
+          this.pet.character.anims.pause();
+          dc = null;
+        }, 500);
+      } else if (dc) {
+        clearTimeout(dc);
+        dc = setTimeout(() => {
+          this.pet.soap.anims.restart();
+
+          this.pet.soap.anims.pause();
+          this.pet.character.anims.pause();
+          dc = null;
+        }, 500);
+      }
+      counter++;
+    });
+
+    // this.pet.character.on("pointerout", () => {
+
+    //  // soapIn = false;
+    //   this.pet.soap.anims.pause();
+    //   this.pet.character.anims.pause();
+    // });
+
+    // this.cameras.main.zoomTo(2, 500);
+    // const tweenData = {
+    //   scrollX: this.cameras.main.scrollX,
+    //   scrollY: this.cameras.main.scrollY,
+    // };
+    // this.tweens.add({
+    //   targets: tweenData,
+    //   scrollX: 120,
+    //   scrollY: 200,
+    //   duration: 500,
+    //   onUpdate: () => {
+    //     this.cameras.main.setScroll(tweenData.scrollX, tweenData.scrollY);
+    //     //   this.cameras.main.centerOn(tweenData.centerX, tweenData.centerY);
+    //   },
+    // });
+  }
+  stopBathAction() {
+    this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
+    this.pet.setBaseY();
+    this.pet.moveRandomly();
+    this.pet.setState("walk");
+    this.pet.soap.destroy();
+    this.pet.character.removeInteractive();
+    this.map.getLayer("Bath").tilemapLayer.setDepth(0);
   }
 }
 
