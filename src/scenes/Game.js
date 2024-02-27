@@ -167,6 +167,9 @@ export class Game extends Scene {
       case "toilet":
         this.toiletAction();
         break;
+      case "sink":
+        this.sinkAction();
+        break;
     }
   }
 
@@ -203,8 +206,20 @@ export class Game extends Scene {
     //     3.5
     // );
   }
+  sinkAction() {
+    this.pet.setState("teeth-brush");
+    this.time.delayedCall(3000, () => {
+      this.stopTeethBrushAction();
+    });
+  }
 
-  toiletAction() {}
+  stopTeethBrushAction() {
+    this.pet.stopToothBrush();
+    //this.pet.setState("idle")
+  }
+  toiletAction() {
+    this.pet.setState("toiletPoop");
+  }
   bathAction() {
     // this.itemInUse = this.add
     //   .image(
@@ -298,8 +313,8 @@ export class Game extends Scene {
   stopBathAction() {
     this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
     this.pet.setBaseY();
-    this.pet.moveRandomly();
-    this.pet.setState("walk");
+    // this.pet.moveRandomly();
+    this.pet.setState("idle");
     this.pet.soap.destroy();
     this.pet.character.removeInteractive();
     this.map.getLayer("Bath").tilemapLayer.setDepth(0);

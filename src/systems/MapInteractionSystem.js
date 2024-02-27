@@ -44,7 +44,7 @@ export class MapInteractionSystem {
   }
   startInteraction(elementName) {
     if (!this.canInteract) return;
-    this.canInteract = false;
+    //this.canInteract = false;
     switch (elementName) {
       case "fridge":
         this.interactFridge();
@@ -54,6 +54,9 @@ export class MapInteractionSystem {
         break;
       case "toilet":
         this.interactToilet();
+        break;
+      case "sink":
+        this.interactSink();
         break;
     }
   }
@@ -83,5 +86,9 @@ export class MapInteractionSystem {
 
   interactToilet() {
     this.scene.setState("toilet");
+  }
+
+  interactSink() {
+    this.scene.setState("sink");
   }
 }

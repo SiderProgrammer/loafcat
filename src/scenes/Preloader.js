@@ -5,23 +5,6 @@ export class Preloader extends Scene {
     super("Preloader");
   }
 
-  init() {
-    //  We loaded this image in our Boot Scene, so we can display it here
-    this.add.image(512, 384, "background");
-
-    //  A simple progress bar. This is the outline of the bar.
-    this.add.rectangle(512, 384, 468, 32).setStrokeStyle(1, 0xffffff);
-
-    //  This is the progress bar itself. It will increase in size from the left based on the % of progress.
-    const bar = this.add.rectangle(512 - 230, 384, 4, 28, 0xffffff);
-
-    //  Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
-    this.load.on("progress", (progress) => {
-      //  Update the progress bar (our bar is 464px wide, so 100% = 464px)
-      bar.width = 4 + 460 * progress;
-    });
-  }
-
   loadUI() {
     this.load.setPath("./assets/ui/shop");
     this.load.image("shopPopup", "shopPopup.png");
@@ -102,6 +85,15 @@ export class Preloader extends Scene {
       frameWidth: 32,
       frameHeight: 32,
     });
+    this.load.spritesheet(`newspaper`, `effects/newspaper.png`, {
+      frameWidth: 32,
+      frameHeight: 36,
+    });
+    this.load.spritesheet(`teeth-brushing`, `effects/teeth-brushing.png`, {
+      frameWidth: 32,
+      frameHeight: 36,
+    });
+
     this.load.image("logo", "logo.png");
     this.load.image("gearButton", "gearButton.png");
     this.load.image("coin", "coin.png");
@@ -138,7 +130,7 @@ export class Preloader extends Scene {
     this.loadStats();
   }
 
-  addLoafcatAnim(name, frames, row, loop = true) {
+  addLoafcatAnim(name, frames, row, loop = true, frameRate = 7) {
     const realFrames = frames.map((frame) => frame + 14 * row);
 
     this.anims.create({
@@ -146,11 +138,18 @@ export class Preloader extends Scene {
       frames: this.anims.generateFrameNumbers("loafcat", {
         frames: realFrames,
       }),
-      frameRate: 7,
+      frameRate,
       repeat: loop ? -1 : 0,
     });
   }
-
+  addBaseEffectAnim(animationKey, animationSpritesheet, frameRate = 7) {
+    this.anims.create({
+      key: animationKey,
+      frames: this.anims.generateFrameNumbers(animationSpritesheet),
+      frameRate,
+      repeat: -1,
+    });
+  }
   create() {
     this.addLoafcatAnim("idle", [0, 1, 2], 0);
     this.addLoafcatAnim("walk", [0, 1, 2, 3], 1);
@@ -162,47 +161,22 @@ export class Preloader extends Scene {
     this.addLoafcatAnim("front-pee", [0, 1, 2, 3, 4, 5, 6, 7], 19);
     this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
     this.addLoafcatAnim("bathing", [0, 1, 2, 3, 4, 5, 6, 7], 23);
+    this.addLoafcatAnim("teeth-brushing", [0, 1, 2, 3], 24, true, 5);
+    this.addLoafcatAnim(
+      "toiletPoop",
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      27,
+      true,
+      5
+    );
 
-    this.anims.create({
-      key: "nutes-idle",
-      frames: this.anims.generateFrameNumbers("musical-nutes", {
-        frames: [0, 1, 2, 3, 4, 5, 6],
-      }),
-      frameRate: 7,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "pee-idle",
-      frames: this.anims.generateFrameNumbers("pee", {
-        frames: [0, 1, 2, 3, 4, 5, 6, 7],
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
+    this.addBaseEffectAnim("pee-idle", "pee");
+    this.addBaseEffectAnim("fart-idle", "fart");
+    this.addBaseEffectAnim("front-pee-idle", "front-pee");
 
-    this.anims.create({
-      key: "fart-idle",
-      frames: this.anims.generateFrameNumbers("fart", {
-        frames: [0, 1, 2, 3, 4, 5, 6, 7],
-      }),
-      frameRate: 8,
-    });
-    this.anims.create({
-      key: "front-pee-idle",
-      frames: this.anims.generateFrameNumbers("front-pee", {
-        frames: [0, 1, 2, 3, 4, 5, 6, 7],
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "soap-idle",
-      frames: this.anims.generateFrameNumbers("soap", {
-        frames: [0, 1, 2, 3, 4, 5, 6, 7],
-      }),
-      frameRate: 8,
-      repeat: -1,
-    });
+    this.addBaseEffectAnim("soap-idle", "soap");
+    this.addBaseEffectAnim("newspaper-idle", "newspaper", 5);
+    this.addBaseEffectAnim("teeth-brushing-idle", "teeth-brushing", 5);
 
     this.scene.start("Game", { map: "streetMap" });
   }

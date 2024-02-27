@@ -59,6 +59,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
       case "bath":
         this.setStateBathing();
         break;
+      case "toiletPoop":
+        this.setStateCatPoop();
+        break;
+      case "teeth-brush":
+        this.setStateCatTeethBrush();
+        break;
     }
   }
   setStateCatFeed() {
@@ -97,12 +103,42 @@ export default class Loafcat extends Phaser.GameObjects.Container {
       this.remove(this.peeSprite);
       this.peeSprite.destroy();
     }
+    if (this.teethBrush) {
+      this.remove(this.teethBrush);
+      this.teethBrush.destroy();
+    }
   }
   fart() {
     this.character.play("fart");
     this.fartImage = this.scene.add.sprite(0, 0, "fart").play("fart-idle");
 
     this.add(this.fartImage);
+  }
+
+  setStateCatPoop() {
+    this.setStateCatIdle();
+    this.character.play("toiletPoop");
+    this.newspaper = this.scene.add
+      .sprite(0, 0, "newspaper")
+      .play("newspaper-idle");
+    this.x = 185;
+    this.y = 268;
+    this.add(this.newspaper);
+  }
+  stopToothBrush() {
+    this.cleanEffects();
+    this.setState("idle");
+  }
+  setStateCatTeethBrush() {
+    this.setBaseY();
+    this.setStateCatIdle();
+    this.character.play("teeth-brushing");
+    this.teethBrush = this.scene.add
+      .sprite(0, 0, "teeth-brushing")
+      .play("teeth-brushing-idle");
+    this.x = 248;
+
+    this.add(this.teethBrush);
   }
 
   listenMusic() {
