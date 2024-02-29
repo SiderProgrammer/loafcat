@@ -13,6 +13,7 @@ body {
 
 html {
     font-family: "slkscr";
+    cursor: url("./assets/pointer.png"), pointer;
 }
 
 #app {
@@ -98,12 +99,12 @@ html {
 
 #addressSection {
     position: absolute;
-    top: 48px;
-    left: 23px;
+    top: 47px;
+    left: 37px;
 }
 
 #walletAddress {
-    font-size: 6px;
+    font-size: 4px;
 }
 
 .dropbtn {
@@ -226,10 +227,28 @@ html {
     }
     .shelfHangBoard {
         margin-top: 19px;
+        font-size: 6px;
+        position: absolute;
     }
     .shelfItem {
         margin-left: 20px;
         margin-top: -5px;
+    }
+
+    .shelfItemPrice {
+        font-size: 8px;
+        position: absolute;
+        margin-top: 10px;
+        margin-left: 20px;
+        letter-spacing: -1px;
+        img {
+            margin-top: -1px;
+            margin-left: -2px;
+        }
+
+        .closingBracket {
+            margin-left: 6px;
+        }
     }
 }
 .shopTabs {
@@ -252,7 +271,12 @@ html {
     }
     .shopTimestampText {
         position: absolute;
-        margin-top: 6px;
+        margin-top: 5px;
         margin-left: -100px;
     }
+}
+.shopCloseButton {
+    left: 325px;
+    top: -7px;
+    position: absolute;
 }

@@ -184,6 +184,6 @@ export class Preloader extends Scene {
         this.addBaseEffectAnim("newspaper-idle", "newspaper", 5);
         this.addBaseEffectAnim("teeth-brushing-idle", "teeth-brushing", 5);
 
-        this.scene.start("Game", { map: "kitchenMap" });
+        this.scene.start("Game", { map: "bathroomMap" });
     }
 }
