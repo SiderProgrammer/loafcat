@@ -42,9 +42,9 @@ html {
 #bottomButtonsSection {
     transform: scale(3);
     transform-origin: bottom right;
-    bottom: 0px;
+    bottom: 7px;
     position: absolute;
-    right: 0px;
+    right: 20px;
     .button {
         margin-left: 9px;
     }
@@ -255,7 +255,7 @@ html {
     position: absolute;
     top: -10px;
     display: flex;
-    left: 35px;
+    left: 130px;
     span {
         font-size: 9px;
     }
@@ -270,13 +270,46 @@ html {
         margin-top: 8px;
     }
     .shopTimestampText {
+        font-size: 6px;
         position: absolute;
-        margin-top: 5px;
-        margin-left: -100px;
+        margin-top: -11px;
+        margin-left: 13px;
+        letter-spacing: -1px;
     }
 }
 .shopCloseButton {
     left: 325px;
     top: -7px;
     position: absolute;
+}
+
+.inventory {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%) scale(3);
+    transform-origin: center;
+    image-rendering: pixelated;
+}
+
+.itemSlotsContainer {
+    position: absolute;
+    top: 30px;
+    left: 15px;
+    display: flex;
+
+    width: 250px;
+    height: 100px;
+    flex-wrap: wrap;
+}
+.itemSlot {
+    height: 50px;
+    width: 180px;
+    flex: 1 0 21%;
+}
+
+.inventoryItem {
+    position: absolute;
+    margin-left: -32px;
+    margin-top: 18px;
 }

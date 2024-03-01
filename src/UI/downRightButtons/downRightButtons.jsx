@@ -6,8 +6,8 @@ export const DownRightButtons = ()=>{
           <Button buttonIcon ="leaderboardButton"></Button>
           <Button buttonIcon ="statsButton"></Button>
           <Button onClick={openShop} buttonIcon ="storeButton"></Button>
-          <Button buttonIcon ="mainMenuButton"></Button>
-          <Button buttonIcon ="gearButton"></Button>
+          <Button buttonIcon ="inventoryButton"></Button>
+          <Button buttonIcon ="mapButton"></Button>
 
 
 
