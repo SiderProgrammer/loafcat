@@ -29,7 +29,7 @@ export const PhaserGame = forwardRef(function PhaserGame ({ currentActiveScene }
             {
                 game.current.destroy(true);
                 game.current = undefined;
-               
+            
             }
 
         }

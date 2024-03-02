@@ -36,8 +36,8 @@ export class Game extends Scene {
 
         this.pet = new Loafcat(this, 80, 275, "loafcat");
         this.pet.setDepth(1);
-        this.pet.moveRandomly();
-
+        // this.pet.moveRandomly();
+        this.pet.sleep();
         //this.pet.listenMusic();
 
         // this.pet.pee();
@@ -105,6 +105,7 @@ export class Game extends Scene {
             });
 
             linkTilemaps(this.roomBelow, roomBelow, false, true);
+            this.add.image(0, 290, "wallOverlay").setOrigin(0, 0);
         }
 
         this.mapInteractionSystem.addInteractiveZones();

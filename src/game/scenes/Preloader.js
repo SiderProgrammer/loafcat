@@ -99,8 +99,12 @@ export class Preloader extends Scene {
             frameWidth: 32,
             frameHeight: 36,
         });
-
+        this.load.spritesheet(`sleep`, `effects/sleep.png`, {
+            frameWidth: 32,
+            frameHeight: 36,
+        });
         this.load.image("logo", "logo.png");
+        this.load.image("wallOverlay", "wallOverlay.png");
         this.load.image("gearButton", "gearButton.png");
         this.load.image("coin", "coin.png");
         this.load.image("storeButton", "storeButton.png");
@@ -163,6 +167,11 @@ export class Preloader extends Scene {
         this.addLoafcatAnim("pee", [0, 1, 2, 3, 4, 5, 6, 7], 14);
         this.addLoafcatAnim("listen-music", [0, 1, 2, 3, 4, 5, 6, 7], 13);
         this.addLoafcatAnim("feed-me", [0, 1, 2, 3], 11);
+        this.addLoafcatAnim(
+            "sleep",
+            [0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13],
+            14
+        );
         this.addLoafcatAnim("fart", [0, 1, 2, 3, 4, 5, 6, 7, 8], 18, false);
         this.addLoafcatAnim("front-pee", [0, 1, 2, 3, 4, 5, 6, 7], 19);
         this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
@@ -179,11 +188,12 @@ export class Preloader extends Scene {
         this.addBaseEffectAnim("pee-idle", "pee");
         this.addBaseEffectAnim("fart-idle", "fart");
         this.addBaseEffectAnim("front-pee-idle", "front-pee");
+        this.addBaseEffectAnim("sleep-idle", "sleep");
 
         this.addBaseEffectAnim("soap-idle", "soap");
         this.addBaseEffectAnim("newspaper-idle", "newspaper", 5);
         this.addBaseEffectAnim("teeth-brushing-idle", "teeth-brushing", 5);
 
-        this.scene.start("Game", { map: "bathroomMap" });
+        this.scene.start("Game", { map: "chillRoomMap" });
     }
 }

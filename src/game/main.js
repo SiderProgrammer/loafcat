@@ -147,11 +147,11 @@ window.addEventListener("load", () => {
     // resize();
 });
 const StartGame = (parent) => {
-    return new Phaser.Game({ ...config, parent: parent });
+    const game = new Phaser.Game({ ...config, parent: parent });
+    globalThis.__PHASER_GAME__ = game;
+    return game;
 };
 
 export default StartGame;
 
 //export default game;
-
-//globalThis.__PHASER_GAME__ = game;
