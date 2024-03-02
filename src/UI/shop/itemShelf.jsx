@@ -1,13 +1,13 @@
 export const ItemShelf = (props) => {
     return (
         <div className="shelf">
-            <img src="./assets/ui/shop/Board dark.png"></img>
+            <img src="./assets/ui/shop/Board light.png"></img>
             <div className="shelfHangBoard">
-                <img src="./assets/ui/shop/Hanging sign small dark.png"></img>
+                <img src="./assets/ui/shop/Hanging sign small.png"></img>
                 <span className="shelfItemPrice">
-                    30(
+                    30
                     <img src="./assets/coin.png"></img>
-                    <span className="closingBracket">)</span>
+                    {/* <span className="closingBracket">)</span> */}
                 </span>
             </div>
 

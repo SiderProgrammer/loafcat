@@ -7,6 +7,8 @@ import { Stats } from "./UI/alert/stats";
 import { DownRightButtons } from "./UI/downRightButtons/downRightButtons";
 import { Inventory } from "./UI/inventory/inventory";
 import { Shop } from "./UI/shop/shop";
+import { BlackOverlay } from "./UI/blackOverlay/blackOverlay";
+import { Leaderboard } from "./UI/leaderboard/leaderboard";
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     // const [canMoveLogo, setCanMoveLogo] = useState(true);
@@ -22,24 +24,36 @@ function App() {
 
     const resizeUI = () => {
         // TODO : find better more reactable solution
-        const canvas = document.querySelector("canvas");
-        let newHeight = canvas.style.height;
-        if (parseFloat(newHeight) > window.innerHeight) {
-            newHeight = window.innerHeight;
-        }
-        setHeight(newHeight);
-
-        let newWidth = canvas.style.width;
-        // if(parseFloat(newWidth) > window.innerHeight) {
-        //     newWidth = window.innerHeight
-        // }
-        setWidth(newWidth);
+        setTimeout(()=>{
+            const canvas = document.querySelector("canvas");
+            let newHeight = canvas.style.height;
+            if (parseFloat(newHeight) > window.innerHeight) {
+                newHeight = window.innerHeight;
+            }
+            setHeight(newHeight);
+    
+            let newWidth = canvas.style.width;
+            // if(parseFloat(newWidth) > window.innerHeight) {
+            //     newWidth = window.innerHeight
+            // }
+            setWidth(newWidth);
+        },0)
+   
     };
 
     useLayoutEffect(() => {
+    //    const element = document.querySelector("window")
+    //    if(!element) return
+    //     const observer = new ResizeObserver(() => {
+    //     resizeUI()
+    //       });
+
+       //    observer.observe(element)
+       resizeUI()
         window.addEventListener("resize", resizeUI);
 
         return () => {
+            // observer.disconnect();
             window.removeEventListener("resize", resizeUI);
         };
     }, [phaserRef]);
@@ -123,7 +137,7 @@ function App() {
                 <div>
                     <button className="button" onClick={addSprite}>Add New Sprite</button>
                 </div> */}
-                <div id="avatarSection">
+                <div id="avatarSection" className="ui">
                     <img
                         id="profileFrame"
                         src="./assets/ui/profileView/profileFrame.png"
@@ -135,7 +149,7 @@ function App() {
                         />
                         <img
                             id="avatarImage"
-                            src="./assets/loafcatAvatar.png"
+                            src="./assets/nftAvatar.jpg"
                         />
                     </div>
                     <div>
@@ -151,9 +165,10 @@ function App() {
                             <span id="levelValue">Lv.13</span>
                         </div>
                     </div>
-                </div>
 
-                <div id="statsDropDownMenu" class="dropdown">
+
+
+                    <div id="statsDropDownMenu" class="dropdown">
                     <button className="dropbtn button" onClick={openAlertStats}>
                         <img
                             id="alertBox"
@@ -176,12 +191,18 @@ function App() {
                         <Stats></Stats>
                     </div>
                 </div>
+                </div>
+
+    
                 <Inventory></Inventory>
                 <Shop></Shop>
-                <div id="bottomButtonsSection">
+                <Leaderboard></Leaderboard>
+                <div id="bottomButtonsSection" className="ui">
                     <DownRightButtons></DownRightButtons>
                 </div>
+      
             </div>
+                <BlackOverlay></BlackOverlay>
         </div>
     );
 }

@@ -9,6 +9,19 @@ body {
     background-color: #000000;
     font-family: "slkscr";
     overflow: hidden;
+    pointer-events: none;
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+
+        background: url("./assets/ui/scrollbar.png") no-repeat;
+        background-size: cover;
+    }
 }
 
 html {
@@ -29,6 +42,19 @@ html {
     width: 100%;
     /* height: 100%;    */
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.center {
+    /* left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%); */
+    position: absolute;
+    margin: auto;
 }
 
 .button {
@@ -37,10 +63,23 @@ html {
     padding: 0;
     cursor: url("./assets/pointer.png"), pointer;
     image-rendering: pixelated;
+    pointer-events: all;
+    img {
+        pointer-events: none;
+    }
+    span {
+        position: absolute;
+        left: 50%;
+        top: 46%;
+        transform: translate(-50%, -50%);
+        font-family: "slkscr";
+        font-size: 6px;
+
+        letter-spacing: -1px;
+    }
 }
 
 #bottomButtonsSection {
-    transform: scale(3);
     transform-origin: bottom right;
     bottom: 7px;
     position: absolute;
@@ -57,19 +96,24 @@ html {
 
 #avatarSection {
     transform-origin: left top;
-    transform: scale(3);
+
     image-rendering: pixelated;
     background: none;
     border: none;
     padding: 0;
     position: absolute;
-    top: -24px;
+    top: -4%;
+    left: 0;
 }
 
 #avatarImage {
     position: absolute;
     left: 2px;
-    top: 5px;
+    top: 2.5px;
+    transform: scale(0.029);
+    transform-origin: top left;
+    border-radius: 0.5;
+    border-radius: 100px;
 }
 #levelSection {
     position: absolute;
@@ -122,10 +166,9 @@ html {
 
 .dropdown {
     position: absolute;
-    transform: scale(3);
+
     transform-origin: left top;
-    top: 220px;
-    left: 130px;
+    left: 45px;
 }
 .dropdown-content {
     display: none;
@@ -199,10 +242,6 @@ html {
 }
 
 .shop {
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%) scale(3);
     transform-origin: center;
     image-rendering: pixelated;
 }
@@ -226,7 +265,7 @@ html {
         position: absolute;
     }
     .shelfHangBoard {
-        margin-top: 19px;
+        margin-top: 18px;
         font-size: 6px;
         position: absolute;
     }
@@ -243,7 +282,6 @@ html {
         letter-spacing: -1px;
         img {
             margin-top: -1px;
-            margin-left: -2px;
         }
 
         .closingBracket {
@@ -277,17 +315,18 @@ html {
         letter-spacing: -1px;
     }
 }
+.shopRefreshButton {
+    position: absolute;
+    left: 230px;
+    top: 70px;
+}
 .shopCloseButton {
     left: 325px;
-    top: -7px;
+    top: -5px;
     position: absolute;
 }
 
 .inventory {
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%) scale(3);
     transform-origin: center;
     image-rendering: pixelated;
 }
@@ -298,18 +337,78 @@ html {
     left: 15px;
     display: flex;
 
-    width: 250px;
-    height: 100px;
+    width: 180px;
+    height: 169px;
     flex-wrap: wrap;
 }
 .itemSlot {
     height: 50px;
-    width: 180px;
+    width: 0px;
     flex: 1 0 21%;
 }
 
 .inventoryItem {
+    position: relative;
+
+    top: -37px;
+    left: 22px;
+}
+
+.inventoryCloseButton {
     position: absolute;
-    margin-left: -32px;
-    margin-top: 18px;
+    left: 90%;
+    top: -5%;
+}
+
+.popup {
+    z-index: 1;
+}
+
+.blackOverlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+}
+
+.leaderboardPlayers {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 20px;
+    font-size: 6px;
+    letter-spacing: -1px;
+    overflow-y: scroll;
+    left: 15px;
+    pointer-events: all;
+    height: 200px;
+    scrollbar img {
+        image-rendering: pixelated;
+        position: relative;
+        top: 7px;
+        pointer-events: none;
+    }
+    span {
+        pointer-events: none;
+        color: black;
+        font-size: 10px;
+    }
+}
+.ui {
+    @media only screen and (min-width: 650px) {
+        transform: scale(1.5);
+    }
+
+    @media only screen and (min-width: 880px) {
+        transform: scale(2);
+    }
+
+    @media only screen and (min-width: 1150px) {
+        transform: scale(2.5);
+    }
+
+    @media only screen and (min-width: 1500px) {
+        transform: scale(3);
+    }
 }
