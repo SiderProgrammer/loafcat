@@ -26,6 +26,17 @@ export class Preloader extends Scene {
         this.load.image("soap", "Soap.png");
         this.load.image("statBox", "statBox.png");
     }
+    loadAmbient() {
+        this.load.setPath("./assets/effects/ambient");
+        this.load.spritesheet(`TV-egyptian-loaf`, `TV-egyptian-loaf.png`, {
+            frameWidth: 576 / 6,
+            frameHeight: 48,
+        });
+        this.load.spritesheet(`TV-lamp`, `TV-lamp.png`, {
+            frameWidth: 576 / 6,
+            frameHeight: 80,
+        });
+    }
     preload() {
         //  Load the assets for the game - Replace with your own assets
         this.load.html("avatarSection", "./UI/avatarSection.html");
@@ -64,6 +75,7 @@ export class Preloader extends Scene {
         this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
         this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
         this.load.tilemapTiledJSON("bathroomMap", `bathroomMap.json`);
+        this.load.tilemapTiledJSON("livingRoomMap", `livingRoomMap.json`);
 
         this.load.spritesheet(`loafcat`, `loafcat.png`, {
             frameWidth: 34,
@@ -103,6 +115,11 @@ export class Preloader extends Scene {
             frameWidth: 32,
             frameHeight: 36,
         });
+        this.load.spritesheet(`cap-coffee`, `effects/cap-coffee.png`, {
+            frameWidth: 32,
+            frameHeight: 36,
+        });
+
         this.load.image("logo", "logo.png");
         this.load.image("wallOverlay", "wallOverlay.png");
         this.load.image("gearButton", "gearButton.png");
@@ -138,6 +155,7 @@ export class Preloader extends Scene {
 
         this.loadUI();
         this.loadStats();
+        this.loadAmbient();
     }
 
     addLoafcatAnim(name, frames, row, loop = true, frameRate = 7) {
@@ -166,6 +184,11 @@ export class Preloader extends Scene {
         this.addLoafcatAnim("dance", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 7);
         this.addLoafcatAnim("pee", [0, 1, 2, 3, 4, 5, 6, 7], 14);
         this.addLoafcatAnim("listen-music", [0, 1, 2, 3, 4, 5, 6, 7], 13);
+        this.addLoafcatAnim(
+            "drink-coffee",
+            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+            26
+        );
         this.addLoafcatAnim("feed-me", [0, 1, 2, 3], 11);
         this.addLoafcatAnim(
             "sleep",
@@ -185,6 +208,7 @@ export class Preloader extends Scene {
             5
         );
 
+        this.addBaseEffectAnim("coffee-idle", "cap-coffee");
         this.addBaseEffectAnim("pee-idle", "pee");
         this.addBaseEffectAnim("fart-idle", "fart");
         this.addBaseEffectAnim("front-pee-idle", "front-pee");
@@ -194,6 +218,9 @@ export class Preloader extends Scene {
         this.addBaseEffectAnim("newspaper-idle", "newspaper", 5);
         this.addBaseEffectAnim("teeth-brushing-idle", "teeth-brushing", 5);
 
-        this.scene.start("Game", { map: "chillRoomMap" });
+        this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf");
+        this.addBaseEffectAnim("TV-lamp", "TV-lamp");
+
+        this.scene.start("Game", { map: "livingRoomMap" });
     }
 }

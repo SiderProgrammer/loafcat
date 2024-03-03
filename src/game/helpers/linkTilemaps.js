@@ -9,7 +9,6 @@ export function linkTilemaps(
         y = -110;
     } else if (previousFloor) {
         y = 291;
-      
     }
     if (map === "streetMap") {
         const streetTileset = tilemap.addTilesetImage("mp_cs_tilemap_all");
@@ -80,5 +79,26 @@ export function linkTilemaps(
 
         tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
         tilemap.createLayer("Bath", tilesets, 0, y);
+    } else if (map === "livingRoomMap") {
+        const kitchenTileset2 = tilemap.addTilesetImage("Bathroom");
+        const kitchenTileset1 = tilemap.addTilesetImage("Background");
+        const kitchenTileset3 = tilemap.addTilesetImage("Chill Room");
+
+        const kitchenTileset5 = tilemap.addTilesetImage("mp_cs_tilemap_all");
+        const kitchenTileset4 = tilemap.addTilesetImage("Play Room");
+
+        const tilesets = [
+            kitchenTileset1,
+            kitchenTileset2,
+            kitchenTileset3,
+            kitchenTileset4,
+            kitchenTileset5,
+        ];
+
+        !nextFloor && tilemap.createLayer("Ground", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 1", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 4", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 3", tilesets, 0, y);
     }
 }

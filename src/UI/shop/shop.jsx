@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
 import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
 import { ItemShelf } from "./itemShelf";
 import { createSignal } from 'react-use-signals';
+import axios from "axios";
+import { UserModel } from "../../game/models/UserModel";
 export const visibilitySignal = createSignal("hidden");
 
 export const openShop = () => {
@@ -14,12 +17,54 @@ export const openShop = () => {
   hideOverlay()
         
   };
-   const refreshShop = () => {
 
-  };
 export const Shop = () => {
+    const changeVisiblity = visibilitySignal.useStateAdapter();
+    const [shopData, setShopData] = useState([]);
+    const fetchData = async () =>{
+        if (visibilitySignal.value === "visible") {
+            const data = await axios({
+                method: "POST",
+                url: `http://localhost:3000/api/daily-items`,
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                data: {
+                  UserID: UserModel.USER_ID,
+                  limit:8
+                },
+              });
+        
+              setShopData(data.data)
+         
+        }
+    }
+    useEffect( () => {
+ 
+        fetchData()
+        
+        return () => {};
+    }, [visibilitySignal.value]);
 
- const changeVisiblity = visibilitySignal.useStateAdapter()
+    const refreshShop = async () => {
+        await axios({
+            method: "POST",
+            url: "http://localhost:3000/api/refresh-items",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            data: {
+              UserID: UserModel.USER_ID,
+            },
+          });
+    
+
+        fetchData()
+    };
+  
+
     return (
         <div className="shop popup ui center" style={{visibility:changeVisiblity.value}} >
             <img src="./assets/ui/shop/shopFrame.png"></img>
@@ -36,14 +81,12 @@ export const Shop = () => {
                 </div>
             </div>
             <div className="shelfs">
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
-                <ItemShelf item="apple"></ItemShelf>
+            {shopData.length &&
+                    shopData.map((prop) => (
+                        <ItemShelf data={prop}></ItemShelf>
+                    ))}
+        
+            
             </div>
         </div>
     );

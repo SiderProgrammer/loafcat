@@ -1,6 +1,5 @@
 DETAIL TODO:
-- add listen to music action starter
-- add shadow for below rooms
+- different pointers
 - trunking items name
 - pet naming in YourPets
 - start game with own wallet
@@ -12,7 +11,6 @@ DETAIL TODO:
 - zoom in actions
 
 TODO:
-- different pointers
 - scale every 16th px?
 - see other loafs
 - loaf size

@@ -14,6 +14,7 @@ import { houseRoomsPlacement } from "../constants/houseRooms";
 import { MapInteractionSystem } from "../systems/MapInteractionSystem";
 import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
+import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 
 export class Game extends Scene {
     constructor() {
@@ -37,7 +38,7 @@ export class Game extends Scene {
         this.pet = new Loafcat(this, 80, 275, "loafcat");
         this.pet.setDepth(1);
         // this.pet.moveRandomly();
-        this.pet.sleep();
+        this.pet.drinkCoffee();
         //this.pet.listenMusic();
 
         // this.pet.pee();
@@ -107,7 +108,7 @@ export class Game extends Scene {
             linkTilemaps(this.roomBelow, roomBelow, false, true);
             this.add.image(0, 290, "wallOverlay").setOrigin(0, 0);
         }
-
+        addAmbientAnimations(this, this.mapKey);
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();
     }

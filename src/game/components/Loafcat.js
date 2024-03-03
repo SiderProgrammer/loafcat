@@ -76,6 +76,15 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
         this.add(this.sleepSprite);
     }
+    drinkCoffee() {
+        this.setStateCatIdle();
+        this.character.play("drink-coffee");
+        this.coffee = this.scene.add
+            .sprite(0, 0, "cap-coffee")
+            .play("coffee-idle");
+
+        this.add(this.coffee);
+    }
     setStateCatFeed() {
         this.setStateCatIdle();
         this.character.play("feed-me");

@@ -27,6 +27,7 @@ body {
 html {
     font-family: "slkscr";
     cursor: url("./assets/pointer.png"), pointer;
+    image-rendering: pixelated;
 }
 
 #app {
@@ -77,6 +78,12 @@ html {
 
         letter-spacing: -1px;
     }
+}
+.button:hover {
+    transform: scale(1.1);
+}
+.button:active {
+    transform: scale(1);
 }
 
 #bottomButtonsSection {
