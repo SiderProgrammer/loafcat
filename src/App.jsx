@@ -169,7 +169,7 @@ function App() {
 
 
                     <div id="statsDropDownMenu" class="dropdown">
-                    <button className="dropbtn button" onClick={openAlertStats}>
+                    <button className="dropbtn button hoverScale" onClick={openAlertStats}>
                         <img
                             id="alertBox"
                             src="./assets/ui/profileView/alertBox1.png"

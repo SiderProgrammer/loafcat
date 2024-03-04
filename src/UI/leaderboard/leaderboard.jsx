@@ -4,9 +4,10 @@ import { createSignal } from "react-use-signals";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
+import { Button } from "../buttons/button";
 export const visibilitySignal = createSignal("hidden");
 
-const sampleData = [{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:5, UserID:"asdasd"}]
+const sampleData = [{Rank:1, UserID:"asdasd"},{Rank:2, UserID:"asdasd"},{Rank:3, UserID:"asdasd"},{Rank:4, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:6, UserID:"asdasd"},{Rank:7, UserID:"asdasd"},{Rank:8, UserID:"asdasd"},{Rank:9, UserID:"asdasd"}]
 export const openLeaderboard = async () => {
     visibilitySignal.value = "visible";
     showOverlay();
@@ -16,6 +17,7 @@ export const closeLeaderboard = () => {
     hideOverlay();
 };
 
+              
 export const Leaderboard = (props) => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -47,7 +49,19 @@ export const Leaderboard = (props) => {
             className="leaderboard ui popup center"
             style={{ visibility: changeVisiblity.value }}
         >
+               <Button onClick={closeLeaderboard} className="leaderboardCloseButton" buttonIcon="closeButton" ></Button>
             <img src="./assets/ui/leaderboard/Leaderboard.png"></img>
+            <div className="leaderboardTop">
+            <img src="./assets/ui/leaderboard/Paw.png"></img>
+            <div className="leaderboardLabel">
+            <img src="./assets/ui/leaderboard/leaderboardLabel.png"></img>
+            <span>LEADERBOARD</span>
+            </div>
+            <img src="./assets/ui/leaderboard/Paw.png"></img>
+     
+
+            </div>
+   
             <div className="leaderboardPlayers">
                 {leaderboardData.length &&
                     leaderboardData.map((prop) => (

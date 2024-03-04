@@ -21,7 +21,31 @@ export const Inventory = ()=>{
         <div className="inventory popup ui center" style={{visibility:changeVisiblity.value}} >
                  <Button onClick={closeInventory} className="inventoryCloseButton" buttonIcon="closeButton" ></Button>
             <img src="./assets/ui/inventory/inventoryFrame.png"></img>
+      <div className="inventoryTabs">
+        <img src="./assets/ui/inventory/inventoryTab.png"></img>
+        <img src="./assets/ui/inventory/inventoryTab.png"></img>
+        <img src="./assets/ui/inventory/inventoryTab.png"></img>
+        <img src="./assets/ui/inventory/inventoryTab.png"></img>
+        <img src="./assets/ui/inventory/inventoryTab.png"></img>
+      </div>
             <div className="itemSlotsContainer">
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
+                <ItemSlot item="apple"></ItemSlot>
                 <ItemSlot item="apple"></ItemSlot>
                 <ItemSlot item="apple"></ItemSlot>
                 <ItemSlot item="apple"></ItemSlot>

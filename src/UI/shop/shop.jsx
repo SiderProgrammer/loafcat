@@ -18,6 +18,16 @@ export const openShop = () => {
         
   };
 
+  const RefreshPrice = ()=>{
+    return (
+      <div style={{display:"flex", fontFamily:"slkscr",fontSize:"6px", alignItems: "center"}}>
+          <div >(30</div>
+        <img src="./assets/coin.png"></img>
+          )
+        {/* <div>)</div> */}
+      </div>
+    )
+  }
 export const Shop = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [shopData, setShopData] = useState([]);
@@ -69,7 +79,7 @@ export const Shop = () => {
         <div className="shop popup ui center" style={{visibility:changeVisiblity.value}} >
             <img src="./assets/ui/shop/shopFrame.png"></img>
             <Button onClick={closeShop} className="shopCloseButton" buttonIcon="closeButton" ></Button>
-            <Button onClick={refreshShop} className="shopRefreshButton" buttonIcon="refreshButton" text={"Refresh"} ></Button>
+            <Button onClick={refreshShop} className="shopRefreshButton" buttonIcon="refreshButton" text={"REFRESH"} passComponent = {<RefreshPrice/>}></Button>
             <div className="shopTabs">
                 {/* <div className="shopTab">
                     <img src="./assets/ui/shop/Shop Tab.png"></img>
@@ -77,13 +87,14 @@ export const Shop = () => {
                 </div> */}
                 <div className="shopTimeTab">
                     <img src="./assets/ui/shop/Time stamp Tab.png"></img>
-                    <div className="shopTimestampText">Refresh in: 21:37:59</div>
+                    <div className="shopTimestampText">REFRESH IN: 21:37:59</div>
                 </div>
             </div>
             <div className="shelfs">
             {shopData.length &&
-                    shopData.map((prop) => (
-                        <ItemShelf data={prop}></ItemShelf>
+                    shopData.map((prop,i) => (
+                   
+                        i < 8 && <ItemShelf data={prop}></ItemShelf>
                     ))}
         
             

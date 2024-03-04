@@ -14,13 +14,16 @@ body {
         width: 10px;
     }
     ::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: rgb(139, 69, 19);
+        border-radius: 5px;
     }
     ::-webkit-scrollbar-thumb {
-        background: #888;
+        background-color: antiquewhite;
+        border-radius: 5px;
+        /* background: #888;
 
         background: url("./assets/ui/scrollbar.png") no-repeat;
-        background-size: cover;
+        background-size: cover; */
     }
 }
 
@@ -65,24 +68,32 @@ html {
     cursor: url("./assets/pointer.png"), pointer;
     image-rendering: pixelated;
     pointer-events: all;
+
     img {
         pointer-events: none;
     }
     span {
-        position: absolute;
-        left: 50%;
-        top: 46%;
-        transform: translate(-50%, -50%);
         font-family: "slkscr";
         font-size: 6px;
-
+        color: white;
         letter-spacing: -1px;
     }
 }
-.button:hover {
+
+.buttonText {
+    display: flex;
+    position: absolute;
+    top: 6px;
+    left: 7px;
+    justify-content: center;
+    align-items: center;
+}
+
+.hoverScale:hover {
     transform: scale(1.1);
 }
-.button:active {
+
+.hoverScale:active {
     transform: scale(1);
 }
 
@@ -267,6 +278,7 @@ html {
 .shelf {
     height: 50px;
     width: 180px;
+
     flex: 1 0 21%;
     img {
         position: absolute;
@@ -338,20 +350,35 @@ html {
     image-rendering: pixelated;
 }
 
+.inventoryTabs {
+    position: absolute;
+    display: flex;
+    top: -11px;
+    width: 100%;
+    justify-content: center;
+}
 .itemSlotsContainer {
     position: absolute;
-    top: 30px;
+    overflow-y: scroll;
+    top: 41px;
     left: 15px;
     display: flex;
-
-    width: 180px;
-    height: 169px;
+    width: 311px;
+    height: 150px;
     flex-wrap: wrap;
+    pointer-events: all;
 }
 .itemSlot {
-    height: 50px;
-    width: 0px;
-    flex: 1 0 21%;
+    width: 41px;
+    height: 41px;
+}
+
+.itemSlot:hover {
+    transform: scale(1.05);
+}
+
+.itemSlot:active {
+    transform: scale(1);
 }
 
 .inventoryItem {
@@ -383,24 +410,53 @@ html {
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: 20px;
+    top: 25px;
     font-size: 6px;
     letter-spacing: -1px;
     overflow-y: scroll;
     left: 15px;
     pointer-events: all;
-    height: 200px;
-    scrollbar img {
+    height: 190px;
+    gap: 5px;
+    /* scrollbar img {
         image-rendering: pixelated;
         position: relative;
         top: 7px;
         pointer-events: none;
+    } */
+    img {
+        padding-right: 5px;
+        position: relative;
+        top: 10px;
     }
     span {
         pointer-events: none;
         color: black;
-        font-size: 10px;
+        font-size: 9px;
     }
+}
+
+.leaderboardTop {
+    top: -3px;
+    position: absolute;
+    left: 18px;
+    display: flex;
+}
+.leaderboardLabel {
+    span {
+        position: absolute;
+        font-size: 8px;
+
+        left: 34px;
+        letter-spacing: -1px;
+        top: 10px;
+    }
+}
+
+.leaderboardCloseButton {
+    position: absolute;
+    left: 168px;
+    top: -12px;
 }
 .ui {
     @media only screen and (min-width: 650px) {

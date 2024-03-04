@@ -29,12 +29,12 @@ export class Preloader extends Scene {
     loadAmbient() {
         this.load.setPath("./assets/effects/ambient");
         this.load.spritesheet(`TV-egyptian-loaf`, `TV-egyptian-loaf.png`, {
-            frameWidth: 576 / 6,
+            frameWidth: 480 / 6,
             frameHeight: 48,
         });
         this.load.spritesheet(`TV-lamp`, `TV-lamp.png`, {
-            frameWidth: 576 / 6,
-            frameHeight: 80,
+            frameWidth: 480 / 6,
+            frameHeight: 64,
         });
     }
     preload() {
@@ -187,7 +187,9 @@ export class Preloader extends Scene {
         this.addLoafcatAnim(
             "drink-coffee",
             [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-            26
+            26,
+            true,
+            4
         );
         this.addLoafcatAnim("feed-me", [0, 1, 2, 3], 11);
         this.addLoafcatAnim(
@@ -208,7 +210,7 @@ export class Preloader extends Scene {
             5
         );
 
-        this.addBaseEffectAnim("coffee-idle", "cap-coffee");
+        this.addBaseEffectAnim("coffee-idle", "cap-coffee", 4);
         this.addBaseEffectAnim("pee-idle", "pee");
         this.addBaseEffectAnim("fart-idle", "fart");
         this.addBaseEffectAnim("front-pee-idle", "front-pee");
@@ -218,7 +220,7 @@ export class Preloader extends Scene {
         this.addBaseEffectAnim("newspaper-idle", "newspaper", 5);
         this.addBaseEffectAnim("teeth-brushing-idle", "teeth-brushing", 5);
 
-        this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf");
+        this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf", 5);
         this.addBaseEffectAnim("TV-lamp", "TV-lamp");
 
         this.scene.start("Game", { map: "livingRoomMap" });
