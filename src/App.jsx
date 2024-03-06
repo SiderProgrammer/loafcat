@@ -9,6 +9,7 @@ import { Inventory } from "./UI/inventory/inventory";
 import { Shop } from "./UI/shop/shop";
 import { BlackOverlay } from "./UI/blackOverlay/blackOverlay";
 import { Leaderboard } from "./UI/leaderboard/leaderboard";
+import { PetStats } from "./UI/stats/petStats";
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     // const [canMoveLogo, setCanMoveLogo] = useState(true);
@@ -194,6 +195,7 @@ function App() {
                 </div>
 
     
+                <PetStats></PetStats>
                 <Inventory></Inventory>
                 <Shop></Shop>
                 <Leaderboard></Leaderboard>

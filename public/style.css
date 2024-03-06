@@ -80,6 +80,11 @@ html {
     }
 }
 
+.button,
+::-webkit-scrollbar-thumb {
+    cursor: url("./assets/pointerPoint.png"), pointer;
+}
+
 .buttonText {
     display: flex;
     position: absolute;
@@ -203,7 +208,7 @@ html {
     cursor: url("./assets/pointer.png"), pointer;
 } */
 
-.statistic {
+.alertStats {
     display: flex;
     padding-top: 3px;
     padding-left: 10px;
@@ -219,11 +224,6 @@ html {
     100% {
         opacity: 1;
     }
-}
-
-.dropdown:hover .dropbtn {
-    /* background-color: #3e8e41; */
-    cursor: url("./assets/pointer.png"), pointer;
 }
 
 .dropdown-content {
@@ -474,4 +474,40 @@ html {
     @media only screen and (min-width: 1500px) {
         transform: scale(3);
     }
+}
+
+.statsAvatar {
+    position: absolute;
+    top: 45px;
+    left: 10px;
+}
+
+.statsView {
+    position: absolute;
+    top: 23px;
+    left: 64px;
+}
+
+.stats {
+    display: flex;
+    position: absolute;
+    top: 0;
+    flex-wrap: wrap;
+    width: 50px;
+}
+
+.statsAvatarImage {
+    transform-origin: top left;
+    transform: scale(0.05);
+    border-radius: 0.5;
+    border-radius: 100px;
+    position: absolute;
+
+    left: 2px;
+    top: 2px;
+}
+
+.petViewStats {
+    display: flex;
+    flex: 1 0 50%;
 }
