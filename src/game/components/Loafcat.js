@@ -97,7 +97,21 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.character.play("idle");
         this.moveTween && this.moveTween.pause();
     }
+    setStateCatDead() {
+        this.cleanEffects();
+        this.character.play("dead");
+        this.moveTween && this.moveTween.pause();
+    }
+    smoke() {
+        this.moveTween && this.moveTween.pause();
 
+        this.character.play("smoke");
+
+        this.smokeSprite = this.scene.add
+            .sprite(0, 0, "smoke")
+            .play("smoke-idle");
+        this.add(this.smokeSprite);
+    }
     async feed(feedValue) {
         this.character.play("eat");
         await Async.delay(2000);
@@ -124,6 +138,10 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         if (this.teethBrush) {
             this.remove(this.teethBrush);
             this.teethBrush.destroy();
+        }
+        if (this.smokeSprite) {
+            this.remove(this.smokeSprite);
+            this.smokeSprite.destroy();
         }
     }
     fart() {

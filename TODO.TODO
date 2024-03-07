@@ -1,8 +1,10 @@
 DETAIL TODO:
 - profile stats UI
+- low stats red fill + animate opacity + add "+" button next to them
 - fridge hover apple
 - init screen UI
 - inventory items sub menu open on click
+- profile pop up add wallet adr, level, exp, coins and other pet info
 - test music
 - pet naming in YourPets
 - start game with own wallet

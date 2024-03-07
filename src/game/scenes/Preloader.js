@@ -119,7 +119,10 @@ export class Preloader extends Scene {
             frameWidth: 32,
             frameHeight: 36,
         });
-
+        this.load.spritesheet(`smoke`, `effects/smoke.png`, {
+            frameWidth: 32,
+            frameHeight: 36,
+        });
         this.load.image("logo", "logo.png");
         this.load.image("wallOverlay", "wallOverlay.png");
         this.load.image("gearButton", "gearButton.png");
@@ -198,9 +201,12 @@ export class Preloader extends Scene {
             14
         );
         this.addLoafcatAnim("fart", [0, 1, 2, 3, 4, 5, 6, 7, 8], 18, false);
+
         this.addLoafcatAnim("front-pee", [0, 1, 2, 3, 4, 5, 6, 7], 19);
         this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
         this.addLoafcatAnim("bathing", [0, 1, 2, 3, 4, 5, 6, 7], 23);
+        this.addLoafcatAnim("smoke", [0, 1, 2, 3, 4, 5, 6, 7], 22, false, 5);
+        this.addLoafcatAnim("dead", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 17, false);
         this.addLoafcatAnim("teeth-brushing", [0, 1, 2, 3], 24, true, 5);
         this.addLoafcatAnim(
             "toiletPoop",
@@ -222,7 +228,8 @@ export class Preloader extends Scene {
 
         this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf", 5);
         this.addBaseEffectAnim("TV-lamp", "TV-lamp");
+        this.addBaseEffectAnim("smoke-idle", "smoke", 5);
 
-        this.scene.start("Game", { map: "livingRoomMap" });
+        this.scene.start("Game", { map: "streetMap" });
     }
 }

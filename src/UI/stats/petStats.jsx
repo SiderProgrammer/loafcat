@@ -32,10 +32,10 @@ export const PetStats = () => {
                 <div className="statsView">
                     <img src="./assets/ui/petStats/statsBoard.png"></img>
                     <div className="stats">
-                        <Stat className="petViewStats" icon="Hungry"></Stat>
-                        <Stat className="petViewStats" icon="Hungry"></Stat>
-                        <Stat className="petViewStats" icon="Hungry"></Stat>
-                        <Stat className="petViewStats" icon="Hungry"></Stat>
+                        <Stat fill={35} className="petViewStats" icon="Hungry"></Stat>
+                        <Stat fill = {0} className="petViewStats" icon="Hungry"></Stat>
+                        <Stat fill = {100} className="petViewStats" icon="Hungry"></Stat>
+                        <Stat fill ={80} className="petViewStats" icon="Hungry"></Stat>
                     </div>
                 </div>
             </div>

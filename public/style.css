@@ -511,3 +511,10 @@ html {
     display: flex;
     flex: 1 0 50%;
 }
+.statsGreenFill {
+    position: relative;
+    left: -50%;
+
+    width: 100%;
+    height: 100%;
+}
