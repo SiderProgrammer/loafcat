@@ -1,5 +1,6 @@
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
+import { openInventory } from "../../UI/inventory/inventory";
 
 export class MapInteractionSystem {
     constructor(scene) {
@@ -63,22 +64,7 @@ export class MapInteractionSystem {
     }
 
     async interactFridge() {
-        const inventoryData = await axios({
-            method: "POST",
-            url: `http://localhost:3000/api/user-items/`,
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            data: {
-                UserID: UserModel.USER_ID,
-            },
-        });
-
-        this.scene.scene.launch("Inventory", {
-            parentScene: this.scene,
-            inventoryData: inventoryData.data,
-        });
+        openInventory(true);
     }
 
     interactBath() {

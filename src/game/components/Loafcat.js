@@ -102,15 +102,16 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.character.play("dead");
         this.moveTween && this.moveTween.pause();
     }
-    smoke() {
+    async smoke() {
         this.moveTween && this.moveTween.pause();
 
         this.character.play("smoke");
 
         this.smokeSprite = this.scene.add
-            .sprite(0, 0, "smoke")
+            .sprite(16, -2, "smoke")
             .play("smoke-idle");
-        this.add(this.smokeSprite);
+
+        this.add([this.smokeSprite]);
     }
     async feed(feedValue) {
         this.character.play("eat");

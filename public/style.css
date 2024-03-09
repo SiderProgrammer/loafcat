@@ -84,7 +84,9 @@ html {
 ::-webkit-scrollbar-thumb {
     cursor: url("./assets/pointerPoint.png"), pointer;
 }
-
+.grabCursor {
+    cursor: url("./assets/pointerHold.png"), pointer;
+}
 .buttonText {
     display: flex;
     position: absolute;
@@ -197,8 +199,6 @@ html {
     display: none;
     position: absolute;
 
-    width: 100%;
-
     z-index: -1;
     top: 20px;
 }
@@ -213,13 +213,15 @@ html {
     padding-top: 3px;
     padding-left: 10px;
 }
-
+.pulseAnimation {
+    animation: pulse 2s infinite;
+}
 @keyframes pulse {
     0% {
         opacity: 1;
     }
     50% {
-        opacity: 0;
+        opacity: 0.5;
     }
     100% {
         opacity: 1;
@@ -233,7 +235,9 @@ html {
 }
 
 .plus {
-    display: none;
+    position: absolute;
+
+    left: 15px;
 }
 #alertIcon {
     visibility: hidden;
@@ -353,7 +357,7 @@ html {
 .inventoryTabs {
     position: absolute;
     display: flex;
-    top: -11px;
+    top: -18px;
     width: 100%;
     justify-content: center;
 }
@@ -363,7 +367,7 @@ html {
     top: 41px;
     left: 15px;
     display: flex;
-    width: 311px;
+    width: 235px;
     height: 150px;
     flex-wrap: wrap;
     pointer-events: all;
@@ -371,6 +375,14 @@ html {
 .itemSlot {
     width: 41px;
     height: 41px;
+    span {
+        position: relative;
+        top: -32px;
+        left: 19px;
+        font-size: 8px;
+        letter-spacing: -1px;
+        color: black;
+    }
 }
 
 .itemSlot:hover {
@@ -509,12 +521,17 @@ html {
 
 .petViewStats {
     display: flex;
-    flex: 1 0 50%;
 }
 .statsGreenFill {
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.statFillContainer {
+    display: flex;
+    align-items: end;
     position: relative;
     left: -50%;
-
-    width: 100%;
-    height: 100%;
+    width: 10px;
+    /* width: 100%; */
 }

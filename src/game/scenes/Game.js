@@ -15,6 +15,7 @@ import { MapInteractionSystem } from "../systems/MapInteractionSystem";
 import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
 import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
+import { EventBus } from "../EventBus";
 
 export class Game extends Scene {
     constructor() {
@@ -35,7 +36,7 @@ export class Game extends Scene {
         this.mapInteractionSystem = new MapInteractionSystem(this);
         this.createMap();
 
-        this.pet = new Loafcat(this, 80, 275, "loafcat");
+        this.pet = new Loafcat(this, 325.5, 277, "loafcat");
         this.pet.setDepth(1);
         // this.pet.moveRandomly();
         //this.pet.drinkCoffee();
@@ -43,7 +44,7 @@ export class Game extends Scene {
         this.pet.smoke();
         setTimeout(() => {
             this.pet.setStateCatDead();
-        }, 7000);
+        }, 7500);
         //this.pet.listenMusic();
 
         // this.pet.pee();
@@ -79,6 +80,20 @@ export class Game extends Scene {
                 this.input.activePointer.worldX,
                 this.input.activePointer.worldY
             );
+        });
+
+        EventBus.on("itemDrop", async (callback) => {
+            // TODO : finish item drop
+            const isPetFed = await this.checkFeedPet(
+                this.slots[this.itemInUse.slot].item.itemData
+            );
+
+            this.pet.setState("walk");
+            callback();
+            //   if (isPetFed) {
+            //     this.itemUsed(this.itemInUse.slot);
+            //     this.itemInUse = null;
+            //   }
         });
     }
 

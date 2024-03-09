@@ -1,12 +1,15 @@
-import { useState } from "react"
+
 
 export const Stat =(props)=>{
-  
+    const isCriticalValue = props.fill < 30
     return (
-        <div  className={props.className}>
+        <div  className={`${props.className}  ${isCriticalValue && "pulseAnimation" }`}>
          
-        <img src="./assets/ui/stats/statBox.png" />
-        <img style={{height:props.fill+"%"}} className="statsGreenFill" src={`./assets/ui/stats/greenFill.png`}></img>
+         <img src="./assets/ui/stats/statBox.png" />
+        <div className="statFillContainer">
+        <img style={{height:props.fill+"%"}} className={`statsGreenFill`} src={`./assets/ui/stats/${ isCriticalValue ? 'redFill' : 'greenFill'}.png`}></img>
+        </div>
+
         <img className="alertIcon" src={`./assets/ui/stats/${props.icon}.png`}></img>
       
       </div>

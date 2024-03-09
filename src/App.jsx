@@ -50,6 +50,7 @@ function App() {
     //       });
 
        //    observer.observe(element)
+  
        resizeUI()
         window.addEventListener("resize", resizeUI);
 

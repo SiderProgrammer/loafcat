@@ -2,9 +2,15 @@ import { createSignal } from 'react-use-signals';
 import { ItemSlot } from './itemSlot';
 import { Button } from '../buttons/button';
 import { hideOverlay, showOverlay } from '../blackOverlay/blackOverlay';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { UserModel } from '../../game/models/UserModel';
 export const visibilitySignal = createSignal("hidden");
 
-export const openInventory = () => {
+let draggable = false
+
+export const openInventory = (itemsDraggable = false) => {
+    draggable = itemsDraggable
         visibilitySignal.value = "visible"
         showOverlay()
   };
@@ -16,6 +22,39 @@ export const openInventory = () => {
   };
 export const Inventory = ()=>{
     const changeVisiblity = visibilitySignal.useStateAdapter()
+  
+        const [inventoryData, setInventoryData] = useState([]);
+        const [itemDraggable, setItemDraggable] = useState(false);
+        const fetchData = async () =>{
+            if (visibilitySignal.value === "visible") {
+              const data = await axios({
+                method: "POST",
+                url: `http://localhost:3000/api/user-items/`,
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                data: {
+                    UserID: UserModel.USER_ID,
+                },
+            });
+            
+            setInventoryData(data.data)
+             
+            }
+        }
+        useEffect( () => {
+     
+            fetchData()
+            
+            return () => {};
+        }, [visibilitySignal.value]);
+
+        useEffect( () => {
+          setItemDraggable(draggable)
+          
+          return () => {};
+      }, [draggable]);
 
     return (
         <div className="inventory popup ui center" style={{visibility:changeVisiblity.value}} >
@@ -29,35 +68,11 @@ export const Inventory = ()=>{
         <img src="./assets/ui/inventory/inventoryTab.png"></img>
       </div>
             <div className="itemSlotsContainer">
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
-                <ItemSlot item="apple"></ItemSlot>
+               {inventoryData.map(item=>(
+ <ItemSlot   itemDraggable={itemDraggable} item="apple" quantity={item.quantity} data={item}></ItemSlot>
+               ))}
+               
+              
             </div>
     </div>
     )

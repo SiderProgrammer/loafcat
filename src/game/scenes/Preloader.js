@@ -120,8 +120,8 @@ export class Preloader extends Scene {
             frameHeight: 36,
         });
         this.load.spritesheet(`smoke`, `effects/smoke.png`, {
-            frameWidth: 32,
-            frameHeight: 36,
+            frameWidth: 256 / 8,
+            frameHeight: 32,
         });
         this.load.image("logo", "logo.png");
         this.load.image("wallOverlay", "wallOverlay.png");
@@ -161,7 +161,7 @@ export class Preloader extends Scene {
         this.loadAmbient();
     }
 
-    addLoafcatAnim(name, frames, row, loop = true, frameRate = 7) {
+    addLoafcatAnim(name, frames, row, loop = true, frameRate = 7, custom) {
         const realFrames = frames.map((frame) => frame + 14 * row);
 
         this.anims.create({
@@ -171,14 +171,22 @@ export class Preloader extends Scene {
             }),
             frameRate,
             repeat: loop ? -1 : 0,
+            ...custom,
         });
     }
-    addBaseEffectAnim(animationKey, animationSpritesheet, frameRate = 7) {
+    addBaseEffectAnim(
+        animationKey,
+        animationSpritesheet,
+        frameRate = 7,
+        loop = true,
+        custom
+    ) {
         this.anims.create({
             key: animationKey,
             frames: this.anims.generateFrameNumbers(animationSpritesheet),
             frameRate,
-            repeat: -1,
+            repeat: loop ? -1 : 0,
+            ...custom,
         });
     }
     create() {
@@ -205,7 +213,9 @@ export class Preloader extends Scene {
         this.addLoafcatAnim("front-pee", [0, 1, 2, 3, 4, 5, 6, 7], 19);
         this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
         this.addLoafcatAnim("bathing", [0, 1, 2, 3, 4, 5, 6, 7], 23);
-        this.addLoafcatAnim("smoke", [0, 1, 2, 3, 4, 5, 6, 7], 22, false, 5);
+        // this.addLoafcatAnim("smoke", [0, 1, 2, 3, 4, 5, 6, 7], 22, false, 5, {
+        //     repeatDelay: 2500,
+        // });
         this.addLoafcatAnim("dead", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 17, false);
         this.addLoafcatAnim("teeth-brushing", [0, 1, 2, 3], 24, true, 5);
         this.addLoafcatAnim(
@@ -228,8 +238,34 @@ export class Preloader extends Scene {
 
         this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf", 5);
         this.addBaseEffectAnim("TV-lamp", "TV-lamp");
-        this.addBaseEffectAnim("smoke-idle", "smoke", 5);
+        // this.addBaseEffectAnim("smoke-idle", "smoke", 5, true, {
+        //     repeatDelay: 0,
+        // });
 
-        this.scene.start("Game", { map: "streetMap" });
+        // this.addLoafcatAnim("smoke", [0, 1, 2, 3, 4, 5, 6, 7], 22, false, 5, {
+        //     repeatDelay: 2500,
+        // });
+
+        const smokeRateLoaf = [0, 1, 2, 3, 4, 5, 6, 7, 1, 1, 1, 1, 1, 1].map(
+            (frame) => frame + 14 * 22
+        );
+        this.anims.create({
+            key: "smoke",
+            frames: this.anims.generateFrameNumbers("loafcat", {
+                frames: smokeRateLoaf,
+            }),
+            frameRate: 5,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: "smoke-idle",
+            frames: this.anims.generateFrameNumbers("smoke", {
+                frames: [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 0, 1, 0, 1],
+            }),
+            frameRate: 5,
+            repeat: -1,
+        });
+
+        this.scene.start("Game", { map: "kitchenMap" });
     }
 }
