@@ -1,5 +1,5 @@
 export class UserModel {
-    static USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45";
+    static USER_ID = "";
     static PET_ID = "309";
     static PET_DATA = {};
 }

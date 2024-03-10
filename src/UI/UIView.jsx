@@ -10,7 +10,9 @@ export const UIView = (props) => {
   
 
 
-    return (<div className="UIContainer" style={{ height: props.height, width: props.width }} >
+    return (
+    
+    <div className="UIContainer" style={{ height: props.height, width: props.width }} >
         <ProfileSection></ProfileSection>
         <PetStats></PetStats>
         <Inventory></Inventory>

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import Phaser from "phaser";
 import { PhaserGame } from "./game/PhaserGame";
@@ -11,10 +11,11 @@ import { BlackOverlay } from "./UI/blackOverlay/blackOverlay";
 import { Leaderboard } from "./UI/leaderboard/leaderboard";
 import { PetStats } from "./UI/stats/petStats";
 
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { ProfileSection } from "./UI/profile/profileSection";
 import { UIView } from "./UI/UIView";
 import { PreGameScreen } from "./screens/preGameScreen";
+import { UserModel } from "./game/models/UserModel";
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     // const [canMoveLogo, setCanMoveLogo] = useState(true);
@@ -28,6 +29,7 @@ function App() {
     const currentScene = (scene) => {
         setCanMoveLogo(scene.scene.key !== "MainMenu");
     };
+    const navigate = useNavigate();
 
     const [height, setHeight] = useState("100%");
     const [width, setWidth] = useState("100%");
@@ -50,7 +52,6 @@ function App() {
     };
 
     useLayoutEffect(() => {
-
         resizeUI();
         window.addEventListener("resize", resizeUI);
 
@@ -60,20 +61,32 @@ function App() {
         };
     }, [phaserRef.ref]);
 
+    useEffect(()=>{
+        UserModel.USER_ID.length === 0 &&    navigate("/")
+    },[])
+
     return (
         <div id="app">
-            <PhaserGame ref={phaserRef} currentScene={currentScene} />
             <Routes>
-            <Route
+                <Route
                     path="/"
                     element={<PreGameScreen width={width} height={height} />}
                 ></Route>
 
                 <Route
                     path="/game"
-                    element={<UIView width={width} height={height} />}
+                    element={
+                        
+                            <>
+                                <PhaserGame
+                                    ref={phaserRef}
+                                    currentScene={currentScene}
+                                />
+                                <UIView width={width} height={height} />
+                            </>
+                        
+                    }
                 ></Route>
-                 
             </Routes>
 
             <BlackOverlay></BlackOverlay>
