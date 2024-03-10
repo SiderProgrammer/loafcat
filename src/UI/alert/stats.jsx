@@ -11,6 +11,7 @@ export const Stats = ()=> {
     return (
         <>
         {/* TODO : handle removing/adding critical value behavior */}
+        {/* TODO : plus button open map selection */}
            {statsConstant.map(stat => ( <div style={{display:"flex"}}>
                  <Stat fill={petData[stat.valueKey]} className="petViewStats" icon={stat.icon}></Stat>
             {petData[stat.valueKey] < 30 && <img src="./assets/plus.png" className="plus pulseAnimation"></img>}

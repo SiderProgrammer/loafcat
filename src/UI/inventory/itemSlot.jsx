@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { closeInventory, openInventory } from "./inventory";
 import { visibilitySignal } from "./inventory";
 import { EventBus } from "../../game/EventBus";
+// TODO : fix visiblity (add drag check)
 export const ItemSlot = (props) => {
     const [isDragging,setDrag] = useState(false)
     const [itemVisible, setItemVisibility] = useState("hidden")

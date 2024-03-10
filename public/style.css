@@ -41,7 +41,7 @@ html {
     justify-content: center;
     align-items: center;
 }
-#UI {
+.UIContainer {
     position: absolute;
     width: 100%;
     /* height: 100%;    */
@@ -89,8 +89,8 @@ html {
 }
 .buttonText {
     display: flex;
-    position: absolute;
-    top: 6px;
+    position: relative;
+    top: -17px;
     left: 7px;
     justify-content: center;
     align-items: center;
@@ -534,4 +534,8 @@ html {
     left: -50%;
     width: 10px;
     /* width: 100%; */
+}
+
+.connectWalletButton {
+    margin: auto;
 }
