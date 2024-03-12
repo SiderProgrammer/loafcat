@@ -1,31 +1,25 @@
 DETAIL TODO:
+- init screen UI
+- profile pop up add wallet adr, level, exp, coins and other pet info
 - add music
 - fridge hover apple
-- init screen UI
 - location selection pop up
-- profile pop up add wallet adr, level, exp, coins and other pet info
 - inventory items sub menu open on click
+- pet dying
 - chat
-- test music
-- pet naming in YourPets
 - start game with own wallet
-- zoom in & stop pet when opening a fridge
-- pet actions API integration
-- make progress bars working
-- update level, progress bars - connect with API
-- make coins deposit work
-- zoom in actions
+- API integration
+- coins deposit 
+- working in office room 
+- polish UI with bouncing tweens
+
 
 TODO:
 - scale every 16th px?
-- see other loafs
-- loaf size
-- scale envelop / width controls height / drop UI to canvas instead of html
+- see other loafs?
+- zoom in & stop pet when opening a fridge?
 - tutorial pop up on every map start
 - import items assets
-- update maps ground
-- pet dying
-- working in office
 - day/night shifts
 - cloths on pet
 - pet backflip animation

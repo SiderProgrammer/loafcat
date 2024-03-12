@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Stats } from "../alert/stats";
+import { shortenText } from "../../utils/stringUtils";
+import { UserModel } from "../../game/models/UserModel";
 
 export const ProfileSection = () =>{
     const [alertStatsVisible, setAlertStatsVisibility] = useState("none");
@@ -34,7 +36,7 @@ export const ProfileSection = () =>{
         <span id="coinValue">13</span>
     </div>
     <div id="addressSection">
-        <span id="walletAddress">78e7e...301b</span>
+        <span id="walletAddress">{shortenText(UserModel.USER_ID)}</span>
     </div>
     <div id="levelSection">
         {/* <img id="levelFrame" src="./assets/ui/profileView/levelBox.png" />  */}

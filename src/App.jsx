@@ -33,6 +33,7 @@ function App() {
 
     const [height, setHeight] = useState("100%");
     const [width, setWidth] = useState("100%");
+    // TODO : on web refresh, this shouldnt be applied before we enter the game
     const resizeUI = () => {
         // TODO : find better more reactable solution
         setTimeout(() => {
@@ -52,6 +53,8 @@ function App() {
     };
 
     useLayoutEffect(() => {
+
+        // TODO : run resizeUI on navigate to /game
         resizeUI();
         window.addEventListener("resize", resizeUI);
 

@@ -70,12 +70,18 @@ export class Preloader extends Scene {
             "Play Room",
             "mp_house_interiors_tileset_pack/kids_bedroom.png"
         );
+        this.load.image("Garage", "mp_house_interiors_tileset_pack/garage.png");
+        this.load.image(
+            "Work Room",
+            "mp_house_interiors_tileset_pack/office.png"
+        );
 
         this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
         this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
         this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
         this.load.tilemapTiledJSON("bathroomMap", `bathroomMap.json`);
         this.load.tilemapTiledJSON("livingRoomMap", `livingRoomMap.json`);
+        this.load.tilemapTiledJSON("garageMap", `garageMap.json`);
 
         this.load.spritesheet(`loafcat`, `loafcat.png`, {
             frameWidth: 34,
@@ -266,6 +272,6 @@ export class Preloader extends Scene {
             repeat: -1,
         });
 
-        this.scene.start("Game", { map: "kitchenMap" });
+        this.scene.start("Game", { map: "garageMap" });
     }
 }

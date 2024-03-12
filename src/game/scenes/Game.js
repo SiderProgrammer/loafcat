@@ -41,10 +41,10 @@ export class Game extends Scene {
         // this.pet.moveRandomly();
         //this.pet.drinkCoffee();
 
-        this.pet.smoke();
-        setTimeout(() => {
-            this.pet.setStateCatDead();
-        }, 7500);
+        // this.pet.smoke();
+        // setTimeout(() => {
+        //     this.pet.setStateCatDead();
+        // }, 7500);
         //this.pet.listenMusic();
 
         // this.pet.pee();

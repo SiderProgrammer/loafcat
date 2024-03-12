@@ -6,6 +6,7 @@ import { Stat } from "./stat";
 import { createSignal } from "react-use-signals";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
+import { PetView } from "./petView";
 export const visibilitySignal = createSignal("hidden");
 
 export const openPetStats = () => {
@@ -60,24 +61,7 @@ export const PetStats = () => {
                 className="inventoryCloseButton"
                 buttonIcon="closeButton"
             ></Button>
-            <img src="./assets/ui/petStats/statsFrame.png"></img>
-            <div>
-                <div className="statsAvatar">
-                    <img src="./assets/ui/petStats/statsProfile.png"></img>
-                    <img className="statsAvatarImage" src="./assets/nftAvatar.jpg"></img>
-                </div>
-                <div className="statsView">
-                    <img src="./assets/ui/petStats/statsBoard.png"></img>
-                    {/* TODO: Health stat should be bigger and only 1 in line && low stats should have red fill*/}
-                    <div className="stats">
-                        {statsConstant.map(stat => (
-                         <Stat fill={petData[stat.valueKey]} className="petViewStats" icon={stat.icon}></Stat>
-                        ))}
-              
-              
-                    </div>
-                </div>
-            </div>
+            <PetView petData={petData}></PetView>
         </div>
     );
 };

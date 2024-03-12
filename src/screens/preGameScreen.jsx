@@ -12,7 +12,7 @@ export const PreGameScreen = (props) => {
     const navigate = useNavigate();
     useLayoutEffect(()=>{
         // TODO : needs better delay/event solution
-        setTimeout(()=>setWalletConnect(window.solana.publicKey ? true : false),500)
+        setTimeout(()=>setWalletConnect(window.solana.publicKey ? true : false),1000)
     },[])
  
     const connectToWallet = async () => {
@@ -39,7 +39,7 @@ export const PreGameScreen = (props) => {
             UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
             setWalletConnect(true)
             // EventBus.emit("startPreloader")
-            navigate("/game")
+           // navigate("/game")
             
         }
 
@@ -48,8 +48,8 @@ export const PreGameScreen = (props) => {
 
     return (
         <div
-            className="UIContainer"
-            style={{ height: props.height, width: props.width }}
+            className="UIContainer preGameScreenContainer"
+            style={{ height: props.height, width: props.width}}
         >
          
 {isWalletConnected ?    <LinkPets/> : <WalletConnect connectWalletClicked={connectWalletClicked}/> }

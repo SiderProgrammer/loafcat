@@ -91,7 +91,7 @@ html {
     display: flex;
     position: relative;
     top: -17px;
-    left: 7px;
+
     justify-content: center;
     align-items: center;
 }
@@ -489,15 +489,18 @@ html {
 }
 
 .statsAvatar {
-    position: absolute;
-    top: 45px;
+    position: relative;
+    top: -100px;
+
+    height: 0px;
     left: 10px;
 }
 
 .statsView {
-    position: absolute;
-    top: 23px;
+    position: relative;
+    top: -130px;
     left: 64px;
+    height: 0px;
 }
 
 .stats {
@@ -538,4 +541,81 @@ html {
 
 .connectWalletButton {
     margin: auto;
+    transform: scale(2);
+    span {
+        font-size: 5px !important;
+    }
+}
+
+.connectWalletButton:hover {
+    transform: scale(2.1) !important;
+}
+
+.connectWalletButton:active {
+    transform: scale(2) !important;
+}
+.preGameScreenContainer {
+    background: url("./assets/preGameBackground.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+}
+
+.petsContainer {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    width: 320px;
+    height: 180px;
+    flex-wrap: wrap;
+    position: absolute;
+    pointer-events: all;
+    gap: 20px;
+    top: 20px;
+    left: 20px;
+}
+
+.yourPetsText {
+    position: absolute;
+    top: -20px;
+    /* margin: auto; */
+    color: black;
+}
+/* .linkPetsContainer {
+    top: 10%;
+} */
+.petLinkPopUpContainer {
+    visibility: visible;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    top: 30px;
+}
+
+.petLinkPopUpAvatar {
+    left: 50px;
+    top: 15px;
+}
+
+.petLinkPopUpNameInput {
+    left: 25px;
+    top: -80px;
+    position: relative;
+}
+
+.nameSubmitButton {
+    position: relative;
+    top: -70px;
+    left: 22px;
+}
+
+#petNameInput {
+    left: -55px;
+    top: -88px;
+    position: relative;
+    height: 10px;
+    width: 60px;
+    pointer-events: all;
 }
