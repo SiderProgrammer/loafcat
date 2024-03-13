@@ -1,12 +1,14 @@
 import { Button } from "../buttons/button";
 import { openInventory } from "../inventory/inventory";
 import { openLeaderboard } from "../leaderboard/leaderboard";
+import { openMapSelection } from "../location/selectMap";
+import { openMainPetView } from "../profile/mainPetView";
 import { openShop } from "../shop/shop";
 import { openPetStats } from "../stats/petStats";
 export const DownRightButtons = () => {
     return (
         <>
-            <Button onClick={openPetStats} buttonIcon="statsButton"></Button>
+            <Button onClick={openMainPetView} buttonIcon="statsButton"></Button>
             <Button
                 onClick={openInventory}
                 buttonIcon="inventoryButton"
@@ -17,7 +19,7 @@ export const DownRightButtons = () => {
                 buttonIcon="leaderboardButton"
             ></Button>
 
-            <Button buttonIcon="mapButton"></Button>
+            <Button onClick={openMapSelection} buttonIcon="mapButton"></Button>
         </>
     );
 };

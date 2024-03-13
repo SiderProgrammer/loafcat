@@ -1,13 +1,10 @@
 DETAIL TODO:
-- init screen UI
-- profile pop up add wallet adr, level, exp, coins and other pet info
-- add music
+- profile pop up new design
+- location pop up
 - fridge hover apple
-- location selection pop up
-- inventory items sub menu open on click
+- shop buy pop up
 - pet dying
 - chat
-- start game with own wallet
 - API integration
 - coins deposit 
 - working in office room 
@@ -15,6 +12,7 @@ DETAIL TODO:
 
 
 TODO:
+- inventory items sub menu open on click
 - scale every 16th px?
 - see other loafs?
 - zoom in & stop pet when opening a fridge?

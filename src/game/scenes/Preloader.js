@@ -162,6 +162,8 @@ export class Preloader extends Scene {
             "WhitePeaberry.xml"
         );
 
+        this.load.audio("theme", ["audio/theme.wav"]);
+
         this.loadUI();
         this.loadStats();
         this.loadAmbient();

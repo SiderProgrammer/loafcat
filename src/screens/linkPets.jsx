@@ -19,8 +19,11 @@ export const LinkPets = (props) => {
     navigate("/game")
   }
   
-  const linkPet = () => {
-    showOverlay()
+  const linkPet = (petData) => {
+   // showOverlay()
+   console.log(petData);
+   setLinkPetData(petData)
+    setLinkPetVisiblity("visible")
     // TODO : open name pop up
     // const linkedNftsData = await axios({
     //   method: "POST",
@@ -52,6 +55,11 @@ export const LinkPets = (props) => {
 
     const [linkedPetsData,setLinkedPetsData] = useState([])
     const [petsData,setPetsData] = useState([])
+
+    const [linkPetVisibility, setLinkPetVisiblity] = useState("hidden")
+    const [linkPetData, setLinkPetData] = useState({})
+
+
     const fetchData = async ()=>{
         const linkedNftsData = await axios({
             method: "POST",
@@ -101,7 +109,7 @@ export const LinkPets = (props) => {
          
     
         </div>
-            <PetLinkPopUp visibility={"visible"}/>
+            <PetLinkPopUp petData={linkPetData} visibility={linkPetVisibility} setLinkPetVisiblity={setLinkPetVisiblity}/>
     </div>
     )
 }

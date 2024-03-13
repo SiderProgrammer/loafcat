@@ -26,6 +26,8 @@ export class Game extends Scene {
         this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
         // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
         // this.scale.refresh();
+        this.sound.add("theme").play({ loop: true });
+
         this.mapKey = map;
         GameModel.MAIN_SCENE = this;
         //this.scene.launch("UI");
@@ -94,6 +96,10 @@ export class Game extends Scene {
             //     this.itemUsed(this.itemInUse.slot);
             //     this.itemInUse = null;
             //   }
+        });
+
+        EventBus.on("changeMap", (map) => {
+            this.scene.start("Game", map);
         });
     }
 

@@ -5,6 +5,8 @@ import { Inventory } from "./inventory/inventory";
 import { Shop } from "./shop/shop";
 import { Leaderboard } from "./leaderboard/leaderboard";
 import { DownRightButtons } from "./downRightButtons/downRightButtons";
+import { MainPetView } from "./profile/mainPetView";
+import { MapSelection } from "./location/selectMap";
 
 export const UIView = (props) => {
   
@@ -14,10 +16,11 @@ export const UIView = (props) => {
     
     <div className="UIContainer" style={{ height: props.height, width: props.width }} >
         <ProfileSection></ProfileSection>
-        <PetStats></PetStats>
+        <MainPetView></MainPetView>
         <Inventory></Inventory>
         <Shop></Shop>
         <Leaderboard></Leaderboard>
+        <MapSelection></MapSelection>
         <div id="bottomButtonsSection" className="ui">
             <DownRightButtons></DownRightButtons>
         </div>
