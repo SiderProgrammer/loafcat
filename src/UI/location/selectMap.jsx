@@ -1,13 +1,9 @@
 import { createSignal } from "react-use-signals";
-import { showOverlay } from "../blackOverlay/blackOverlay";
+import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
 import { EventBus } from "../../game/EventBus";
+import { MAPS_ORDER } from "../../game/constants/houseRooms";
 
-const MAPS = [
-    "garageMap",
-    "kitchenMap",
-    "bathroomMap",
-]
 export const visibilitySignal = createSignal("hidden");
 export const openMapSelection = async () => {
     visibilitySignal.value = "visible";
@@ -19,6 +15,8 @@ export const closeMapSelection = () => {
 };
 const selectMap = (map)=>{
     EventBus.emit("changeMap",{map})
+    closeMapSelection()
+    hideOverlay()
 }
 export const MapSelection = ()=>{
 
@@ -27,7 +25,7 @@ export const MapSelection = ()=>{
     return (
         <div   className="locationSelection ui popup center"
         style={{ visibility: changeVisiblity.value, display:"flex", flexDirection:"column"}}>
-            {MAPS.map((map)=><Button onClick={()=>selectMap(map)}style={{transform:"scale(0.4)"}} buttonIcon={"garageMapIcon"}></Button>)}
+            {MAPS_ORDER.map((map)=><Button onClick={()=>selectMap(map)}style={{transform:"scale(0.4)"}} buttonIcon={"garageMapIcon"}></Button>)}
        
        
         </div>

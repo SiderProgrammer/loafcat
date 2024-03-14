@@ -644,8 +644,7 @@ html {
     width: 230px;
     overflow-y: scroll;
     pointer-events: all;
+    overflow-x: hidden;
 
-    button {
-        transform: scale(0.4);
-    }
+    gap: 10px;
 }

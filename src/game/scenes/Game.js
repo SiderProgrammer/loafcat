@@ -10,7 +10,7 @@ import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
 import { linkTilemaps } from "../helpers/linkTilemaps";
-import { houseRoomsPlacement } from "../constants/houseRooms";
+import { MAPS_ORDER } from "../constants/houseRooms";
 import { MapInteractionSystem } from "../systems/MapInteractionSystem";
 import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
@@ -109,31 +109,33 @@ export class Game extends Scene {
 
         //if (!houseRoomsPlacement[this.mapKey]) return;
         // change name to: roomAbove
-        if (houseRoomsPlacement[this.mapKey]) {
-            this.nextFloor = this.make.tilemap({
-                key: houseRoomsPlacement[this.mapKey].nextFloor,
-            });
-            linkTilemaps(
-                this.nextFloor,
-                houseRoomsPlacement[this.mapKey].nextFloor,
-                true
-            );
+        const mapIndex = MAPS_ORDER.indexOf(this.mapKey);
+        if (mapIndex !== 0) {
+            if (mapIndex !== -1) {
+                this.nextFloor = this.make.tilemap({
+                    key: MAPS_ORDER[mapIndex + 1],
+                });
+                linkTilemaps(this.nextFloor, MAPS_ORDER[mapIndex + 1], true);
+            }
+
+            let roomBelow = MAPS_ORDER[mapIndex - 1];
+            if (roomBelow !== "streetMap") {
+                if (roomBelow) {
+                    this.roomBelow = this.make.tilemap({
+                        key: roomBelow,
+                    });
+
+                    linkTilemaps(this.roomBelow, roomBelow, false, true);
+                    this.add.image(0, 290, "wallOverlay").setOrigin(0, 0);
+                }
+            }
         }
 
-        let roomBelow;
-        for (const room in houseRoomsPlacement) {
-            if (houseRoomsPlacement[room].nextFloor === this.mapKey)
-                roomBelow = room;
-        }
+        // for (const room in houseRoomsPlacement) {
+        //     if (houseRoomsPlacement[room].nextFloor === this.mapKey)
+        //         roomBelow = room;
+        // }
 
-        if (roomBelow) {
-            this.roomBelow = this.make.tilemap({
-                key: roomBelow,
-            });
-
-            linkTilemaps(this.roomBelow, roomBelow, false, true);
-            this.add.image(0, 290, "wallOverlay").setOrigin(0, 0);
-        }
         addAmbientAnimations(this, this.mapKey);
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();

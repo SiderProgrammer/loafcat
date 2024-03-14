@@ -5,6 +5,7 @@ import { hideOverlay, showOverlay } from '../blackOverlay/blackOverlay';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserModel } from '../../game/models/UserModel';
+import Draggable from 'react-draggable';
 export const visibilitySignal = createSignal("hidden");
 
 let draggable = false
@@ -69,7 +70,10 @@ export const Inventory = ()=>{
       </div>
             <div className="itemSlotsContainer">
                {inventoryData.map(item=>(
- <ItemSlot   itemDraggable={itemDraggable} item="apple" quantity={item.quantity} data={item}></ItemSlot>
+                <Draggable         axis="x"> 
+ <ItemSlot  item="apple" quantity={item.quantity} data={item}></ItemSlot>
+                </Draggable>
+
                ))}
                
               
