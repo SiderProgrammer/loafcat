@@ -9,8 +9,6 @@ import { MainPetView } from "./profile/mainPetView";
 import { MapSelection } from "./location/selectMap";
 
 export const UIView = (props) => {
-  
-
 
     return (
     

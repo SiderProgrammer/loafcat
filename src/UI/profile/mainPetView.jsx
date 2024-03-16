@@ -8,6 +8,7 @@ import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { PetView } from "../stats/petView";
 import { MainPetContent } from "./mainPetContent";
+import { PetModel } from "../../game/models/PetModel";
 
 export const visibilitySignal = createSignal("hidden");
 
@@ -23,30 +24,10 @@ export const MainPetView = () => {
 
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [petData, setPetData] = useState([]);
-    const fetchData = async () =>{
-        if (visibilitySignal.value === "visible") {
-            const petData = await axios({
-                method: "POST",
-                url: "http://localhost:3000/api/my-pet",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    UserID: UserModel.USER_ID,
-                    PetID: UserModel.PET_ID,
-                },
-            });
 
-            //TODO : pet data shouldn't be updated here
-            UserModel.PET_DATA = petData.data.pet
-            setPetData(petData.data.pet)
-         
-        }
-    }
     useEffect( () => {
- 
-        fetchData()
+        setPetData(PetModel.PET_DATA)
+
         
         return () => {};
     }, [visibilitySignal.value]);

@@ -2,7 +2,6 @@ export const MAPS_ORDER = [
     "streetMap",
     "garageMap",
     "kitchenMap",
-
     "bathroomMap",
     "livingRoomMap",
     "chillRoomMap",

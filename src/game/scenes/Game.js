@@ -40,7 +40,7 @@ export class Game extends Scene {
 
         this.pet = new Loafcat(this, 325.5, 277, "loafcat");
         this.pet.setDepth(1);
-        // this.pet.moveRandomly();
+        this.pet.moveRandomly();
         //this.pet.drinkCoffee();
 
         // this.pet.smoke();
@@ -75,32 +75,67 @@ export class Game extends Scene {
         this.alertSystem.updateAlerts();
 
         console.log(this.petData.data.pet);
-
-        this.input.on("pointermove", () => {
+        // this.input.on("pointerdown", () => {
+        //     if (!this.itemInUse) return;
+        //     this.itemInUse.setPosition(
+        //         this.input.activePointer.worldX,
+        //         this.input.activePointer.worldY
+        //     );
+        // });
+        // this.input.on("pointermove", () => {
+        //     if (!this.itemInUse) return;
+        //     this.itemInUse.setPosition(
+        //         this.input.activePointer.worldX,
+        //         this.input.activePointer.worldY
+        //     );
+        // });
+        this.input.on("pointerup", async () => {
             if (!this.itemInUse) return;
-            this.itemInUse.setPosition(
-                this.input.activePointer.worldX,
-                this.input.activePointer.worldY
-            );
-        });
-
-        EventBus.on("itemDrop", async (callback) => {
-            // TODO : finish item drop
-            const isPetFed = await this.checkFeedPet(
-                this.slots[this.itemInUse.slot].item.itemData
-            );
+            this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
+            this.itemInUse.destroy();
+            const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
 
             this.pet.setState("walk");
-            callback();
+
+            EventBus.emit("itemDrop");
+            //callback();
+
             //   if (isPetFed) {
             //     this.itemUsed(this.itemInUse.slot);
             //     this.itemInUse = null;
             //   }
         });
 
-        EventBus.on("changeMap", (map) => {
+        EventBus.on("itemGrab", async ({ data }) => {
+            // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
+            // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
+
+            this.input.setDefaultCursor(
+                'url("./assets/pointerHold.png"), pointer'
+            );
+            this.pet.setState("feed");
+            this.itemInUse = GameModel.MAIN_SCENE.add
+                .image(
+                    this.input.activePointer.worldX,
+                    this.input.activePointer.worldY,
+                    "apple"
+                )
+                .setDepth(2);
+
+            this.itemInUse.itemData = data;
+            // .setInteractive();
+        });
+        EventBus.once("changeMap", (map) => {
             this.scene.start("Game", map);
         });
+    }
+
+    update() {
+        if (!this.itemInUse) return;
+        this.itemInUse.setPosition(
+            this.input.activePointer.worldX,
+            this.input.activePointer.worldY
+        );
     }
 
     createMap() {

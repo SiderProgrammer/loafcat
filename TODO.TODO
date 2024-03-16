@@ -1,21 +1,21 @@
 DETAIL TODO:
-- fridge hover apple
-- shop buy pop up
-- pet dying
-- chat
+- fridge hover apple, no inventory
+- update fridge data on pointer up
 - API integration
+- pet dying
 - coins deposit 
 - working in office room 
+- import items assets
 - polish UI with bouncing tweens
 
 
 TODO:
+- tutorial pop up on every map start
+- chat
 - inventory items sub menu open on click
 - scale every 16th px?
 - see other loafs?
 - zoom in & stop pet when opening a fridge?
-- tutorial pop up on every map start
-- import items assets
 - day/night shifts
 - cloths on pet
 - pet backflip animation

@@ -3,11 +3,11 @@ import { UserModel } from "../../game/models/UserModel"
 import { statsConstant } from "../../sharedConstants/stats"
 import { Stat } from "../stats/stat"
 
-export const Stats = ()=> {
-    const [petData,setPetData] = useState(UserModel.PET_DATA)
-    useEffect(()=>{
-        setPetData(UserModel.PET_DATA)
-    },[UserModel.PET_DATA])
+export const Stats = ({petData})=> {
+    // const [petData,setPetData] = useState(UserModel.PET_DATA)
+    // useEffect(()=>{
+    //     setPetData(UserModel.PET_DATA)
+    // },[UserModel.PET_DATA])
     return (
         <>
         {/* TODO : handle removing/adding critical value behavior */}

@@ -21,11 +21,14 @@ export const openInventory = (itemsDraggable = false) => {
   
         
   };
+ 
 export const Inventory = ()=>{
     const changeVisiblity = visibilitySignal.useStateAdapter()
   
         const [inventoryData, setInventoryData] = useState([]);
         const [itemDraggable, setItemDraggable] = useState(false);
+  
+
         const fetchData = async () =>{
             if (visibilitySignal.value === "visible") {
               const data = await axios({
@@ -69,10 +72,10 @@ export const Inventory = ()=>{
         <img src="./assets/ui/inventory/inventoryTab.png"></img>
       </div>
             <div className="itemSlotsContainer">
-               {inventoryData.map(item=>(
-                <Draggable         axis="x"> 
- <ItemSlot  item="apple" quantity={item.quantity} data={item}></ItemSlot>
-                </Draggable>
+               {inventoryData.map((item,i)=>(
+              
+ <ItemSlot key={i} onClick={closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>
+          
 
                ))}
                

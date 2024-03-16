@@ -1,5 +1,13 @@
+import { Button } from "../buttons/button";
+
 export const ItemShelf = (props) => {
     props.data.ItemID.item_name = 'apple'
+
+    const showBuyPopUp = ()=>{
+        console.log(props);
+        props.showBuyPopUp(props)
+    }
+  
     return (
         <div className="shelf">
             <img src="./assets/ui/shop/Board light.png"></img>
@@ -11,8 +19,8 @@ export const ItemShelf = (props) => {
                     {/* <span className="closingBracket">)</span> */}
                 </span>
             </div>
-
-            <img className="shelfItem" src={`./assets/${props.data.ItemID.item_name}.png`}></img>
+        <Button onClick={showBuyPopUp} className={"shelfItem"} imgPath={"./assets/"} buttonIcon={`${props.data.ItemID.item_name}`}></Button>
+       
         </div>
     );
 };

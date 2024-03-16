@@ -14,7 +14,7 @@ import { showOverlay } from "../UI/blackOverlay/blackOverlay"
 export const LinkPets = (props) => {
   const navigate = useNavigate();
   const choosePet = (petData) => {
-    console.log(petData);
+
     UserModel.PET_ID = petData.PetID
     navigate("/game")
   }

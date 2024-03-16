@@ -26,6 +26,7 @@ export class MapInteractionSystem {
             });
         });
     }
+    // TODO : show arrow again on interaction complete
     addPointingArrows() {
         this.zones.forEach((zone) => {
             const arrow = this.scene.add.image(

@@ -16,6 +16,7 @@ import { ProfileSection } from "./UI/profile/profileSection";
 import { UIView } from "./UI/UIView";
 import { PreGameScreen } from "./screens/preGameScreen";
 import { UserModel } from "./game/models/UserModel";
+import axios from "axios";
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     // const [canMoveLogo, setCanMoveLogo] = useState(true);
@@ -53,7 +54,7 @@ function App() {
     };
 
     useLayoutEffect(() => {
-
+     
         // TODO : run resizeUI on navigate to /game
         resizeUI();
         window.addEventListener("resize", resizeUI);
@@ -67,6 +68,8 @@ function App() {
     useEffect(()=>{
         UserModel.USER_ID.length === 0 &&    navigate("/")
     },[])
+
+ 
 
     return (
         <div id="app">

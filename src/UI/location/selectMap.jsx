@@ -13,21 +13,31 @@ export const closeMapSelection = () => {
     visibilitySignal.value = "hidden";
     hideOverlay();
 };
-const selectMap = (map)=>{
-    EventBus.emit("changeMap",{map})
-    closeMapSelection()
-    hideOverlay()
-}
-export const MapSelection = ()=>{
-
-
+const selectMap = (map) => {
+    EventBus.emit("changeMap", { map });
+    closeMapSelection();
+    hideOverlay();
+};
+export const MapSelection = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
     return (
-        <div   className="locationSelection ui popup center"
-        style={{ visibility: changeVisiblity.value, display:"flex", flexDirection:"column"}}>
-            {MAPS_ORDER.map((map)=><Button onClick={()=>selectMap(map)}style={{transform:"scale(0.4)"}} buttonIcon={"garageMapIcon"}></Button>)}
-       
-       
+        <div
+            className="locationSelection ui popup center"
+            style={{
+                visibility: changeVisiblity.value,
+                display: "flex",
+                flexDirection: "column",
+            }}
+        >
+            {/* <Button  className="inventoryCloseButton" buttonIcon="closeButton" ></Button> */}
+            {MAPS_ORDER.map((map) => (
+                <Button
+                    onClick={() => selectMap(map)}
+                    style={{ transform: "scale(0.4)" }}
+                    buttonIcon={map + "Icon"}
+                    ext={"png"}
+                ></Button>
+            ))}
         </div>
-    )
-}
+    );
+};

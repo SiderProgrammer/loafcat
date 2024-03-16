@@ -18,7 +18,7 @@ export const closePetStats = () => {
     hideOverlay();
 };
 export const PetStats = () => {
-
+// TODO : remove it?
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [petData, setPetData] = useState([]);
     const fetchData = async () =>{

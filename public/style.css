@@ -60,7 +60,9 @@ html {
     position: absolute;
     margin: auto;
 }
-
+canvas {
+    pointer-events: all;
+}
 .button {
     background: none;
     border: none;
@@ -293,8 +295,15 @@ html {
         position: absolute;
     }
     .shelfItem {
-        margin-left: 20px;
-        margin-top: -5px;
+        /* margin-left: 20px;
+        margin-top: -5px; */
+        position: absolute;
+        width: 60px;
+        height: 30px;
+        img {
+            left: 20px;
+            top: -5px;
+        }
     }
 
     .shelfItemPrice {
@@ -402,8 +411,8 @@ html {
 
 .inventoryCloseButton {
     position: absolute;
-    left: 90%;
-    top: -5%;
+    left: 140px;
+    top: -50px;
 }
 
 .popup {
@@ -647,4 +656,59 @@ html {
     overflow-x: hidden;
 
     gap: 10px;
+}
+
+.itemBuyPopUp {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.itemBuyContent {
+    display: flex;
+    position: relative;
+    top: -210px;
+    img {
+        margin: auto;
+    }
+    flex-direction: column;
+}
+
+.buyPopUpShelf {
+    position: relative;
+    top: -100px;
+}
+
+.buyPopUpPriceBoard {
+    position: relative;
+    top: -95px;
+}
+
+.buyPopUpBoard {
+    top: -100px;
+    position: relative;
+    margin-left: 50px;
+}
+
+.buyButton {
+    position: relative;
+    top: -90px;
+}
+.buyPopUpPrice {
+    position: relative;
+    top: -100px;
+    left: -70px;
+}
+
+.buyPopUpItem {
+    position: absolute;
+    left: 90px;
+    top: 30px;
+}
+
+.shopClosePopUpButton {
+    top: 0;
+    position: absolute;
 }

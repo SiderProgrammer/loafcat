@@ -2,14 +2,19 @@ import { useState } from "react";
 import { Stats } from "../alert/stats";
 import { shortenText } from "../../utils/stringUtils";
 import { UserModel } from "../../game/models/UserModel";
+import { PetModel } from "../../game/models/PetModel";
 
 export const ProfileSection = () =>{
     const [alertStatsVisible, setAlertStatsVisibility] = useState("none");
+    
+    const [petData,setPetData] = useState(PetModel.PET_DATA)
+
     const openAlertStats = () => {
         if (alertStatsVisible === "block") {
             setAlertStatsVisibility("none");
         } else {
             setAlertStatsVisibility("block");
+            setPetData(PetModel.PET_DATA)
         }
     };
 
@@ -66,7 +71,7 @@ export const ProfileSection = () =>{
         id="alertStatsBoard"
         src="./assets/ui/profileView/alertStatsBoard.png"
     ></img>
-    <Stats></Stats>
+    <Stats petData={petData}></Stats>
 </div>
 </div>
 </div>
