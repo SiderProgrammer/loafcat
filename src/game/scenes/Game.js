@@ -105,26 +105,28 @@ export class Game extends Scene {
             //     this.itemInUse = null;
             //   }
         });
+        if (!EventBus.eventNames().includes("itemGrab")) {
+            EventBus.on("itemGrab", async ({ data }) => {
+                // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
+                // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
 
-        EventBus.on("itemGrab", async ({ data }) => {
-            // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
-            // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
+                this.input.setDefaultCursor(
+                    'url("./assets/pointerHold.png"), pointer'
+                );
+                this.pet.setState("feed");
+                this.itemInUse = GameModel.MAIN_SCENE.add
+                    .image(
+                        this.input.activePointer.worldX,
+                        this.input.activePointer.worldY,
+                        "apple"
+                    )
+                    .setDepth(2);
 
-            this.input.setDefaultCursor(
-                'url("./assets/pointerHold.png"), pointer'
-            );
-            this.pet.setState("feed");
-            this.itemInUse = GameModel.MAIN_SCENE.add
-                .image(
-                    this.input.activePointer.worldX,
-                    this.input.activePointer.worldY,
-                    "apple"
-                )
-                .setDepth(2);
+                this.itemInUse.itemData = data;
+                // .setInteractive();
+            });
+        }
 
-            this.itemInUse.itemData = data;
-            // .setInteractive();
-        });
         EventBus.once("changeMap", (map) => {
             this.scene.start("Game", map);
         });
@@ -236,6 +238,9 @@ export class Game extends Scene {
             case "sink":
                 this.sinkAction();
                 break;
+            case "smoke":
+                this.smokeAction();
+                break;
         }
     }
 
@@ -272,10 +277,22 @@ export class Game extends Scene {
         //     3.5
         // );
     }
+    smokeAction() {
+        //takeAction("smoke")
+        this.pet.smoke();
+        this.pet.x = 127;
+    }
     sinkAction() {
         this.pet.setState("teeth-brush");
         this.time.delayedCall(3000, () => {
             this.stopTeethBrushAction();
+            this.mapInteractionSystem.setAllInteractive();
+        });
+
+        //takeAction("toothBrush")
+        this.updatePetData({
+            ...this.petData.data.pet,
+            CleanlinessLevel: this.petData.data.pet.CleanlinessLevel + 15,
         });
     }
 
@@ -284,7 +301,18 @@ export class Game extends Scene {
         //this.pet.setState("idle")
     }
     toiletAction() {
+        // TODO : best to have select menu between poop/pee when toilet clicked
+
+        // TODO: play here pee then poop just after
         this.pet.setState("toiletPoop");
+        //takeAction("poo")
+        //takeAction("pee")
+
+        this.updatePetData({
+            ...this.petData.data.pet,
+            PoopLevel: 0,
+            PeeLevel: 0,
+        });
     }
     bathAction() {
         // this.itemInUse = this.add
@@ -387,6 +415,12 @@ export class Game extends Scene {
         this.pet.soap.destroy();
         this.pet.character.removeInteractive();
         this.map.getLayer("Bath").tilemapLayer.setDepth(0);
+        this.mapInteractionSystem.setAllInteractive();
+        //takeAction("bath")
+        this.updatePetData({
+            ...this.petData.data.pet,
+            CleanlinessLevel: 100,
+        });
     }
 }
 

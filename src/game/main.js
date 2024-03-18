@@ -36,8 +36,8 @@ const config = {
         //   height: MAX_HEIGHT,
         // },
         max: {
-            width: SAFE_GAME_WIDTH * 4,
-            height: SAFE_GAME_HEIGHT * 4,
+            width: SAFE_GAME_WIDTH * 4 + 256,
+            height: SAFE_GAME_HEIGHT * 4 + 256,
         },
     },
     scene: [

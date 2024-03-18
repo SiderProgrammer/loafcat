@@ -1,6 +1,7 @@
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import { openInventory } from "../../UI/inventory/inventory";
+import { openShop } from "../../UI/shop/shop";
 
 export class MapInteractionSystem {
     constructor(scene) {
@@ -14,18 +15,38 @@ export class MapInteractionSystem {
         zones.objects.forEach((area) => {
             const zone = this.scene.add
                 .zone(area.x, area.y, area.width, area.height)
-                .setInteractive()
+                .setInteractive({
+                    cursor: 'url("./assets/pointerPoint.png"), pointer',
+                })
                 .setOrigin(0, 0);
 
             this.zones.push(zone);
 
             zone.on("pointerdown", () => {
-                console.log(area);
-                zone.arrow.destroy();
+                // TODO : also should block some of UI
+                this.disableAll();
+
                 this.startInteraction(area.name);
             });
         });
     }
+
+    setAllInteractive() {
+        this.zones.forEach((zone) => {
+            zone.setInteractive({
+                cursor: 'url("./assets/pointerPoint.png"), pointer',
+            });
+            zone.arrow.setVisible(true);
+        });
+    }
+
+    disableAll() {
+        this.zones.forEach((zone) => {
+            zone.disableInteractive();
+            zone.arrow.setVisible(false);
+        });
+    }
+
     // TODO : show arrow again on interaction complete
     addPointingArrows() {
         this.zones.forEach((zone) => {
@@ -46,9 +67,13 @@ export class MapInteractionSystem {
         });
     }
     startInteraction(elementName) {
-        if (!this.canInteract) return;
+        //   if (!this.canInteract) return;
+
         //this.canInteract = false;
         switch (elementName) {
+            case "shop":
+                this.interactShop();
+                break;
             case "fridge":
                 this.interactFridge();
                 break;
@@ -61,11 +86,22 @@ export class MapInteractionSystem {
             case "sink":
                 this.interactSink();
                 break;
+            case "tv":
+                this.interactTV();
+                break;
+            case "smoke":
+                this.interactSmoke();
+                break;
         }
     }
 
     async interactFridge() {
         openInventory(true);
+    }
+
+    interactShop() {
+        openShop();
+        // this.scene.setState("shopping");
     }
 
     interactBath() {
@@ -78,5 +114,11 @@ export class MapInteractionSystem {
 
     interactSink() {
         this.scene.setState("sink");
+    }
+    interactTV() {
+        this.scene.setState("TV");
+    }
+    interactSmoke() {
+        this.scene.setState("smoke");
     }
 }

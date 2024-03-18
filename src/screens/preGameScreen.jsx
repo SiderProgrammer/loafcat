@@ -49,7 +49,7 @@ export const PreGameScreen = (props) => {
     return (
         <div
             className="UIContainer preGameScreenContainer"
-            style={{ height: props.height, width: props.width}}
+            // style={{ height: props.height, width: props.width}}
         >
          
 {isWalletConnected ?    <LinkPets/> : <WalletConnect connectWalletClicked={connectWalletClicked}/> }

@@ -171,9 +171,42 @@
          "width":37,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":11,
+         "name":"interactive",
+         "objects":[
+                {
+                 "height":64.3636363636364,
+                 "id":2,
+                 "name":"shop",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":82.7272727272727,
+                 "x":371.272727272727,
+                 "y":224.181818181818
+                }, 
+                {
+                 "height":47.6666666666667,
+                 "id":3,
+                 "name":"smoke",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":46.6666666666667,
+                 "x":96,
+                 "y":240.333333333333
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":11,
- "nextobjectid":1,
+ "nextlayerid":12,
+ "nextobjectid":4,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

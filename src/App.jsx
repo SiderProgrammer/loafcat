@@ -85,6 +85,7 @@ function App() {
                         
                             <>
                                 <PhaserGame
+                                onStart={resizeUI}
                                     ref={phaserRef}
                                     currentScene={currentScene}
                                 />

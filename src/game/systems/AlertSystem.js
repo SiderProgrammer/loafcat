@@ -1,15 +1,16 @@
 import { PetModel } from "../models/PetModel";
+import { StatsSystem } from "./StatsSystem";
 
 export class AlertSystem {
     constructor() {}
     updateAlerts() {
-        this.hideAlerts(this.getAllStats());
+        this.hideAlerts(StatsSystem.getAllStats());
 
         document.querySelector("#alertIcon").style.animation = "";
         document.querySelector("#alertIcon").style.visibility = "hidden";
 
-        if (this.getLowStats().length > 0) {
-            this.showAlerts(this.getLowStats());
+        if (StatsSystem.getLowStats().length > 0) {
+            this.showAlerts(StatsSystem.getLowStats());
         }
     }
     hideAlerts(stats) {
@@ -28,23 +29,5 @@ export class AlertSystem {
         //     "pulse 2s infinite";
         //   document.querySelector(stat).children[1].style.display = "block";
         // });
-    }
-
-    getAllStats() {
-        return ["#hunger", "#health", "#happines"];
-    }
-
-    getLowStats() {
-        const stats = [];
-
-        if (this.stats.HungerLevel <= 50) {
-            stats.push("#hunger");
-        }
-
-        return stats;
-    }
-
-    get stats() {
-        return PetModel.PET_DATA;
     }
 }

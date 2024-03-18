@@ -1,8 +1,10 @@
 DETAIL TODO:
-- fridge hover apple, no inventory
-- update fridge data on pointer up
+- pee/poop level should be reversed and have '-' instead of '+' button
+- fridge hover apple instead of inventory, update fridge items on pointer up
+- integrate alert system
+- dropdown stats plus button location pop up
 - API integration
-- pet dying
+- pet dying, go to ambulance
 - coins deposit 
 - working in office room 
 - import items assets
@@ -10,9 +12,11 @@ DETAIL TODO:
 
 
 TODO:
+- pet sleeping?
+- optimize tilemaps, remove hidden elements
 - tutorial pop up on every map start
 - chat
-- inventory items sub menu open on click
+- inventory items sub menu open on click, hover
 - scale every 16th px?
 - see other loafs?
 - zoom in & stop pet when opening a fridge?

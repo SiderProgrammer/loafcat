@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="37" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="37" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="4">
+ <editorsettings>
+  <export target="streetMap.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" source="mp_cs_tilemap_all.tsx"/>
  <layer id="1" name="Background" width="37" height="23">
   <data encoding="csv">
@@ -136,4 +139,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="11" name="interactive">
+  <object id="2" name="shop" x="371.273" y="224.182" width="82.7273" height="64.3636"/>
+  <object id="3" name="smoke" x="96" y="240.333" width="46.6667" height="47.6667"/>
+ </objectgroup>
 </map>

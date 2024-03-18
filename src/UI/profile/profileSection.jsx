@@ -71,6 +71,7 @@ export const ProfileSection = () =>{
         id="alertStatsBoard"
         src="./assets/ui/profileView/alertStatsBoard.png"
     ></img>
+    {/* // TODO : sort by lowest value to highest? */}
     <Stats petData={petData}></Stats>
 </div>
 </div>

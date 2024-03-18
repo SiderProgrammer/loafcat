@@ -564,7 +564,7 @@ canvas {
     transform: scale(2) !important;
 }
 .preGameScreenContainer {
-    background: url("./assets/preGameBackground.jpg");
+    background: url("./assets/preGameBackground.png");
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
