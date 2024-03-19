@@ -1,7 +1,8 @@
 
 
 export const Stat =(props)=>{
-    const isCriticalValue = props.fill < 30
+    const isCriticalValue = props.reversedValue ? props.fill > 70 : props.fill < 30
+
     return (
         <div  className={`${props.className}  ${isCriticalValue && "pulseAnimation" }`}>
          

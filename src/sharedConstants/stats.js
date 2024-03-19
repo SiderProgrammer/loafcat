@@ -4,6 +4,6 @@ export const statsConstant = [
     { icon: "Hydration", valueKey: "HydrationLevel" },
     { icon: "Happiness", valueKey: "HappinessLevel" },
     { icon: "Soap", valueKey: "CleanlinessLevel" },
-    { icon: "Pee", valueKey: "PeeLevel" },
-    { icon: "Poo", valueKey: "PoopLevel" },
+    { icon: "Pee", valueKey: "PeeLevel", reversedValue: true },
+    { icon: "Poo", valueKey: "PoopLevel", reversedValue: true },
 ];

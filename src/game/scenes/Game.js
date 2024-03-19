@@ -196,8 +196,8 @@ export class Game extends Scene {
             return false;
 
         this.updatePetData({
-            ...this.petData.data.pet,
-            HungerLevel: this.petData.data.pet.HungerLevel + 15,
+            ...PetModel.PET_DATA,
+            HungerLevel: PetModel.PET_DATA.HungerLevel + 15,
         });
         this.alertSystem.updateAlerts();
         await this.pet.feed(1); // itemData.itemDetails.pointValue
@@ -291,8 +291,8 @@ export class Game extends Scene {
 
         //takeAction("toothBrush")
         this.updatePetData({
-            ...this.petData.data.pet,
-            CleanlinessLevel: this.petData.data.pet.CleanlinessLevel + 15,
+            ...PetModel.PET_DATA,
+            CleanlinessLevel: PetModel.PET_DATA.CleanlinessLevel + 15,
         });
     }
 
@@ -309,7 +309,7 @@ export class Game extends Scene {
         //takeAction("pee")
 
         this.updatePetData({
-            ...this.petData.data.pet,
+            ...PetModel.PET_DATA,
             PoopLevel: 0,
             PeeLevel: 0,
         });
@@ -418,7 +418,7 @@ export class Game extends Scene {
         this.mapInteractionSystem.setAllInteractive();
         //takeAction("bath")
         this.updatePetData({
-            ...this.petData.data.pet,
+            ...PetModel.PET_DATA,
             CleanlinessLevel: 100,
         });
     }

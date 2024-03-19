@@ -202,7 +202,10 @@ canvas {
     position: absolute;
 
     z-index: -1;
-    top: 20px;
+    top: 40px;
+    img {
+        image-rendering: pixelated;
+    }
 }
 
 /* .dropdown:hover .dropdown-content {
@@ -230,10 +233,13 @@ canvas {
     }
 }
 
-.dropdown-content {
-    img {
-        image-rendering: pixelated;
-    }
+.dropDownMenuStatsContainer {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 50px;
+    width: 40px;
+    pointer-events: all;
+    height: 100px;
 }
 
 .plus {
@@ -251,6 +257,7 @@ canvas {
     position: absolute;
     z-index: -1;
     background: none;
+    transform: scale(1.5);
 }
 
 #alertArrow {
@@ -711,4 +718,35 @@ canvas {
 .shopClosePopUpButton {
     top: 0;
     position: absolute;
+}
+
+#swapAmount {
+    position: relative;
+    top: -33px;
+    text-align: center;
+}
+
+.coinBuyMainContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: -150px;
+    pointer-events: all;
+    color: black;
+    font-size: 6px;
+}
+
+.youGetContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 90px;
+    color: black;
+    font-size: 8px;
+}
+
+.getAmount {
+    position: relative;
+    top: -20px;
+    left: 30px;
 }

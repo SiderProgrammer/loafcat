@@ -14,7 +14,7 @@ export const PetView = (props)=>{
                     {/* TODO: Health stat should be bigger and only 1 in line && low stats should have red fill*/}
                     <div className="stats">
                         {statsConstant.map(stat => (
-                         <Stat fill={props.petData ? props.petData[stat.valueKey] : 0 } className="petViewStats" icon={stat.icon}></Stat>
+                         <Stat fill={props.petData ? props.petData[stat.valueKey] : 0 } reversedValue={stat.reversedValue}className="petViewStats" icon={stat.icon}></Stat>
                         ))}
               
               

@@ -1,6 +1,7 @@
 DETAIL TODO:
 - pee/poop level should be reversed and have '-' instead of '+' button
 - fridge hover apple instead of inventory, update fridge items on pointer up
+- alert system stats scrollbar 
 - integrate alert system
 - dropdown stats plus button location pop up
 - API integration
@@ -9,7 +10,7 @@ DETAIL TODO:
 - working in office room 
 - import items assets
 - polish UI with bouncing tweens
-
+- fix blue screen before canvas fully created
 
 TODO:
 - pet sleeping?
