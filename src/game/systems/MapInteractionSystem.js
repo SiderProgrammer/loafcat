@@ -72,53 +72,29 @@ export class MapInteractionSystem {
         //this.canInteract = false;
         switch (elementName) {
             case "shop":
-                this.interactShop();
+                openShop();
                 break;
             case "fridge":
-                this.interactFridge();
+                openInventory(true);
                 break;
             case "bath":
-                this.interactBath();
+                this.scene.setState("bath");
                 break;
             case "toilet":
-                this.interactToilet();
+                this.scene.setState("toilet");
                 break;
             case "sink":
-                this.interactSink();
+                this.scene.setState("sink");
                 break;
             case "tv":
-                this.interactTV();
+                this.scene.setState("TV");
                 break;
             case "smoke":
-                this.interactSmoke();
+                this.scene.setState("smoke");
+                break;
+            case "bed":
+                this.scene.setState("bed");
                 break;
         }
-    }
-
-    async interactFridge() {
-        openInventory(true);
-    }
-
-    interactShop() {
-        openShop();
-        // this.scene.setState("shopping");
-    }
-
-    interactBath() {
-        this.scene.setState("bath");
-    }
-
-    interactToilet() {
-        this.scene.setState("toilet");
-    }
-
-    interactSink() {
-        this.scene.setState("sink");
-    }
-    interactTV() {
-        this.scene.setState("TV");
-    }
-    interactSmoke() {
-        this.scene.setState("smoke");
     }
 }

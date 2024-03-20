@@ -11,9 +11,9 @@ DETAIL TODO:
 - import items assets
 - polish UI with bouncing tweens
 - fix blue screen before canvas fully created
+- sleeping
 
 TODO:
-- pet sleeping?
 - optimize tilemaps, remove hidden elements
 - tutorial pop up on every map start
 - chat

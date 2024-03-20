@@ -8,7 +8,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         scene.add.existing(this);
         this.baseY = y;
         this.sprite = sprite;
-
+        this.effects = [];
         this.addLoafcatSprite();
     }
     setBaseY() {
@@ -48,6 +48,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     setState(state) {
         switch (state) {
             case "idle":
+                this.cleanEffects();
                 this.setStateCatIdle();
                 break;
             case "walk":
@@ -65,6 +66,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             case "teeth-brush":
                 this.setStateCatTeethBrush();
                 break;
+            case "TV":
+                this.setStateCatWatchTV();
+                break;
+                case "sleep":
+                    this.sleep();
+                    break;
         }
     }
     sleep() {
@@ -75,6 +82,17 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             .play("sleep-idle");
 
         this.add(this.sleepSprite);
+        this.effects.push(this.sleepSprite);
+    }
+    setStateCatWatchTV() {
+        this.setStateCatIdle();
+        this.character.play("watch-tv");
+        this.popcorn = this.scene.add
+            .sprite(0, 0, "tv-popcorn")
+            .play("tv-popcorn");
+
+        this.add(this.popcorn);
+        this.effects.push(this.popcorn);
     }
     drinkCoffee() {
         this.setStateCatIdle();
@@ -84,6 +102,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             .play("coffee-idle");
 
         this.add(this.coffee);
+        this.effects.push(this.coffee);
     }
     setStateCatFeed() {
         this.setStateCatIdle();
@@ -98,12 +117,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.moveTween && this.moveTween.pause();
     }
     setStateCatDead() {
+        this.setStateCatIdle();
         this.cleanEffects();
         this.character.play("dead");
-        this.moveTween && this.moveTween.pause();
     }
     async smoke() {
-        this.moveTween && this.moveTween.pause();
+        this.setStateCatIdle();
 
         this.character.play("smoke");
 
@@ -112,6 +131,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             .play("smoke-idle");
 
         this.add([this.smokeSprite]);
+        this.effects.push(this.smokeSprite);
     }
     async feed(feedValue) {
         this.character.play("eat");
@@ -127,29 +147,16 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
 
     cleanEffects() {
-        if (this.fartImage) {
-            this.remove(this.fartImage);
-            this.fartImage.destroy();
-        }
-
-        if (this.peeSprite) {
-            this.remove(this.peeSprite);
-            this.peeSprite.destroy();
-        }
-        if (this.teethBrush) {
-            this.remove(this.teethBrush);
-            this.teethBrush.destroy();
-        }
-        if (this.smokeSprite) {
-            this.remove(this.smokeSprite);
-            this.smokeSprite.destroy();
-        }
+        this.effects.forEach((effect) => {
+            this.remove(effect, true);
+        });
     }
     fart() {
         this.character.play("fart");
         this.fartImage = this.scene.add.sprite(0, 0, "fart").play("fart-idle");
 
         this.add(this.fartImage);
+        this.effects.push(this.fartImage);
     }
 
     setStateCatPoop() {
@@ -158,24 +165,22 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.newspaper = this.scene.add
             .sprite(0, 0, "newspaper")
             .play("newspaper-idle");
-        this.x = 185;
-        this.y = 268;
+
         this.add(this.newspaper);
+
+        this.effects.push(this.newspaper);
     }
-    stopToothBrush() {
-        this.cleanEffects();
-        this.setState("idle");
-    }
+
     setStateCatTeethBrush() {
-        this.setBaseY();
+        // this.setBaseY();
         this.setStateCatIdle();
         this.character.play("teeth-brushing");
         this.teethBrush = this.scene.add
             .sprite(0, 0, "teeth-brushing")
             .play("teeth-brushing-idle");
-        this.x = 248;
 
         this.add(this.teethBrush);
+        this.effects.push(this.teethBrush);
     }
 
     listenMusic() {
@@ -186,6 +191,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             .play("nutes-idle");
 
         this.add(this.notes);
+        this.effects.push(this.notes);
     }
 
     pee() {
@@ -198,17 +204,18 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
         this.add(this.peeSprite);
         this.swap(this.peeSprite, this.character);
+        this.effects.push(this.peeSprite);
     }
 
     setStateBathing() {
         this.setStateCatIdle();
         this.moveTween.destroy();
-        this.x = 369;
-        this.y = 272;
+
         //this.character.play("bathing");
 
         this.soap = this.scene.add.sprite(0, 0, "soap"); //.play("soap-idle");
 
         this.add(this.soap);
+        this.effects.push(this.soap);
     }
 }

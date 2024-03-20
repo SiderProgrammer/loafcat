@@ -16,6 +16,7 @@ import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
 import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 import { EventBus } from "../EventBus";
+import { PetStateSystem } from "../systems/StateSystem";
 
 export class Game extends Scene {
     constructor() {
@@ -35,6 +36,7 @@ export class Game extends Scene {
 
         //this.add.image(512, 384, "background").setAlpha(0.5);
         this.alertSystem = new AlertSystem();
+
         this.mapInteractionSystem = new MapInteractionSystem(this);
         this.createMap();
 
@@ -42,7 +44,7 @@ export class Game extends Scene {
         this.pet.setDepth(1);
         this.pet.moveRandomly();
         //this.pet.drinkCoffee();
-
+        this.petStateSystem = new PetStateSystem(this, this.pet);
         // this.pet.smoke();
         // setTimeout(() => {
         //     this.pet.setStateCatDead();
@@ -75,20 +77,7 @@ export class Game extends Scene {
         this.alertSystem.updateAlerts();
 
         console.log(this.petData.data.pet);
-        // this.input.on("pointerdown", () => {
-        //     if (!this.itemInUse) return;
-        //     this.itemInUse.setPosition(
-        //         this.input.activePointer.worldX,
-        //         this.input.activePointer.worldY
-        //     );
-        // });
-        // this.input.on("pointermove", () => {
-        //     if (!this.itemInUse) return;
-        //     this.itemInUse.setPosition(
-        //         this.input.activePointer.worldX,
-        //         this.input.activePointer.worldY
-        //     );
-        // });
+
         this.input.on("pointerup", async () => {
             if (!this.itemInUse) return;
             this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
@@ -203,23 +192,6 @@ export class Game extends Scene {
         await this.pet.feed(1); // itemData.itemDetails.pointValue
 
         return true;
-        // axios({
-        //   method: "POST",
-        //   url: "http://localhost:3000/api/feed-pet",
-        //   headers: {
-        //     Accept: "application/json",
-        //     "Content-Type": "application/json",
-        //   },
-        //   data: {
-        //     UserID: UserModel.USER_ID,
-        //     PetID: UserModel.PET_ID,
-
-        //     ItemID: itemData.itemDetails.ItemID,
-
-        //     foodType: itemData.itemDetails.category,
-        //     quantity: 1,
-        //   },
-        // });
     }
 
     updatePetData(data) {
@@ -227,200 +199,16 @@ export class Game extends Scene {
     }
 
     setState(state) {
-        // TODO : should be pipeline for all pet states?
-        switch (state) {
-            case "bath":
-                this.bathAction();
-                break;
-            case "toilet":
-                this.toiletAction();
-                break;
-            case "sink":
-                this.sinkAction();
-                break;
-            case "smoke":
-                this.smokeAction();
-                break;
-        }
+        this.petStateSystem.setState(state);
     }
 
     resize() {
-        // document.getElementById("game-container").children[0].style.width =
-        //     document.querySelector("canvas").style.width;
-        // document.getElementById("game-container").children[0].style.height =
-        //     document.querySelector("canvas").style.height;
-
         // this.resize();
         this.cameras.main.setBounds(0, -20, MAX_WIDTH, MAX_HEIGHT);
         this.cameras.main.centerOn(
             Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
             MAX_HEIGHT
-            //  Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2)
         );
-        // GameModel.GAME_WIDTH = this.scale.width;
-        // GameModel.GAME_HEIGHT = this.scale.height;
-
-        // this.cameras.resize(this.scale.width, this.scale.height);
-
-        // document.getElementById("game-container").children[0].style.width =
-        //   document.querySelector("canvas").style.width;
-        // document.getElementById("game-container").children[0].style.height =
-        //   document.querySelector("canvas").style.height;
-
-        // // this.cameras.main.setViewport(0, 0, gameSize.width, gameSize.height);
-        // // // TODO : fix it
-
-        // this.cameras.main.setBounds(0, 0, MAX_WIDTH, MAX_HEIGHT);
-        // this.cameras.main.centerOn(
-        //   Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
-        //   Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2) +
-        //     3.5
-        // );
-    }
-    smokeAction() {
-        //takeAction("smoke")
-        this.pet.smoke();
-        this.pet.x = 127;
-    }
-    sinkAction() {
-        this.pet.setState("teeth-brush");
-        this.time.delayedCall(3000, () => {
-            this.stopTeethBrushAction();
-            this.mapInteractionSystem.setAllInteractive();
-        });
-
-        //takeAction("toothBrush")
-        this.updatePetData({
-            ...PetModel.PET_DATA,
-            CleanlinessLevel: PetModel.PET_DATA.CleanlinessLevel + 15,
-        });
-    }
-
-    stopTeethBrushAction() {
-        this.pet.stopToothBrush();
-        //this.pet.setState("idle")
-    }
-    toiletAction() {
-        // TODO : best to have select menu between poop/pee when toilet clicked
-
-        // TODO: play here pee then poop just after
-        this.pet.setState("toiletPoop");
-        //takeAction("poo")
-        //takeAction("pee")
-
-        this.updatePetData({
-            ...PetModel.PET_DATA,
-            PoopLevel: 0,
-            PeeLevel: 0,
-        });
-    }
-    bathAction() {
-        // this.itemInUse = this.add
-        //   .image(
-        //     this.input.activePointer.worldX,
-        //     this.input.activePointer.worldY,
-        //     "soapImage"
-        //   )
-        //   .setDepth(3);
-        this.input.setDefaultCursor('url("./assets/soapImage.png"), pointer');
-        this.map.getLayer("Bath").tilemapLayer.setDepth(2);
-        this.pet.setState("bath");
-
-        this.pet.character.setInteractive();
-        let soapIn = false;
-        let lastEventPoint = {
-            x: this.input.activePointer.worldX,
-            y: this.input.activePointer.worldY,
-        };
-        let dc = null;
-        let counter = 0;
-        // TODO : soap too big in some scales, bigger hitbox, check zooming in
-        this.pet.character.on("pointerover", () => {
-            const pointerPos = {
-                x: this.input.activePointer.worldX,
-                y: this.input.activePointer.worldY,
-            };
-            if (
-                Phaser.Math.Distance.BetweenPoints(pointerPos, lastEventPoint) <
-                5
-            )
-                return;
-
-            if (counter == 25) {
-                this.stopBathAction();
-                clearTimeout(dc);
-                return;
-            }
-            lastEventPoint = {
-                x: this.input.activePointer.worldX,
-                y: this.input.activePointer.worldY,
-            };
-
-            if (!dc) {
-                if (counter === 0) {
-                    this.pet.character.play("bathing");
-                    this.pet.soap.play("soap-idle");
-                }
-
-                this.pet.soap.anims.resume();
-                this.pet.character.anims.resume();
-                dc = setTimeout(() => {
-                    this.pet.soap.anims.restart();
-                    this.pet.character.anims.restart();
-                    this.pet.soap.anims.pause();
-                    this.pet.character.anims.pause();
-                    dc = null;
-                }, 500);
-            } else if (dc) {
-                clearTimeout(dc);
-                dc = setTimeout(() => {
-                    this.pet.soap.anims.restart();
-
-                    this.pet.soap.anims.pause();
-                    this.pet.character.anims.pause();
-                    dc = null;
-                }, 500);
-            }
-            counter++;
-        });
-
-        // this.pet.character.on("pointerout", () => {
-
-        //  // soapIn = false;
-        //   this.pet.soap.anims.pause();
-        //   this.pet.character.anims.pause();
-        // });
-
-        // this.cameras.main.zoomTo(2, 500);
-        // const tweenData = {
-        //   scrollX: this.cameras.main.scrollX,
-        //   scrollY: this.cameras.main.scrollY,
-        // };
-        // this.tweens.add({
-        //   targets: tweenData,
-        //   scrollX: 120,
-        //   scrollY: 200,
-        //   duration: 500,
-        //   onUpdate: () => {
-        //     this.cameras.main.setScroll(tweenData.scrollX, tweenData.scrollY);
-        //     //   this.cameras.main.centerOn(tweenData.centerX, tweenData.centerY);
-        //   },
-        // });
-    }
-    stopBathAction() {
-        this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
-        this.pet.setBaseY();
-        // this.pet.moveRandomly();
-        this.pet.setState("idle");
-        this.pet.soap.destroy();
-        this.pet.character.removeInteractive();
-        this.map.getLayer("Bath").tilemapLayer.setDepth(0);
-        this.mapInteractionSystem.setAllInteractive();
-        //takeAction("bath")
-        this.updatePetData({
-            ...PetModel.PET_DATA,
-            CleanlinessLevel: 100,
-        });
     }
 }
 

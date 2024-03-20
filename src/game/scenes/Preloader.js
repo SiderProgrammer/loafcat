@@ -75,13 +75,22 @@ export class Preloader extends Scene {
             "Work Room",
             "mp_house_interiors_tileset_pack/office.png"
         );
-
+        this.load.image(
+            "Laundry",
+            "mp_house_interiors_tileset_pack/laundry_room.png"
+        );
+        this.load.image(
+            "Bedroom",
+            "mp_house_interiors_tileset_pack/parents_room.png"
+        );
         this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
         this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
         this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
         this.load.tilemapTiledJSON("bathroomMap", `bathroomMap.json`);
         this.load.tilemapTiledJSON("livingRoomMap", `livingRoomMap.json`);
         this.load.tilemapTiledJSON("garageMap", `garageMap.json`);
+        this.load.tilemapTiledJSON("laundryMap", `laundryMap.json`);
+        this.load.tilemapTiledJSON("bedroomMap", `bedroomMap.json`);
 
         this.load.spritesheet(`loafcat`, `loafcat.png`, {
             frameWidth: 34,
@@ -127,6 +136,10 @@ export class Preloader extends Scene {
         });
         this.load.spritesheet(`smoke`, `effects/smoke.png`, {
             frameWidth: 256 / 8,
+            frameHeight: 32,
+        });
+        this.load.spritesheet(`tv-popcorn`, `effects/tv-popcorn.png`, {
+            frameWidth: 32,
             frameHeight: 32,
         });
         this.load.image("logo", "logo.png");
@@ -221,6 +234,7 @@ export class Preloader extends Scene {
         this.addLoafcatAnim("front-pee", [0, 1, 2, 3, 4, 5, 6, 7], 19);
         this.addLoafcatAnim("eat", [0, 1, 2, 3, 4], 20);
         this.addLoafcatAnim("bathing", [0, 1, 2, 3, 4, 5, 6, 7], 23);
+        this.addLoafcatAnim("watch-tv", [0, 1, 2, 3, 4], 21);
         // this.addLoafcatAnim("smoke", [0, 1, 2, 3, 4, 5, 6, 7], 22, false, 5, {
         //     repeatDelay: 2500,
         // });
@@ -246,6 +260,7 @@ export class Preloader extends Scene {
 
         this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf", 5);
         this.addBaseEffectAnim("TV-lamp", "TV-lamp");
+        this.addBaseEffectAnim("tv-popcorn", "tv-popcorn");
         // this.addBaseEffectAnim("smoke-idle", "smoke", 5, true, {
         //     repeatDelay: 0,
         // });
