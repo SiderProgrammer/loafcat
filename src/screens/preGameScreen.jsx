@@ -6,26 +6,22 @@ import { LinkPets } from "./linkPets";
 import { useNavigate } from "react-router-dom";
 import { EventBus } from "../game/EventBus";
 
-
 export const PreGameScreen = (props) => {
-    const [isWalletConnected, setWalletConnect] = useState( false)
+    const [isWalletConnected, setWalletConnect] = useState(false);
     const navigate = useNavigate();
-    useLayoutEffect(()=>{
-        // TODO : needs better delay/event solution
-        setTimeout(()=>setWalletConnect(window.solana.publicKey ? true : false),1000)
-    },[])
- 
+    useLayoutEffect(() => {
+        const connect = async () => {
+            await connectWalletClicked();
+        };
+        connect();
+    }, []);
+
     const connectToWallet = async () => {
- 
         try {
             if (window.solana) {
-                window.solana.on("connect", () => {
-               
-                });
+                window.solana.on("connect", () => {});
                 const resp = await window.solana.connect();
                 console.log("connected wallet", resp);
-                
-          
             }
         } catch (err) {
             // TODO : update the text on connect error
@@ -35,15 +31,12 @@ export const PreGameScreen = (props) => {
 
     const connectWalletClicked = async () => {
         await connectToWallet();
-        if(window.solana.publicKey) {
+        if (window.solana.publicKey) {
             UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
-            setWalletConnect(true)
+            setWalletConnect(true);
             // EventBus.emit("startPreloader")
-           navigate("/game")
-            
+            navigate("/game");
         }
-
-
     };
 
     return (
@@ -51,10 +44,11 @@ export const PreGameScreen = (props) => {
             className="UIContainer preGameScreenContainer"
             // style={{ height: props.height, width: props.width}}
         >
-         
-{isWalletConnected ?    <LinkPets/> : <WalletConnect connectWalletClicked={connectWalletClicked}/> }
-      
-  
+            {isWalletConnected ? (
+                <LinkPets />
+            ) : (
+                <WalletConnect connectWalletClicked={connectWalletClicked} />
+            )}
         </div>
     );
 };

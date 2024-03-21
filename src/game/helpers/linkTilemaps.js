@@ -181,5 +181,41 @@ export function linkTilemaps(
         tilemap.createLayer("Tile Layer 4", tilesets, 0, y);
         tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
         tilemap.createLayer("Tile Layer 3", tilesets, 0, y);
+    } else if (map === "officeMap") {
+        const kitchenTileset2 = tilemap.addTilesetImage("Office");
+        const kitchenTileset1 = tilemap.addTilesetImage("Office 2");
+        const kitchenTileset3 = tilemap.addTilesetImage("Office 3");
+
+        const kitchenTileset4 = tilemap.addTilesetImage("Bathroom");
+        const kitchenTileset11 = tilemap.addTilesetImage("Background");
+        const kitchenTileset10 = tilemap.addTilesetImage("Chill Room");
+
+        const kitchenTileset6 = tilemap.addTilesetImage("Chill Room");
+        const kitchenTileset5 = tilemap.addTilesetImage("mp_cs_tilemap_all");
+        const kitchenTileset8 = tilemap.addTilesetImage("Work Room");
+        const kitchenTileset7 = tilemap.addTilesetImage("Garage");
+        const kitchenTileset9 = tilemap.addTilesetImage("Play Room");
+
+        const tilesets = [
+            kitchenTileset1,
+            kitchenTileset2,
+            kitchenTileset3,
+            kitchenTileset4,
+            kitchenTileset5,
+            kitchenTileset6,
+            kitchenTileset7,
+            kitchenTileset8,
+            kitchenTileset9,
+            kitchenTileset10,
+            kitchenTileset11,
+        ];
+
+        !nextFloor && tilemap.createLayer("Ground", tilesets, 0, y);
+
+        tilemap.createLayer("Tile Layer 2", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 6", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 5", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 3", tilesets, 0, y);
+        tilemap.createLayer("Tile Layer 4", tilesets, 0, y);
     }
 }

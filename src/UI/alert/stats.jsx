@@ -18,15 +18,20 @@ export const Stats = ({ petData }) => {
                             reversedValue={stat.reversedValue}
                         ></Stat>
 
-                        {(stat.reversedValue
-                            ? petData[stat.valueKey] > 70
-                            : petData[stat.valueKey] < 30) && (
-                                  <Button
-                                      className={"plus pulseAnimation"}
-                                      buttonIcon={"plus"}
-                                      imgPath="./assets/"
-                                  ></Button>
-                              )}
+                        {stat.reversedValue && petData[stat.valueKey] > 70 && (
+                            <Button
+                                className={"plus pulseAnimation"}
+                                buttonIcon={"minus"}
+                                imgPath="./assets/"
+                            ></Button>
+                        )}
+                        {!stat.reversedValue && petData[stat.valueKey] < 30 && (
+                            <Button
+                                className={"plus pulseAnimation"}
+                                buttonIcon={"plus"}
+                                imgPath="./assets/"
+                            ></Button>
+                        )}
                     </div>
                 ))}
             </div>

@@ -83,6 +83,22 @@ export class Preloader extends Scene {
             "Bedroom",
             "mp_house_interiors_tileset_pack/parents_room.png"
         );
+        this.load.image(
+            "Architecture",
+            "mp_house_interiors_tileset_pack/tileset_architecture.png"
+        );
+        this.load.image(
+            "Office",
+            "mp_house_interiors_tileset_pack/tileset_architecture.png"
+        );
+        this.load.image(
+            "Office 2",
+            "mp_house_interiors_tileset_pack/tileset_objects.png"
+        );
+        this.load.image(
+            "Office 3",
+            "mp_house_interiors_tileset_pack/tileset_elevator.png"
+        );
         this.load.tilemapTiledJSON("streetMap", `streetMap.json`);
         this.load.tilemapTiledJSON("kitchenMap", `kitchenMap.json`);
         this.load.tilemapTiledJSON("chillRoomMap", `chillRoomMap.json`);
@@ -91,6 +107,7 @@ export class Preloader extends Scene {
         this.load.tilemapTiledJSON("garageMap", `garageMap.json`);
         this.load.tilemapTiledJSON("laundryMap", `laundryMap.json`);
         this.load.tilemapTiledJSON("bedroomMap", `bedroomMap.json`);
+        this.load.tilemapTiledJSON("officeMap", `officeMap.json`);
 
         this.load.spritesheet(`loafcat`, `loafcat.png`, {
             frameWidth: 34,
