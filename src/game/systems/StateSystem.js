@@ -26,6 +26,9 @@ export class PetStateSystem {
             case "bed":
                 await this.bedAction();
                 break;
+            case "work":
+                await this.workAction();
+                break;
         }
 
         this.pet.setState("idle");
@@ -33,6 +36,13 @@ export class PetStateSystem {
         this.pet.y = this.pet.baseY;
     }
     async bedAction() {
+        this.pet.sleep();
+        this.pet.x = 410;
+        this.pet.y = 261;
+        await Async.delay(10000);
+        //takeAction("sleep")
+    }
+    async workAction() {
         this.pet.sleep();
         this.pet.x = 410;
         this.pet.y = 261;

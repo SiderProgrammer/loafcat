@@ -95,6 +95,10 @@ export class MapInteractionSystem {
             case "bed":
                 this.scene.setState("bed");
                 break;
+
+            case "work":
+                this.scene.setState("work");
+                break;
         }
     }
 }

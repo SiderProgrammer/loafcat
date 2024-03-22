@@ -74,7 +74,7 @@ export const Inventory = ()=>{
             <div className="itemSlotsContainer">
                {inventoryData.map((item,i)=>(
               
- <ItemSlot key={i} onClick={closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>
+ <ItemSlot key={i} onClick={draggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>
           
 
                ))}

@@ -3,7 +3,8 @@ import { Stat } from "../stats/stat";
 import { Button } from "../buttons/button";
 import { createSignal } from "react-use-signals";
 import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { RangeSlider } from "../common/rangeSlider.jsx/rangeSlider";
 export const visibilitySignal = createSignal("hidden");
 
 export const openCoinsBuy = () => {
@@ -19,14 +20,13 @@ export const openCoinsBuy = () => {
   };
 
 
-export const CoinsBuy = () => {
+export const WorkPopUp = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter()
-    const [getValue, setGetValue] = useState(0)
-    const input = useRef()
-    const updateGetValue = () => {
-        setGetValue((Number(input.current.value)*5).toFixed(2))
-    }
-    const balance = 1373
+    visibilitySignal.value = "visible"
+
+
+    const [value, setValue] = React.useState({ min: 0, max: 100 });
+
     return (
         <>
         
@@ -36,14 +36,16 @@ export const CoinsBuy = () => {
                
           
                <div className={"coinBuyMainContainer"}>
-                <span>Swap</span>
-                <span>Available {balance} USDT</span>
+             
+                <span>Set working hours</span>
                    <img
                        className={""}
                        src="./assets/ui/valueHolder.png"
                    ></img>
-                       <input  min={5} max={balance} type="number"  id="swapAmount" placeholder={"0.00"} ref={input} onChange={updateGetValue}/>
-               </div>
+                        <RangeSlider min={0} max={100} step={5} value={value} onChange={setValue} />
+    </div>
+                       {/* <input  min={5} max={balance} type="number"  id="swapAmount" placeholder={"0.00"} ref={input} onChange={updateGetValue}/>
+           
                <div className={"youGetContainer"}>
                <span>You get</span>
                <img
@@ -51,13 +53,13 @@ export const CoinsBuy = () => {
                        src="./assets/ui/valueHolder.png"
                    ></img>
                    <span className={"getAmount"}>{getValue}( )</span>
-               </div>
-        
+               </div> */}
+    
                <Button
           
                    className={"nameSubmitButton"}
                    buttonIcon={"submitButton"}
-                   text={"Swap!"}
+                   text={"Start work"}
                />
         
             </div>

@@ -8,6 +8,7 @@ import { DownRightButtons } from "./downRightButtons/downRightButtons";
 import { MainPetView } from "./profile/mainPetView";
 import { MapSelection } from "./location/selectMap";
 import { CoinsBuy } from "./coinsBuy/coinsBuy";
+import { WorkPopUp } from "./work/WorkPopUp";
 
 export const UIView = (props) => {
 
@@ -21,6 +22,7 @@ export const UIView = (props) => {
         <Leaderboard></Leaderboard>
         <MapSelection></MapSelection>
         <CoinsBuy></CoinsBuy>
+        <WorkPopUp></WorkPopUp>
         <div id="bottomButtonsSection" className="ui">
             <DownRightButtons></DownRightButtons>
         </div>

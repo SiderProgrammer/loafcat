@@ -83,17 +83,14 @@ export class Preloader extends Scene {
             "Bedroom",
             "mp_house_interiors_tileset_pack/parents_room.png"
         );
-        this.load.image(
-            "Architecture",
-            "mp_house_interiors_tileset_pack/tileset_architecture.png"
-        );
+
         this.load.image(
             "Office",
-            "mp_house_interiors_tileset_pack/tileset_architecture.png"
+            "mp_house_interiors_tileset_pack/tileset_objects.png"
         );
         this.load.image(
             "Office 2",
-            "mp_house_interiors_tileset_pack/tileset_objects.png"
+            "mp_house_interiors_tileset_pack/tileset_architecture.png"
         );
         this.load.image(
             "Office 3",
