@@ -664,6 +664,10 @@ canvas {
 
     gap: 10px;
 }
+.mapSelectButton {
+    height: 50px;
+    position: relative;
+}
 
 .itemBuyPopUp {
     visibility: visible;
@@ -753,4 +757,12 @@ canvas {
 
 .wrapper {
     pointer-events: all;
+}
+.inputSlider {
+    cursor: url("./assets/pointerPoint.png"), pointer;
+}
+
+.flyingValue {
+    position: absolute;
+    transform: scale(2);
 }

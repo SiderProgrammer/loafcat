@@ -2,6 +2,7 @@ import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import { openInventory } from "../../UI/inventory/inventory";
 import { openShop } from "../../UI/shop/shop";
+import { openWorkPopUp } from "../../UI/work/WorkPopUp";
 
 export class MapInteractionSystem {
     constructor(scene) {
@@ -97,7 +98,7 @@ export class MapInteractionSystem {
                 break;
 
             case "work":
-                this.scene.setState("work");
+                openWorkPopUp();
                 break;
         }
     }

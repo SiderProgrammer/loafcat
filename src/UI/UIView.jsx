@@ -9,6 +9,7 @@ import { MainPetView } from "./profile/mainPetView";
 import { MapSelection } from "./location/selectMap";
 import { CoinsBuy } from "./coinsBuy/coinsBuy";
 import { WorkPopUp } from "./work/WorkPopUp";
+import { FlyingValue } from "./flyingValue/flyingValue";
 
 export const UIView = (props) => {
 
@@ -26,5 +27,6 @@ export const UIView = (props) => {
         <div id="bottomButtonsSection" className="ui">
             <DownRightButtons></DownRightButtons>
         </div>
+      <FlyingValue></FlyingValue>
     </div>)
 };

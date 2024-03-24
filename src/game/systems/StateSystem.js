@@ -1,3 +1,6 @@
+import { openWorkPopUp } from "../../UI/work/WorkPopUp";
+import { statsConstant } from "../../sharedConstants/stats";
+import { EventBus } from "../EventBus";
 import { PetModel } from "../models/PetModel";
 import { Async } from "../utils/Async";
 
@@ -56,6 +59,12 @@ export class PetStateSystem {
         //takeAction("smoke")
     }
     async sinkAction() {
+        //  const icon = statsConstant.find(stat => stat.icon==="Happiness").
+        EventBus.emit("actionUpdate", {
+            value: 15,
+            img: "Happiness",
+            pos: this.scene.input.activePointer,
+        });
         this.pet.x = 248;
         this.pet.setState("teeth-brush");
         this.scene.updatePetData({

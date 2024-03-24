@@ -13,26 +13,22 @@ export const RangeSlider = ({ min, max, value, step, onChange }) => {
   
     const handleMinChange = e => {
       e.preventDefault();
-      const newMinVal = Math.min(+e.target.value, maxValue - step);
-     // if (!value) setMinValue(newMinVal);
-       onChange({ min: newMinVal, max: maxValue });
+      const newMinVal = +e.target.value
+     
+     if (!value) setMinValue(newMinVal);
+        onChange({ min: newMinVal, max: maxValue });
     };
   
-    const handleMaxChange = e => {
-      e.preventDefault();
-      const newMaxVal = Math.max(+e.target.value, minValue + step);
-      if (!value) setMaxValue(newMaxVal);
-      onChange({ min: minValue, max: newMaxVal });
-    };
+   
   
     const minPos = ((minValue - min) / (max - min)) * 100;
     const maxPos = ((maxValue - min) / (max - min)) * 100;
-  
+
     return (
       <div class="wrapper">
         <div class="input-wrapper">
           <input
-            class="input"
+            class="inputSlider"
             type="range"
             value={minValue}
             min={min}
@@ -40,15 +36,7 @@ export const RangeSlider = ({ min, max, value, step, onChange }) => {
             step={step}
             onChange={handleMinChange}
           />
-          <input
-            class="input"
-            type="range"
-            value={maxValue}
-            min={min}
-            max={max}
-            step={step}
-            // onChange={handleMaxChange}
-          />
+     
         </div>
   
         <div class="control-wrapper">

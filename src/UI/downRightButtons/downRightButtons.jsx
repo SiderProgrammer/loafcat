@@ -21,7 +21,7 @@ export const DownRightButtons = () => {
             ></Button>
 
             <Button onClick={openMapSelection} buttonIcon="mapButton"></Button>
-            <Button onClick={openCoinsBuy} buttonIcon="mapButton"></Button>
+            <Button onClick={openCoinsBuy} buttonIcon="coinButton"></Button>
         </>
     );
 };

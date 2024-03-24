@@ -11,6 +11,8 @@ export const Button = (props) => {
                 <span>{props.text}</span>
                 {props.passComponent}
             </div>
+
+            {props.children}
         </button>
     );
 };

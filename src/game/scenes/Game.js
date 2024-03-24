@@ -119,6 +119,13 @@ export class Game extends Scene {
         EventBus.once("changeMap", (map) => {
             this.scene.start("Game", map);
         });
+
+        EventBus.once("startWork", () => {
+            this.setState("work");
+        });
+        EventBus.once("stopWork", () => {
+            this.setState("idle");
+        });
     }
 
     update() {

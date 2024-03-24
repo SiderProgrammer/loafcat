@@ -303,6 +303,6 @@ export class Preloader extends Scene {
             repeat: -1,
         });
 
-        this.scene.start("Game", { map: "garageMap" });
+        this.scene.start("Game", { map: "streetMap" });
     }
 }

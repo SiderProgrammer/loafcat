@@ -31,12 +31,17 @@ export const MapSelection = () => {
         >
             {/* <Button  className="inventoryCloseButton" buttonIcon="closeButton" ></Button> */}
             {MAPS_ORDER.map((map) => (
-                <Button
-                    onClick={() => selectMap(map)}
-                    style={{ transform: "scale(0.4)" }}
-                    buttonIcon={map + "Icon"}
-                    ext={"png"}
-                ></Button>
+                <div>
+                
+                    <Button
+                        onClick={() => selectMap(map)}
+                        // style={{ transform: "scale(0.4)" }}
+                        className={"mapSelectButton"}
+                        buttonIcon={map + "Icon"}
+                        ext={"png"}
+                        children={    <img src="./assets/ui/mapFrame.png" style={{position:"absolute",top:"-1px",left:"-3px"}}></img>}
+                    ></Button>
+                </div>
             ))}
         </div>
     );
