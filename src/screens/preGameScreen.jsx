@@ -5,7 +5,8 @@ import { WalletConnect } from "./walletConnect";
 import { LinkPets } from "./linkPets";
 import { useNavigate } from "react-router-dom";
 import { EventBus } from "../game/EventBus";
-
+import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
+import { GameModel } from "../game/models/GameModel";
 export const PreGameScreen = (props) => {
     const [isWalletConnected, setWalletConnect] = useState(false);
     const navigate = useNavigate();
@@ -22,6 +23,8 @@ export const PreGameScreen = (props) => {
                 window.solana.on("connect", () => {});
                 const resp = await window.solana.connect();
                 console.log("connected wallet", resp);
+                const connection = new Connection('https://multi-blissful-wind.solana-mainnet.quiknode.pro/13fc50b03434c8775643c0ae2d3db06e6162d1ef');
+                GameModel.solanaConnection = connection
             }
         } catch (err) {
             // TODO : update the text on connect error

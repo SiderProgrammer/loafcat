@@ -28,6 +28,10 @@ export class Preloader extends Scene {
     }
     loadAmbient() {
         this.load.setPath("./assets/effects/ambient");
+        this.load.spritesheet(`chart`, `chart.png`, {
+            frameWidth: 132 / 6,
+            frameHeight: 13,
+        });
         this.load.spritesheet(`TV-egyptian-loaf`, `TV-egyptian-loaf.png`, {
             frameWidth: 480 / 6,
             frameHeight: 48,
@@ -115,7 +119,10 @@ export class Preloader extends Scene {
             frameWidth: 32,
             frameHeight: 36,
         });
-
+        this.load.spritesheet(`office-set`, `effects/office-set.png`, {
+            frameWidth: 32,
+            frameHeight: 36,
+        });
         this.load.spritesheet(`pee`, `effects/pee.png`, {
             frameWidth: 32,
             frameHeight: 36,
@@ -261,6 +268,7 @@ export class Preloader extends Scene {
             true,
             5
         );
+        this.addLoafcatAnim("working", [0, 1, 2, 3, 4], 30, true);
 
         this.addBaseEffectAnim("coffee-idle", "cap-coffee", 4);
         this.addBaseEffectAnim("pee-idle", "pee");
@@ -275,6 +283,9 @@ export class Preloader extends Scene {
         this.addBaseEffectAnim("TV-egyptian-loaf", "TV-egyptian-loaf", 5);
         this.addBaseEffectAnim("TV-lamp", "TV-lamp");
         this.addBaseEffectAnim("tv-popcorn", "tv-popcorn");
+        this.addBaseEffectAnim("chart", "chart");
+        this.addBaseEffectAnim("office-set", "office-set");
+
         // this.addBaseEffectAnim("smoke-idle", "smoke", 5, true, {
         //     repeatDelay: 0,
         // });

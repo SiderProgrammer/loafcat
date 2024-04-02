@@ -124,7 +124,7 @@ export class Game extends Scene {
             this.setState("work");
         });
         EventBus.once("stopWork", () => {
-            this.setState("idle");
+            this.petStateSystem.actionStopped();
         });
     }
 

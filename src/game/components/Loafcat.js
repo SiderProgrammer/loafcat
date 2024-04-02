@@ -69,10 +69,21 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             case "TV":
                 this.setStateCatWatchTV();
                 break;
-                case "sleep":
-                    this.sleep();
-                    break;
+            case "sleep":
+                this.sleep();
+                break;
         }
+    }
+    work() {
+        this.setStateCatIdle();
+        this.character.play("working");
+        this.setScale(1, 1);
+        this.officeSet = this.scene.add
+            .sprite(0, 0, "office-set")
+            .play("office-set");
+
+        this.add(this.officeSet);
+        this.effects.push(this.officeSet);
     }
     sleep() {
         this.setStateCatIdle();

@@ -33,7 +33,9 @@ export class PetStateSystem {
                 await this.workAction();
                 break;
         }
-
+        this.actionStopped();
+    }
+    actionStopped() {
         this.pet.setState("idle");
         this.scene.mapInteractionSystem.setAllInteractive();
         this.pet.y = this.pet.baseY;
@@ -46,10 +48,10 @@ export class PetStateSystem {
         //takeAction("sleep")
     }
     async workAction() {
-        this.pet.sleep();
-        this.pet.x = 410;
-        this.pet.y = 261;
-        await Async.delay(10000);
+        this.pet.work();
+        this.pet.x = 422;
+        this.pet.y = 266.5;
+        await Async.delay(100000000);
         //takeAction("sleep")
     }
     async smokeAction() {
