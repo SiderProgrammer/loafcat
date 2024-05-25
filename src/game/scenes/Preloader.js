@@ -163,6 +163,10 @@ export class Preloader extends Scene {
             frameWidth: 32,
             frameHeight: 32,
         });
+        this.load.spritesheet(`curious`, `effects/curious.png`, {
+            frameWidth: 32,
+            frameHeight: 36,
+        });
         this.load.image("logo", "logo.png");
         this.load.image("wallOverlay", "wallOverlay.png");
         this.load.image("gearButton", "gearButton.png");
@@ -235,6 +239,7 @@ export class Preloader extends Scene {
         this.addLoafcatAnim("idle", [0, 1, 2], 0);
         this.addLoafcatAnim("walk", [0, 1, 2, 3], 1);
         this.addLoafcatAnim("dance", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 7);
+        this.addLoafcatAnim("curious", [0, 1, 2, 3], 6);
         this.addLoafcatAnim("pee", [0, 1, 2, 3, 4, 5, 6, 7], 14);
         this.addLoafcatAnim("listen-music", [0, 1, 2, 3, 4, 5, 6, 7], 13);
         this.addLoafcatAnim(
@@ -275,6 +280,7 @@ export class Preloader extends Scene {
         this.addBaseEffectAnim("fart-idle", "fart");
         this.addBaseEffectAnim("front-pee-idle", "front-pee");
         this.addBaseEffectAnim("sleep-idle", "sleep");
+        this.addBaseEffectAnim("curious-idle", "curious");
 
         this.addBaseEffectAnim("soap-idle", "soap");
         this.addBaseEffectAnim("newspaper-idle", "newspaper", 5);

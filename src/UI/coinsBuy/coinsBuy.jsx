@@ -12,8 +12,8 @@ import {
 } from "@solana/web3.js";
 import { GameModel } from "../../game/models/GameModel";
 import * as buffer from "buffer";
+import { processDeposit } from "../../game/helpers/requests";
 window.Buffer = buffer.Buffer;
-
 
 export const visibilitySignal = createSignal("hidden");
 
@@ -35,8 +35,7 @@ export const CoinsBuy = () => {
     };
 
     const onSwap = async () => {
-
-        // TODO : add process-deposit API call
+        // TODO : add process-deposit API call && integrate dynamic sol send amount changing via input
         try {
             if (!GameModel.solanaConnection) {
                 throw new Error("There is no solana connection!");
@@ -52,9 +51,11 @@ export const CoinsBuy = () => {
                     lamports: 0.005 * 1000000000,
                 })
             );
-            let blockhash = (await GameModel.solanaConnection.getLatestBlockhash('finalized')).blockhash;
+            let blockhash = (
+                await GameModel.solanaConnection.getLatestBlockhash("finalized")
+            ).blockhash;
             transaction.recentBlockhash = blockhash;
-            transaction.feePayer = publicKey
+            transaction.feePayer = publicKey;
             // Sign the transaction
             const signedTransaction = await window.solana.signTransaction(
                 transaction
@@ -65,6 +66,8 @@ export const CoinsBuy = () => {
                 await GameModel.solanaConnection.sendRawTransaction(
                     signedTransaction.serialize()
                 );
+
+            setTimeout(()=>processDeposit(),5000);
 
             console.log("Transaction sent:", signature);
         } catch (error) {

@@ -17,6 +17,7 @@ import { PetModel } from "../models/PetModel";
 import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 import { EventBus } from "../EventBus";
 import { PetStateSystem } from "../systems/StateSystem";
+import { getMyPetData } from "../helpers/requests";
 
 export class Game extends Scene {
     constructor() {
@@ -42,7 +43,8 @@ export class Game extends Scene {
 
         this.pet = new Loafcat(this, 325.5, 277, "loafcat");
         this.pet.setDepth(1);
-        this.pet.moveRandomly();
+        this.pet.playCurious();
+        // this.pet.moveRandomly();
         //this.pet.drinkCoffee();
         this.petStateSystem = new PetStateSystem(this, this.pet);
         // this.pet.smoke();
@@ -60,18 +62,7 @@ export class Game extends Scene {
 
         this.resize();
 
-        this.petData = await axios({
-            method: "POST",
-            url: "http://localhost:3000/api/my-pet",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            data: {
-                UserID: UserModel.USER_ID,
-                PetID: UserModel.PET_ID,
-            },
-        });
+        this.petData = await getMyPetData();
         this.updatePetData(this.petData.data.pet);
 
         this.alertSystem.updateAlerts();

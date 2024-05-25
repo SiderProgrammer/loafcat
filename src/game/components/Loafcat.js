@@ -85,6 +85,17 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.add(this.officeSet);
         this.effects.push(this.officeSet);
     }
+
+    playCurious() {
+        this.setStateCatIdle();
+        this.character.play("curious");
+        this.curiousSprite = this.scene.add
+            .sprite(0, 0, "curious")
+            .play("curious-idle");
+
+        this.add(this.curiousSprite);
+        this.effects.push(this.curiousSprite);
+    }
     sleep() {
         this.setStateCatIdle();
         this.character.play("sleep");

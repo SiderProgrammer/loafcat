@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserModel } from '../../game/models/UserModel';
 import Draggable from 'react-draggable';
+import { getUserItems } from '../../game/helpers/requests';
 export const visibilitySignal = createSignal("hidden");
 
 let draggable = false
@@ -31,17 +32,7 @@ export const Inventory = ()=>{
 
         const fetchData = async () =>{
             if (visibilitySignal.value === "visible") {
-              const data = await axios({
-                method: "POST",
-                url: `http://localhost:3000/api/user-items/`,
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    UserID: UserModel.USER_ID,
-                },
-            });
+              const data = await getUserItems()
             
             setInventoryData(data.data)
              
