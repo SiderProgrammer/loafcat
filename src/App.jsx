@@ -80,7 +80,7 @@ function App() {
                 ></Route>
 
                 <Route
-                    path="/loafcat/game"
+                    path="/game"
                     element={
                         
                             <>
