@@ -1,0 +1,768 @@
+@font-face {
+    font-family: "slkscr";
+    src: url("/assets/slkscr.ttf") format("truetype");
+}
+body {
+    margin: 0;
+    padding: 0;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #000000;
+    font-family: "slkscr";
+    overflow: hidden;
+    pointer-events: none;
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: rgb(139, 69, 19);
+        border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: antiquewhite;
+        border-radius: 5px;
+        /* background: #888;
+
+        background: url("./assets/ui/scrollbar.png") no-repeat;
+        background-size: cover; */
+    }
+}
+
+html {
+    font-family: "slkscr";
+    cursor: url("./assets/pointer.png"), pointer;
+    image-rendering: pixelated;
+}
+
+#app {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.UIContainer {
+    position: absolute;
+    width: 100%;
+    /* height: 100%;    */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.center {
+    /* left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%); */
+    position: absolute;
+    margin: auto;
+}
+canvas {
+    pointer-events: all;
+}
+.button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: url("./assets/pointer.png"), pointer;
+    image-rendering: pixelated;
+    pointer-events: all;
+
+    img {
+        pointer-events: none;
+    }
+    span {
+        font-family: "slkscr";
+        font-size: 6px;
+        color: white;
+        letter-spacing: -1px;
+    }
+}
+
+.button,
+::-webkit-scrollbar-thumb {
+    cursor: url("./assets/pointerPoint.png"), pointer;
+}
+.grabCursor {
+    cursor: url("./assets/pointerHold.png"), pointer;
+}
+.buttonText {
+    display: flex;
+    position: relative;
+    top: -17px;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.hoverScale:hover {
+    transform: scale(1.1);
+}
+
+.hoverScale:active {
+    transform: scale(1);
+}
+
+#bottomButtonsSection {
+    transform-origin: bottom right;
+    bottom: 7px;
+    position: absolute;
+    right: 20px;
+    .button {
+        margin-left: 9px;
+    }
+}
+#characterAvatarSection {
+    position: absolute;
+    top: 20px;
+    left: 22px;
+}
+
+#avatarSection {
+    transform-origin: left top;
+
+    image-rendering: pixelated;
+    background: none;
+    border: none;
+    padding: 0;
+    position: absolute;
+    top: -4%;
+    left: 0;
+}
+
+#avatarImage {
+    position: absolute;
+    left: 2px;
+    top: 2.5px;
+    transform: scale(0.029);
+    transform-origin: top left;
+    border-radius: 0.5;
+    border-radius: 100px;
+}
+#levelSection {
+    position: absolute;
+    left: 55px;
+    top: 24px;
+    #levelValue {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+        font-size: 6px;
+    }
+}
+
+#coinSection {
+    position: absolute;
+    left: 57px;
+    top: 36px;
+    #coinIcon {
+    }
+    #coinValue {
+        position: absolute;
+        font-size: 6px;
+        top: 6px;
+        left: 12px;
+    }
+}
+
+#addressSection {
+    position: absolute;
+    top: 47px;
+    left: 37px;
+}
+
+#walletAddress {
+    font-size: 4px;
+}
+
+.dropbtn {
+    background-color: red;
+    background: none;
+    border: none;
+    color: white;
+
+    font-size: 16px;
+    border: none;
+    img {
+        image-rendering: pixelated;
+    }
+}
+
+.dropdown {
+    position: absolute;
+
+    transform-origin: left top;
+    left: 45px;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+
+    z-index: -1;
+    top: 40px;
+    img {
+        image-rendering: pixelated;
+    }
+}
+
+/* .dropdown:hover .dropdown-content {
+    display: block;
+    cursor: url("./assets/pointer.png"), pointer;
+} */
+
+.alertStats {
+    display: flex;
+    padding-top: 3px;
+    padding-left: 10px;
+}
+.pulseAnimation {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.dropDownMenuStatsContainer {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 50px;
+    width: 40px;
+    pointer-events: all;
+    height: 100px;
+}
+
+.plus {
+    position: absolute;
+
+    left: 15px;
+}
+#alertIcon {
+    visibility: hidden;
+    position: absolute;
+    left: 11px;
+    top: 1px;
+}
+#alertStatsBoard {
+    position: absolute;
+    z-index: -1;
+    background: none;
+    transform: scale(1.5);
+}
+
+#alertArrow {
+    position: absolute;
+    left: 12px;
+    top: 16px;
+}
+
+.alertIcon {
+    position: absolute;
+
+    transform: translate(25%, 25%);
+}
+
+.shop {
+    transform-origin: center;
+    image-rendering: pixelated;
+}
+
+.shelfs {
+    position: absolute;
+    top: 100px;
+    left: 66px;
+    display: flex;
+
+    width: 250px;
+    height: 100px;
+    flex-wrap: wrap;
+}
+
+.shelf {
+    height: 50px;
+    width: 180px;
+
+    flex: 1 0 21%;
+    img {
+        position: absolute;
+    }
+    .shelfHangBoard {
+        margin-top: 18px;
+        font-size: 6px;
+        position: absolute;
+    }
+    .shelfItem {
+        /* margin-left: 20px;
+        margin-top: -5px; */
+        position: absolute;
+        width: 60px;
+        height: 30px;
+        img {
+            left: 20px;
+            top: -5px;
+        }
+    }
+
+    .shelfItemPrice {
+        font-size: 8px;
+        position: absolute;
+        margin-top: 10px;
+        margin-left: 20px;
+        letter-spacing: -1px;
+        img {
+            margin-top: -1px;
+        }
+
+        .closingBracket {
+            margin-left: 6px;
+        }
+    }
+}
+.shopTabs {
+    position: absolute;
+    top: -10px;
+    display: flex;
+    left: 130px;
+    span {
+        font-size: 9px;
+    }
+
+    .shopTimeTab {
+        margin-top: 4px;
+    }
+
+    .shopText {
+        position: absolute;
+        margin-left: -50px;
+        margin-top: 8px;
+    }
+    .shopTimestampText {
+        font-size: 6px;
+        position: absolute;
+        margin-top: -11px;
+        margin-left: 13px;
+        letter-spacing: -1px;
+    }
+}
+.shopRefreshButton {
+    position: absolute;
+    left: 230px;
+    top: 70px;
+}
+.shopCloseButton {
+    left: 325px;
+    top: -5px;
+    position: absolute;
+}
+
+.inventory {
+    transform-origin: center;
+    image-rendering: pixelated;
+}
+
+.inventoryTabs {
+    position: absolute;
+    display: flex;
+    top: -18px;
+    width: 100%;
+    justify-content: center;
+}
+.itemSlotsContainer {
+    position: absolute;
+    overflow-y: scroll;
+    top: 41px;
+    left: 15px;
+    display: flex;
+    width: 235px;
+    height: 150px;
+    flex-wrap: wrap;
+    pointer-events: all;
+}
+.itemSlot {
+    width: 41px;
+    height: 41px;
+    span {
+        position: relative;
+        top: -32px;
+        left: 19px;
+        font-size: 8px;
+        letter-spacing: -1px;
+        color: black;
+    }
+}
+
+.itemSlot:hover {
+    transform: scale(1.05);
+}
+
+.itemSlot:active {
+    transform: scale(1);
+}
+
+.inventoryItem {
+    position: relative;
+
+    top: -37px;
+    left: 22px;
+}
+
+.inventoryCloseButton {
+    position: absolute;
+    left: 140px;
+    top: -50px;
+}
+
+.popup {
+    z-index: 1;
+}
+
+.blackOverlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+}
+
+.leaderboardPlayers {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 25px;
+    font-size: 6px;
+    letter-spacing: -1px;
+    overflow-y: scroll;
+    left: 15px;
+    pointer-events: all;
+    height: 190px;
+    gap: 5px;
+    /* scrollbar img {
+        image-rendering: pixelated;
+        position: relative;
+        top: 7px;
+        pointer-events: none;
+    } */
+    img {
+        padding-right: 5px;
+        position: relative;
+        top: 10px;
+    }
+    span {
+        pointer-events: none;
+        color: black;
+        font-size: 9px;
+    }
+}
+
+.leaderboardTop {
+    top: -3px;
+    position: absolute;
+    left: 18px;
+    display: flex;
+}
+.leaderboardLabel {
+    span {
+        position: absolute;
+        font-size: 8px;
+
+        left: 34px;
+        letter-spacing: -1px;
+        top: 10px;
+    }
+}
+
+.leaderboardCloseButton {
+    position: absolute;
+    left: 168px;
+    top: -12px;
+}
+.ui {
+    @media only screen and (min-width: 650px) {
+        transform: scale(1.5);
+    }
+
+    @media only screen and (min-width: 880px) {
+        transform: scale(2);
+    }
+
+    @media only screen and (min-width: 1150px) {
+        transform: scale(2.5);
+    }
+
+    @media only screen and (min-width: 1500px) {
+        transform: scale(3);
+    }
+}
+
+.statsAvatar {
+    position: relative;
+    top: -100px;
+
+    height: 0px;
+    left: 10px;
+}
+
+.statsView {
+    position: relative;
+    top: -130px;
+    left: 64px;
+    height: 0px;
+}
+
+.stats {
+    display: flex;
+    position: absolute;
+    top: 0;
+    flex-wrap: wrap;
+    width: 50px;
+}
+
+.statsAvatarImage {
+    transform-origin: top left;
+    transform: scale(0.05);
+    border-radius: 0.5;
+    border-radius: 100px;
+    position: absolute;
+
+    left: 2px;
+    top: 2px;
+}
+
+.petViewStats {
+    display: flex;
+}
+.statsGreenFill {
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.statFillContainer {
+    display: flex;
+    align-items: end;
+    position: relative;
+    left: -50%;
+    width: 10px;
+    /* width: 100%; */
+}
+
+.connectWalletButton {
+    margin: auto;
+    transform: scale(2);
+    span {
+        font-size: 5px !important;
+    }
+}
+
+.connectWalletButton:hover {
+    transform: scale(2.1) !important;
+}
+
+.connectWalletButton:active {
+    transform: scale(2) !important;
+}
+.preGameScreenContainer {
+    background: url("./assets/preGameBackground.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+}
+
+.petsContainer {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    width: 320px;
+    height: 180px;
+    flex-wrap: wrap;
+    position: absolute;
+    pointer-events: all;
+    gap: 20px;
+    top: 20px;
+    left: 20px;
+}
+
+.yourPetsText {
+    position: absolute;
+    top: -20px;
+    /* margin: auto; */
+    color: black;
+}
+/* .linkPetsContainer {
+    top: 10%;
+} */
+.petLinkPopUpContainer {
+    visibility: visible;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    top: 30px;
+}
+
+.petLinkPopUpAvatar {
+    left: 50px;
+    top: 15px;
+}
+
+.petLinkPopUpNameInput {
+    left: 25px;
+    top: -80px;
+    position: relative;
+}
+
+.nameSubmitButton {
+    position: relative;
+    top: -70px;
+    left: 22px;
+}
+
+#petNameInput {
+    left: -55px;
+    top: -88px;
+    position: relative;
+    height: 10px;
+    width: 60px;
+    pointer-events: all;
+}
+
+.petViewNameBoard {
+    position: absolute;
+    top: 45px;
+    left: -21px;
+    transform: scale(0.7);
+}
+
+.petViewMainInfoContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 80px;
+    font-size: 10px;
+    color: black;
+    gap: 10px;
+}
+
+.locationSelection {
+    visibility: visible;
+    display: flex;
+    height: 250px;
+    width: 230px;
+    overflow-y: scroll;
+    pointer-events: all;
+    overflow-x: hidden;
+
+    gap: 10px;
+}
+.mapSelectButton {
+    height: 50px;
+    position: relative;
+}
+
+.itemBuyPopUp {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.itemBuyContent {
+    display: flex;
+    position: relative;
+    top: -210px;
+    img {
+        margin: auto;
+    }
+    flex-direction: column;
+}
+
+.buyPopUpShelf {
+    position: relative;
+    top: -100px;
+}
+
+.buyPopUpPriceBoard {
+    position: relative;
+    top: -95px;
+}
+
+.buyPopUpBoard {
+    top: -100px;
+    position: relative;
+    margin-left: 50px;
+}
+
+.buyButton {
+    position: relative;
+    top: -90px;
+}
+.buyPopUpPrice {
+    position: relative;
+    top: -100px;
+    left: -70px;
+}
+
+.buyPopUpItem {
+    position: absolute;
+    left: 90px;
+    top: 30px;
+}
+
+.shopClosePopUpButton {
+    top: 0;
+    position: absolute;
+}
+
+#swapAmount {
+    position: relative;
+    top: -33px;
+    text-align: center;
+}
+
+.coinBuyMainContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: -150px;
+    pointer-events: all;
+    color: black;
+    font-size: 6px;
+}
+
+.youGetContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 90px;
+    color: black;
+    font-size: 8px;
+}
+
+.getAmount {
+    position: relative;
+    top: -20px;
+    left: 30px;
+}
+
+.wrapper {
+    pointer-events: all;
+}
+.inputSlider {
+    cursor: url("./assets/pointerPoint.png"), pointer;
+}
+
+.flyingValue {
+    position: absolute;
+    transform: scale(2);
+}
