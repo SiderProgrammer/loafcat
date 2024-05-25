@@ -16,7 +16,7 @@ export const LinkPets = (props) => {
   const choosePet = (petData) => {
 
     UserModel.PET_ID = petData.PetID
-    navigate("/game")
+    navigate("/loafcat/game")
   }
   
   const linkPet = (petData) => {
