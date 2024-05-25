@@ -38,7 +38,7 @@ export const PreGameScreen = (props) => {
             UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
             setWalletConnect(true);
             // EventBus.emit("startPreloader")
-            navigate("/game");
+            navigate("/loafcat/game/");
         }
     };
 
