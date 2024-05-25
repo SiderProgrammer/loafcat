@@ -6,6 +6,7 @@ import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import React, { useRef, useState } from "react";
 import { RangeSlider } from "../common/rangeSlider.jsx/rangeSlider";
 import { EventBus } from "../../game/EventBus";
+import { HOST } from "../../sharedConstants/constants";
 export const visibilitySignal = createSignal("hidden");
 
 export const openWorkPopUp = () => {
@@ -40,7 +41,7 @@ export const WorkPopUp = () => {
             >
                 <img
                     style={{ transform: "scale(1.5)" }}
-                    src="./assets/ui/linkPet/linkPetBoard.png"
+                    src={HOST+"assets/ui/linkPet/linkPetBoard.png"}
                 ></img>
 
                 <div className={"coinBuyMainContainer"}>

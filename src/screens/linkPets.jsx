@@ -7,6 +7,7 @@ import { Button } from "../UI/buttons/button"
 import { useNavigate } from "react-router-dom";
 import { PetLinkPopUp } from "../UI/petLink/petLinkPopUp"
 import { showOverlay } from "../UI/blackOverlay/blackOverlay"
+import { HOST } from "../sharedConstants/constants"
   
 
 
@@ -98,7 +99,7 @@ export const LinkPets = (props) => {
     return (
       // TODO : scroll in horizontal axis?
         <div style={{ display:"flex", flexDirection:"column"}}className={"ui center linkPetsContainer"}>
-          <img src="./assets/ui/petStats/petsBoard.png"></img>
+          <img src={HOST+"assets/ui/petStats/petsBoard.png"}></img>
         <span className={"yourPetsText"}>
             Your Pets
         </span>

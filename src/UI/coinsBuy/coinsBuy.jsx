@@ -13,6 +13,7 @@ import {
 import { GameModel } from "../../game/models/GameModel";
 import * as buffer from "buffer";
 import { processDeposit } from "../../game/helpers/requests";
+import { HOST } from "../../sharedConstants/constants";
 window.Buffer = buffer.Buffer;
 
 export const visibilitySignal = createSignal("hidden");
@@ -83,13 +84,13 @@ export const CoinsBuy = () => {
             >
                 <img
                     style={{ transform: "scale(1.5)" }}
-                    src="./assets/ui/linkPet/linkPetBoard.png"
+                    src={HOST+"assets/ui/linkPet/linkPetBoard.png"}
                 ></img>
 
                 <div className={"coinBuyMainContainer"}>
                     <span>Swap</span>
                     <span>Available {balance} USDT</span>
-                    <img className={""} src="./assets/ui/valueHolder.png"></img>
+                    <img className={""} src={HOST+"assets/ui/valueHolder.png"}></img>
                     <input
                         min={5}
                         max={balance}
@@ -102,7 +103,7 @@ export const CoinsBuy = () => {
                 </div>
                 <div className={"youGetContainer"}>
                     <span>You get</span>
-                    <img className={""} src="./assets/ui/valueHolder.png"></img>
+                    <img className={""} src={HOST+"assets/ui/valueHolder.png"}></img>
                     <span className={"getAmount"}>{getValue}( )</span>
                 </div>
 

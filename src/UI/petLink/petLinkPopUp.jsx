@@ -1,3 +1,4 @@
+import { HOST } from "../../sharedConstants/constants";
 import { Button } from "../buttons/button";
 
 export const PetLinkPopUp = (props) => {
@@ -25,19 +26,19 @@ export const PetLinkPopUp = (props) => {
             style={{ visibility: props.visibility }}
         >
   
-            <img style={{transform:"scale(1.5)"}} src="./assets/ui/linkPet/linkPetBoard.png"></img>
+            <img style={{transform:"scale(1.5)"}} src={HOST+"assets/ui/linkPet/linkPetBoard.png"}></img>
             <span style={{position:"absolute",left:"0px",top:"-13px",color:"black"}}>{props.petData.name}</span>
             <div>
                
                 <img
                     className={"statsAvatarImage petLinkPopUpAvatar"}
-                    src="./assets/nftAvatar.jpg"
+                    src={HOST+"assets/nftAvatar.jpg"}
                 ></img>
                 <div style={{pointerEvents:"pointer-events: all;"}}>
                 
                     <img
                         className={"petLinkPopUpNameInput"}
-                        src="./assets/ui/linkPet/nameInput.png"
+                        src={HOST+"assets/ui/linkPet/nameInput.png"}
                     ></img>
                         <input type="text" id="petNameInput" placeholder={"Your nickname..."} />
                 </div>

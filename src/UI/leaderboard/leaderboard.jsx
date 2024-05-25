@@ -5,6 +5,7 @@ import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
+import { HOST } from "../../sharedConstants/constants";
 export const visibilitySignal = createSignal("hidden");
 
 const sampleData = [{Rank:1, UserID:"asdasd"},{Rank:2, UserID:"asdasd"},{Rank:3, UserID:"asdasd"},{Rank:4, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:6, UserID:"asdasd"},{Rank:7, UserID:"asdasd"},{Rank:8, UserID:"asdasd"},{Rank:9, UserID:"asdasd"}]
@@ -50,14 +51,14 @@ export const Leaderboard = (props) => {
             style={{ visibility: changeVisiblity.value }}
         >
                <Button onClick={closeLeaderboard} className="leaderboardCloseButton" buttonIcon="closeButton" ></Button>
-            <img src="./assets/ui/leaderboard/Leaderboard.png"></img>
+            <img src={HOST+"assets/ui/leaderboard/Leaderboard.png"}></img>
             <div className="leaderboardTop">
-            <img src="./assets/ui/leaderboard/Paw.png"></img>
+            <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
             <div className="leaderboardLabel">
-            <img src="./assets/ui/leaderboard/leaderboardLabel.png"></img>
+            <img src={HOST+"assets/ui/leaderboard/leaderboardLabel.png"}></img>
             <span>LEADERBOARD</span>
             </div>
-            <img src="./assets/ui/leaderboard/Paw.png"></img>
+            <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
      
 
             </div>

@@ -5,6 +5,7 @@ import { ItemShelf } from "./itemShelf";
 import { createSignal } from "react-use-signals";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
+import { HOST } from "../../sharedConstants/constants";
 export const visibilitySignal = createSignal("hidden");
 
 export const openShop = () => {
@@ -29,7 +30,7 @@ const RefreshPrice = () => {
             }}
         >
             <div>(30</div>
-            <img src="./assets/coin.png"></img>){/* <div>)</div> */}
+            <img src={HOST+"assets/coin.png"}></img>){/* <div>)</div> */}
         </div>
     );
 };
@@ -117,7 +118,7 @@ closePopUp()
             className="shop popup ui center"
             style={{ visibility: changeVisiblity.value }}
         >
-            <img src="./assets/ui/shop/shopFrame.png"></img>
+            <img src={HOST+"assets/ui/shop/shopFrame.png"}></img>
             <Button
                 onClick={closeShop}
                 className="shopCloseButton"
@@ -132,11 +133,11 @@ closePopUp()
             ></Button>
             <div className="shopTabs">
                 {/* <div className="shopTab">
-                    <img src="./assets/ui/shop/Shop Tab.png"></img>
+                    <img src={HOST+"assets/ui/shop/Shop Tab.png"}></img>
                     <span className="shopText">Shop</span>
                 </div> */}
                 <div className="shopTimeTab">
-                    <img src="./assets/ui/shop/Time stamp Tab.png"></img>
+                    <img src={HOST+"assets/ui/shop/Time stamp Tab.png"}></img>
                     <div className="shopTimestampText">
                         REFRESH IN: 21:37:59
                     </div>
@@ -166,35 +167,35 @@ closePopUp()
                         : "hidden",
                 }}
             >
-                <img src="./assets/ui/leaderboard/Leaderboard.png"></img>
+                <img src={HOST+"assets/ui/leaderboard/Leaderboard.png"}></img>
                 <Button
                     onClick={closePopUp}
                     className="shopClosePopUpButton"
                     buttonIcon="closeButton"
                 ></Button>
                 <div className={"itemBuyContent"}>
-                    <img src="./assets/ui/shop/Chocolate Board.png"></img>
+                    <img src={HOST+"assets/ui/shop/Chocolate Board.png"}></img>
 
                     <img
                         className={"buyPopUpShelf"}
-                        src="./assets/ui/shop/Board light.png"
+                        src={HOST+"assets/ui/shop/Board light.png"}
                     ></img>
                     <img
                         className={"buyPopUpItem"}
-                        src="./assets/apple.png"
+                        src={HOST+"assets/apple.png"}
                     ></img>
                     <img
                         className={"buyPopUpBoard"}
-                        src="./assets/ui/shop/Description Box Mini.png"
+                        src={HOST+"assets/ui/shop/Description Box Mini.png"}
                     ></img>
                     <div>
                         <img
                             className={"buyPopUpPriceBoard"}
-                            src="./assets/ui/linkPet/nameInput.png"
+                            src={HOST+"assets/ui/linkPet/nameInput.png"}
                         ></img>
                         <span className={"buyPopUpPrice"}>
                             {30}
-                            <img src="./assets/coin.png"></img>
+                            <img src={HOST+"assets/coin.png"}></img>
                         </span>
                     </div>
 

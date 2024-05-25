@@ -7,6 +7,7 @@ import axios from 'axios';
 import { UserModel } from '../../game/models/UserModel';
 import Draggable from 'react-draggable';
 import { getUserItems } from '../../game/helpers/requests';
+import { HOST } from '../../sharedConstants/constants';
 export const visibilitySignal = createSignal("hidden");
 
 let draggable = false
@@ -54,13 +55,13 @@ export const Inventory = ()=>{
     return (
         <div className="inventory popup ui center" style={{visibility:changeVisiblity.value}} >
                  <Button onClick={closeInventory} className="inventoryCloseButton" buttonIcon="closeButton" ></Button>
-            <img src="./assets/ui/inventory/inventoryFrame.png"></img>
+            <img src={HOST+"assets/ui/inventory/inventoryFrame.png"}></img>
       <div className="inventoryTabs">
-        <img src="./assets/ui/inventory/inventoryTab.png"></img>
-        <img src="./assets/ui/inventory/inventoryTab.png"></img>
-        <img src="./assets/ui/inventory/inventoryTab.png"></img>
-        <img src="./assets/ui/inventory/inventoryTab.png"></img>
-        <img src="./assets/ui/inventory/inventoryTab.png"></img>
+        <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
+        <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
+        <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
+        <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
+        <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
       </div>
             <div className="itemSlotsContainer">
                {inventoryData.map((item,i)=>(

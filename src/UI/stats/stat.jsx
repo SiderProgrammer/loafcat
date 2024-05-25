@@ -1,3 +1,4 @@
+import { HOST } from "../../sharedConstants/constants"
 
 
 export const Stat =(props)=>{
@@ -6,7 +7,7 @@ export const Stat =(props)=>{
     return (
         <div  className={`${props.className}  ${isCriticalValue && "pulseAnimation" }`}>
          
-         <img src="./assets/ui/stats/statBox.png" />
+         <img src={HOST+"assets/ui/stats/statBox.png" }/>
         <div className="statFillContainer">
         <img style={{height:props.fill+"%"}} className={`statsGreenFill`} src={`./assets/ui/stats/${ isCriticalValue ? 'redFill' : 'greenFill'}.png`}></img>
         </div>

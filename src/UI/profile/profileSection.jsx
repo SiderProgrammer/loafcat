@@ -3,6 +3,7 @@ import { Stats } from "../alert/stats";
 import { shortenText } from "../../utils/stringUtils";
 import { UserModel } from "../../game/models/UserModel";
 import { PetModel } from "../../game/models/PetModel";
+import { HOST } from "../../sharedConstants/constants";
 
 export const ProfileSection = () =>{
     const [alertStatsVisible, setAlertStatsVisibility] = useState("none");
@@ -23,28 +24,28 @@ export const ProfileSection = () =>{
 <div id="avatarSection" className="ui">
 <img
     id="profileFrame"
-    src="/assets/ui/profileView/profileFrame.png"
+    src={HOST+"./assets/ui/profileView/profileFrame.png"}
 />
 <div id="characterAvatarSection">
     <img
         id="avatarFrame"
-        src="./assets/ui/profileView/avatarFrame.png"
+        src={HOST+"./assets/ui/profileView/avatarFrame.png"}
     />
     <img
         id="avatarImage"
-        src="./assets/nftAvatar.jpg"
+        src={HOST+"./assets/nftAvatar.jpg"}
     />
 </div>
 <div>
     <div id="coinSection">
-        <img id="coinIcon" src="./assets/coin.png" />
+        <img id="coinIcon" src={HOST+"./assets/coin.png"} />
         <span id="coinValue">13</span>
     </div>
     <div id="addressSection">
         <span id="walletAddress">{shortenText(UserModel.USER_ID)}</span>
     </div>
     <div id="levelSection">
-        {/* <img id="levelFrame" src="./assets/ui/profileView/levelBox.png" />  */}
+        {/* <img id="levelFrame" src={HOST+"./assets/ui/profileView/levelBox.png"} />  */}
         <span id="levelValue">Lv.13</span>
     </div>
 </div>
@@ -55,12 +56,12 @@ export const ProfileSection = () =>{
 <button className="dropbtn button hoverScale" onClick={openAlertStats}>
     <img
         id="alertBox"
-        src="./assets/ui/profileView/alertBox1.png"
+        src={HOST+"./assets/ui/profileView/alertBox1.png"}
     ></img>
-    <img id="alertIcon" src="./assets/alertIcon.png" />
+    <img id="alertIcon" src={HOST+"./assets/alertIcon.png"} />
     <img
         id="alertArrow"
-        src="./assets/ui/profileView/alertArrowDown.png"
+        src={HOST+"./assets/ui/profileView/alertArrowDown.png"}
     ></img>
 </button>
 <div
@@ -69,7 +70,7 @@ export const ProfileSection = () =>{
 >
     <img
         id="alertStatsBoard"
-        src="./assets/ui/profileView/alertStatsBoard.png"
+        src={HOST+"./assets/ui/profileView/alertStatsBoard.png"}
     ></img>
     {/* // TODO : sort by lowest value to highest? */}
     <Stats petData={petData}></Stats>

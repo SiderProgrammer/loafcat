@@ -3,6 +3,7 @@ import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
 import { EventBus } from "../../game/EventBus";
 import { MAPS_ORDER } from "../../game/constants/houseRooms";
+import { HOST } from "../../sharedConstants/constants";
 
 export const visibilitySignal = createSignal("hidden");
 export const openMapSelection = async () => {
@@ -39,7 +40,7 @@ export const MapSelection = () => {
                         className={"mapSelectButton"}
                         buttonIcon={map + "Icon"}
                         ext={"png"}
-                        children={    <img src="./assets/ui/mapFrame.png" style={{position:"absolute",top:"-1px",left:"-3px"}}></img>}
+                        children={    <img src={HOST+"assets/ui/mapFrame.png"} style={{position:"absolute",top:"-1px",left:"-3px"}}></img>}
                     ></Button>
                 </div>
             ))}
