@@ -24,7 +24,7 @@ export const ProfileSection = () =>{
 <div id="avatarSection" className="ui">
 <img
     id="profileFrame"
-    src={"../assets/ui/profileView/profileFrame.png"}
+    src={process.env.PUBLIC_URL+"/assets/ui/profileView/profileFrame.png"}
 />
 <div id="characterAvatarSection">
     <img
