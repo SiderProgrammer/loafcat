@@ -29,11 +29,11 @@ export const ProfileSection = () =>{
 <div id="characterAvatarSection">
     <img
         id="avatarFrame"
-        src={HOST+"./assets/ui/profileView/avatarFrame.png"}
+        src={process.env.PUBLIC_URL+"/assets/ui/profileView/avatarFrame.png"}
     />
     <img
         id="avatarImage"
-        src={HOST+"./assets/nftAvatar.jpg"}
+        src={process.env.PUBLIC_URL+"/assets/nftAvatar.jpg"}
     />
 </div>
 <div>
