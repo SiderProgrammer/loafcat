@@ -9,7 +9,7 @@ export const ProfileSection = () =>{
     const [alertStatsVisible, setAlertStatsVisibility] = useState("none");
     
     const [petData,setPetData] = useState(PetModel.PET_DATA)
-
+    console.log(process.env.PUBLIC_URL);
     const openAlertStats = () => {
         if (alertStatsVisible === "block") {
             setAlertStatsVisibility("none");
