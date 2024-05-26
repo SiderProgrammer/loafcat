@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { HOST } from "../../sharedConstants/constants";
 
 export class Preloader extends Scene {
     constructor() {
@@ -6,7 +7,7 @@ export class Preloader extends Scene {
     }
 
     loadUI() {
-        this.load.setPath("./assets/ui/shop");
+        this.load.setPath(`${HOST}assets/ui/shop`);
         this.load.image("shopPopup", "shopPopup.png");
         this.load.image("itemBox", "itemBox.png");
         this.load.image("chocolateButton", "chocolateButton.png");
@@ -17,7 +18,7 @@ export class Preloader extends Scene {
         this.load.image("whiteBox", "whiteBox.png");
     }
     loadStats() {
-        this.load.setPath("./assets/stats");
+        this.load.setPath(`${HOST}assets/stats`);
         this.load.image("happines", "Happines.png");
         this.load.image("health", "Health.png");
         this.load.image("hungry", "Hungry.png");
@@ -27,7 +28,7 @@ export class Preloader extends Scene {
         this.load.image("statBox", "statBox.png");
     }
     loadAmbient() {
-        this.load.setPath("./assets/effects/ambient");
+        this.load.setPath(`${HOST}assets/effects/ambient`);
         this.load.spritesheet(`chart`, `chart.png`, {
             frameWidth: 132 / 6,
             frameHeight: 13,
@@ -49,7 +50,7 @@ export class Preloader extends Scene {
             "./UI/bottomButtonsSection.html"
         );
         this.load.html("statsDropDownMenu", "./UI/statsDropDownMenu.html");
-        this.load.setPath("assets");
+        this.load.setPath(`${HOST}assets`);
 
         this.load.image("mp_cs_tilemap_all", "mp_cs_tilemap_all.png");
         this.load.image(

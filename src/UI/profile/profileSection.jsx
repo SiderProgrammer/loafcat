@@ -24,7 +24,7 @@ export const ProfileSection = () =>{
 <div id="avatarSection" className="ui">
 <img
     id="profileFrame"
-    src={HOST+"./assets/ui/profileView/profileFrame.png"}
+    src={"../assets/ui/profileView/profileFrame.png"}
 />
 <div id="characterAvatarSection">
     <img
