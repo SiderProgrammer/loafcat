@@ -19,7 +19,7 @@ const phasermsg = () => {
 };
 
 export default defineConfig({
-    base: "./loaffff",
+    base: "/loafcat/",
     plugins: [react(), phasermsg()],
     logLevel: "warning",
     build: {
