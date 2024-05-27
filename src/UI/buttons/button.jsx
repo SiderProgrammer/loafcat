@@ -1,3 +1,5 @@
+import { HOST } from "../../sharedConstants/constants";
+
 export const Button = (props) => {
     const imgPath = props.imgPath ? props.imgPath : "assets/ui/buttons/";
     const ext = props.ext ? props.ext : "png";

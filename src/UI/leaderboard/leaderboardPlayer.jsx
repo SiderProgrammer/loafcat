@@ -1,3 +1,4 @@
+import { HOST } from "../../sharedConstants/constants";
 import { shortenText } from "../../utils/stringUtils";
 
 export const LeaderboardPlayer = (props) => {

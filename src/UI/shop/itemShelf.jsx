@@ -20,7 +20,7 @@ export const ItemShelf = (props) => {
                     {/* <span className="closingBracket">)</span> */}
                 </span>
             </div>
-        <Button onClick={showBuyPopUp} className={"shelfItem"} imgPath={"./assets/"} buttonIcon={`${props.data.ItemID.item_name}`}></Button>
+        <Button onClick={showBuyPopUp} className={"shelfItem"} imgPath={"assets/"} buttonIcon={`${props.data.ItemID.item_name}`}></Button>
        
         </div>
     );

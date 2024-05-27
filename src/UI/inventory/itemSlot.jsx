@@ -3,6 +3,7 @@ import { closeInventory, openInventory } from "./inventory";
 import { visibilitySignal } from "./inventory";
 import { EventBus } from "../../game/EventBus";
 import Draggable from "react-draggable";
+import { HOST } from "../../sharedConstants/constants";
 // TODO : fix visiblity (add drag check)
 export const ItemSlot = (props) => {
     const [isDragging,setDrag] = useState(false)

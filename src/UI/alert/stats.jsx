@@ -22,14 +22,14 @@ export const Stats = ({ petData }) => {
                             <Button
                                 className={"plus pulseAnimation"}
                                 buttonIcon={"minus"}
-                                imgPath="./assets/"
+                                imgPath="assets/"
                             ></Button>
                         )}
                         {!stat.reversedValue && petData[stat.valueKey] < 30 && (
                             <Button
                                 className={"plus pulseAnimation"}
                                 buttonIcon={"plus"}
-                                imgPath="./assets/"
+                                imgPath="assets/"
                             ></Button>
                         )}
                     </div>
