@@ -24,21 +24,21 @@ export const ProfileSection = () =>{
 <div id="avatarSection" className="ui">
 <img
     id="profileFrame"
-    src={"/assets/ui/profileView/profileFrame.png"}
+    src={HOST+"assets/ui/profileView/profileFrame.png"}
 />
 <div id="characterAvatarSection">
     <img
         id="avatarFrame"
-        src={profileFramePNG}
+        src={HOST+"assets/ui/profileView/avatarFrame.png"}
     />
     <img
         id="avatarImage"
-        src={process.env.PUBLIC_URL+"/assets/nftAvatar.jpg"}
+        src={HOST+"assets/nftAvatar.jpg"}
     />
 </div>
 <div>
     <div id="coinSection">
-        <img id="coinIcon" src={"./assets/coin.png"} />
+        <img id="coinIcon" src={HOST+"assets/coin.png"} />
         <span id="coinValue">13</span>
     </div>
     <div id="addressSection">
@@ -56,12 +56,12 @@ export const ProfileSection = () =>{
 <button className="dropbtn button hoverScale" onClick={openAlertStats}>
     <img
         id="alertBox"
-        src={HOST+"./assets/ui/profileView/alertBox1.png"}
+        src={HOST+"assets/ui/profileView/alertBox1.png"}
     ></img>
-    <img id="alertIcon" src={HOST+"./assets/alertIcon.png"} />
+    <img id="alertIcon" src={HOST+"assets/alertIcon.png"} />
     <img
         id="alertArrow"
-        src={HOST+"./assets/ui/profileView/alertArrowDown.png"}
+        src={HOST+"assets/ui/profileView/alertArrowDown.png"}
     ></img>
 </button>
 <div
@@ -70,7 +70,7 @@ export const ProfileSection = () =>{
 >
     <img
         id="alertStatsBoard"
-        src={HOST+"./assets/ui/profileView/alertStatsBoard.png"}
+        src={HOST+"assets/ui/profileView/alertStatsBoard.png"}
     ></img>
     {/* // TODO : sort by lowest value to highest? */}
     <Stats petData={petData}></Stats>

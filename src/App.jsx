@@ -73,7 +73,7 @@ function App() {
 
     return (
         <div id="app">
-            <Routes basename={"/loafcat/"}>
+            <Routes>
                 <Route
                     path="/"
                     element={<PreGameScreen width={width} height={height} />}
