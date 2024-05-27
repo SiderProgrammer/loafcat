@@ -4,12 +4,12 @@ import { shortenText } from "../../utils/stringUtils";
 import { UserModel } from "../../game/models/UserModel";
 import { PetModel } from "../../game/models/PetModel";
 import { HOST } from "../../sharedConstants/constants";
-
+import profileFramePNG from '../../../public/assets/ui/profileView/avatarFrame.png'
 export const ProfileSection = () =>{
     const [alertStatsVisible, setAlertStatsVisibility] = useState("none");
     
     const [petData,setPetData] = useState(PetModel.PET_DATA)
-    console.log(process.env.PUBLIC_URL);
+  
     const openAlertStats = () => {
         if (alertStatsVisible === "block") {
             setAlertStatsVisibility("none");
@@ -24,12 +24,12 @@ export const ProfileSection = () =>{
 <div id="avatarSection" className="ui">
 <img
     id="profileFrame"
-    src={process.env.PUBLIC_URL+"/assets/ui/profileView/profileFrame.png"}
+    src={"/assets/ui/profileView/profileFrame.png"}
 />
 <div id="characterAvatarSection">
     <img
         id="avatarFrame"
-        src={process.env.PUBLIC_URL+"/assets/ui/profileView/avatarFrame.png"}
+        src={profileFramePNG}
     />
     <img
         id="avatarImage"
@@ -38,7 +38,7 @@ export const ProfileSection = () =>{
 </div>
 <div>
     <div id="coinSection">
-        <img id="coinIcon" src={HOST+"./assets/coin.png"} />
+        <img id="coinIcon" src={"./assets/coin.png"} />
         <span id="coinValue">13</span>
     </div>
     <div id="addressSection">
