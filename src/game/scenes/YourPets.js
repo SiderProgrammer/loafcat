@@ -4,6 +4,7 @@ import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
+import { getMyPetsData } from "../helpers/requests";
 
 export class YourPets extends Scene {
   constructor() {
@@ -11,17 +12,7 @@ export class YourPets extends Scene {
   }
 
   async create() {
-    const petsData = await axios({
-      method: "POST",
-      url: `http://localhost:3000/api/my-pets`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      data: {
-        UserID: UserModel.USER_ID,
-      },
-    });
+    const petsData = await getMyPetsData()
 
     const nftsData = await axios({
       method: "GET",

@@ -6,6 +6,7 @@ import { createSignal } from "react-use-signals";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { HOST } from "../../sharedConstants/constants";
+import { refreshItems } from "../../game/helpers/requests";
 export const visibilitySignal = createSignal("hidden");
 
 export const openShop = () => {
@@ -48,34 +49,12 @@ export const Shop = () => {
     };
 
   const getDailyItems =async () => {
-    return  axios({
-      method: "POST",
-      url: `http://localhost:3000/api/daily-items`,
-      headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-      },
-      data: {
-          UserID: UserModel.USER_ID,
-          limit: 8,
-      },
-  });
+    return  getDailyItems()
   }
     const buyItem = async (data) => {
 
 closePopUp()
-  await axios({
-        method: "POST",
-        url: `http://localhost:3000/api/buy-item`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          UserID: UserModel.USER_ID,
-          ItemID: data.data.ItemID.id
-        },
-      });
+  await buyItem(data.data.ItemID.id)
    
       const newItems = await getDailyItems()
       setShopData(newItems.data)
@@ -96,17 +75,7 @@ closePopUp()
     }, [visibilitySignal.value]);
 
     const refreshShop = async () => {
-        await axios({
-            method: "POST",
-            url: "http://localhost:3000/api/refresh-items",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            data: {
-                UserID: UserModel.USER_ID,
-            },
-        });
+        await refreshItems()
 
         fetchData();
     };

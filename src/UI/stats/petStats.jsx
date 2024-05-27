@@ -7,6 +7,7 @@ import { createSignal } from "react-use-signals";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { PetView } from "./petView";
+import { getMyPetData } from "../../game/helpers/requests";
 export const visibilitySignal = createSignal("hidden");
 
 export const openPetStats = () => {
@@ -23,18 +24,7 @@ export const PetStats = () => {
     const [petData, setPetData] = useState([]);
     const fetchData = async () =>{
         if (visibilitySignal.value === "visible") {
-            const petData = await axios({
-                method: "POST",
-                url: "http://localhost:3000/api/my-pet",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                data: {
-                    UserID: UserModel.USER_ID,
-                    PetID: UserModel.PET_ID,
-                },
-            });
+            const petData = await getMyPetData()
 
             //TODO : pet data shouldn't be updated here
             UserModel.PET_DATA = petData.data.pet

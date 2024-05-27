@@ -4,6 +4,7 @@ import { UserModel } from "../models/UserModel";
 import axios from "axios";
 import Button from "../components/Button";
 import { GameModel } from "../models/GameModel";
+import { getDailyItems, getLeadersboard, getMyPetData, getUserItems } from "../helpers/requests";
 // TODO : this scene should be set visible/invisible instead of destroying and starting again
 export class UI extends Scene {
   constructor() {
@@ -132,17 +133,7 @@ export class UI extends Scene {
   addHTMLButtonsEvents() {
     // TODO : add preventDefault on click events
     this.mainMenuButton.addEventListener("click", async () => {
-      const inventoryData = await axios({
-        method: "POST",
-        url: `http://localhost:3000/api/user-items/`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          UserID: UserModel.USER_ID,
-        },
-      });
+      const inventoryData = await getUserItems()
 
       console.log(inventoryData);
 
@@ -152,17 +143,7 @@ export class UI extends Scene {
       });
     });
     this.storeButton.addEventListener("click", async () => {
-      const shopData = await axios({
-        method: "POST",
-        url: `http://localhost:3000/api/daily-items`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          UserID: UserModel.USER_ID,
-        },
-      });
+      const shopData = await getDailyItems()
 
       console.log(shopData.data);
 
@@ -172,18 +153,7 @@ export class UI extends Scene {
       });
     });
     this.statsButton.addEventListener("click", async () => {
-      const petData = await axios({
-        method: "POST",
-        url: "http://localhost:3000/api/my-pet",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          UserID: UserModel.USER_ID,
-          PetID: UserModel.PET_ID,
-        },
-      });
+      const petData = await getMyPetData()
       console.log(petData);
       this.scene.launch("Stats", {
         parentScene: this,
@@ -191,18 +161,7 @@ export class UI extends Scene {
       });
     });
     this.leaderboardButton.addEventListener("click", async () => {
-      const leaderboardData = await axios({
-        method: "POST",
-        url: "http://localhost:3000/api/leadersboard",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        data: {
-          UserID: UserModel.USER_ID,
-          limit: "50",
-        },
-      });
+      const leaderboardData = await getLeadersboard()
       console.log(leaderboardData);
       this.scene.launch("Leaderboard", {
         parentScene: this,

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { PetLinkPopUp } from "../UI/petLink/petLinkPopUp"
 import { showOverlay } from "../UI/blackOverlay/blackOverlay"
 import { HOST } from "../sharedConstants/constants"
+import { getMyPetsData } from "../game/helpers/requests"
   
 
 
@@ -62,17 +63,7 @@ export const LinkPets = (props) => {
 
 
     const fetchData = async ()=>{
-        const linkedNftsData = await axios({
-            method: "POST",
-            url: `http://localhost:3000/api/my-pets`,
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            data: {
-              UserID: UserModel.USER_ID,
-            },
-          });
+        const linkedNftsData = await getMyPetsData()
       
           const nftsData = await axios({
             method: "GET",
