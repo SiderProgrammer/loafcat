@@ -7,7 +7,7 @@ export const LeaderboardPlayer = (props) => {
             <span>{shortenText(props.data.UserID, 5)}</span>
             {props.data.Rank <= 6 && (
                 <img
-                    src={`./assets/ui/leaderboard/paw${props.data.Rank}.png`}
+                    src={`${HOST}assets/ui/leaderboard/paw${props.data.Rank}.png`}
                 ></img>
             )}
         </div>

@@ -38,7 +38,7 @@ export const ItemSlot = (props) => {
             <img draggable={false} src={HOST+"assets/ui/inventory/itemSlot.png"}></img>
 
 
-            <img onPointerDown={onClick} draggable={false} className={`inventoryItem ${isDragging && "grabCursor"}`}style={{visibility:itemVisible}} src={`./assets/${props.item}.png`}></img>
+            <img onPointerDown={onClick} draggable={false} className={`inventoryItem ${isDragging && "grabCursor"}`}style={{visibility:itemVisible}} src={`${HOST}assets/${props.item}.png`}></img>
   
          
             <span>{props.quantity}</span>

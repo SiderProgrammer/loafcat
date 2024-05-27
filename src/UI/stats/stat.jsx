@@ -9,10 +9,10 @@ export const Stat =(props)=>{
          
          <img src={HOST+"assets/ui/stats/statBox.png" }/>
         <div className="statFillContainer">
-        <img style={{height:props.fill+"%"}} className={`statsGreenFill`} src={`./assets/ui/stats/${ isCriticalValue ? 'redFill' : 'greenFill'}.png`}></img>
+        <img style={{height:props.fill+"%"}} className={`statsGreenFill`} src={`${HOST}assets/ui/stats/${ isCriticalValue ? 'redFill' : 'greenFill'}.png`}></img>
         </div>
 
-        <img className="alertIcon " src={`./assets/ui/stats/${props.icon}.png`}></img>
+        <img className="alertIcon " src={`${HOST}assets/ui/stats/${props.icon}.png`}></img>
       
       </div>
     )
