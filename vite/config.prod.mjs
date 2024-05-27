@@ -19,8 +19,8 @@ const phasermsg = () => {
 };
 
 export default defineConfig({
-    base: "./",
     plugins: [react(), phasermsg()],
+    base: "/loafcat/",
     logLevel: "warning",
     build: {
         rollupOptions: {
