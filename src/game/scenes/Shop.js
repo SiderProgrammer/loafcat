@@ -4,7 +4,7 @@ import { GameModel } from "../models/GameModel";
 import Button from "../components/Button";
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
-import { getDailyItems, refreshItems } from "../helpers/requests";
+import { getDailyItemsData, refreshItems } from "../helpers/requests";
 
 export class Shop extends Scene {
     constructor() {
@@ -37,7 +37,7 @@ export class Shop extends Scene {
         this.refreshButton.onClick(async () => {
             await refreshItems();
 
-            const newItems = await getDailyItems();
+            const newItems = await getDailyItemsData();
 
             this.updateItems(newItems.data);
         });
