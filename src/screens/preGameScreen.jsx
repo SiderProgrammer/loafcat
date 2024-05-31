@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { EventBus } from "../game/EventBus";
 import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
 import { GameModel } from "../game/models/GameModel";
+import { navigatePrefixURL } from "../sharedConstants/constants";
 export const PreGameScreen = (props) => {
     const [isWalletConnected, setWalletConnect] = useState(false);
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ export const PreGameScreen = (props) => {
             UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
             setWalletConnect(true);
             // EventBus.emit("startPreloader")
-            navigate("/loafcat/game/");
+            navigate(navigatePrefixURL+"/game/");
         }
     };
 

@@ -7,7 +7,7 @@ import { Button } from "../UI/buttons/button"
 import { useNavigate } from "react-router-dom";
 import { PetLinkPopUp } from "../UI/petLink/petLinkPopUp"
 import { showOverlay } from "../UI/blackOverlay/blackOverlay"
-import { HOST } from "../sharedConstants/constants"
+import { HOST, navigatePrefixURL } from "../sharedConstants/constants"
 import { getMyPetsData } from "../game/helpers/requests"
   
 
@@ -18,7 +18,7 @@ export const LinkPets = (props) => {
   const choosePet = (petData) => {
 
     UserModel.PET_ID = petData.PetID
-    navigate("/loafcat/game/")
+    navigate(navigatePrefixURL+"/game/")
   }
   
   const linkPet = (petData) => {

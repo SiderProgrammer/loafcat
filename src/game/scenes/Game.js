@@ -43,8 +43,9 @@ export class Game extends Scene {
 
         this.pet = new Loafcat(this, 325.5, 277, "loafcat");
         this.pet.setDepth(1);
-        this.pet.playCurious();
-        // this.pet.moveRandomly();
+
+        //this.pet.playCurious();
+        this.pet.moveRandomly();
         //this.pet.drinkCoffee();
         this.petStateSystem = new PetStateSystem(this, this.pet);
         // this.pet.smoke();

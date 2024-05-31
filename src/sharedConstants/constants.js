@@ -1,2 +1,6 @@
-export const HOST = "./../"; //location.host + "/loafcat/";
-export const navigatePrefixURL = "/loafcat";
+const IS_DEV = true;
+export const HOST = "./../";
+export const navigatePrefixURL = IS_DEV ? "" : "/loafcat";
+export const HOST_URL = IS_DEV
+    ? "http://localhost:3000"
+    : "https://gamev1.loaf.pet";

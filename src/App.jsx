@@ -17,6 +17,7 @@ import { UIView } from "./UI/UIView";
 import { PreGameScreen } from "./screens/preGameScreen";
 import { UserModel } from "./game/models/UserModel";
 import axios from "axios";
+import { navigatePrefixURL } from "./sharedConstants/constants";
 function App() {
     // The sprite can only be moved in the MainMenu Scene
     // const [canMoveLogo, setCanMoveLogo] = useState(true);
@@ -80,7 +81,7 @@ function App() {
                 ></Route>
 
                 <Route
-                    path="/loafcat/game/"
+                    path={navigatePrefixURL+"/game/"}
                     element={
                         
                             <>

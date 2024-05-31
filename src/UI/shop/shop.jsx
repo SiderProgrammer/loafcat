@@ -6,7 +6,7 @@ import { createSignal } from "react-use-signals";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { HOST } from "../../sharedConstants/constants";
-import { refreshItems } from "../../game/helpers/requests";
+import { getDailyItemsData, refreshItems } from "../../game/helpers/requests";
 export const visibilitySignal = createSignal("hidden");
 
 export const openShop = () => {
@@ -49,7 +49,7 @@ export const Shop = () => {
     };
 
   const getDailyItems =async () => {
-    return  getDailyItems()
+    return  getDailyItemsData()
   }
     const buyItem = async (data) => {
 

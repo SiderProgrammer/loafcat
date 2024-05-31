@@ -1,8 +1,7 @@
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
+import { HOST_URL } from "../../sharedConstants/constants";
 
-// TODO : move all API requests here
-const HOST_URL = "https://gamev1.loaf.pet";
 const getBaseConfig = (api) => {
     return {
         url: `${HOST_URL}/api/${api}`,
@@ -67,7 +66,7 @@ export const getUserItems = () => {
         ...getBaseConfig("user-items"),
     });
 };
-export const getDailyItems = () => {
+export const getDailyItemsData = () => {
     return axios({
         method: "POST",
 
@@ -86,7 +85,7 @@ export const getLeadersboard = () => {
     return axios({
         method: "POST",
 
-        url: "http://localhost:3000/api/leadersboard",
+        url: `${HOST_URL}/api/leadersboard`,
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -102,7 +101,7 @@ export const buyItem = (itemID) => {
     return axios({
         method: "POST",
 
-        url: `http://localhost:3000/api/buy-item`,
+        url: `${HOST_URL}/api/buy-item`,
         headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
