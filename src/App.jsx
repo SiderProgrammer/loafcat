@@ -51,7 +51,7 @@ function App() {
             //     newWidth = window.innerHeight
             // }
             setWidth(newWidth);
-        }, 0);
+        }, 50);
     };
 
     useLayoutEffect(() => {
@@ -67,7 +67,7 @@ function App() {
     }, [phaserRef.ref]);
 
     useEffect(()=>{
-        UserModel.USER_ID.length === 0 &&    navigate("/")
+        UserModel.USER_ID.length === 0 && navigate("/")
     },[])
 
  

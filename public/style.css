@@ -1,6 +1,6 @@
 @font-face {
     font-family: "slkscr";
-    src: url("/assets/slkscr.ttf") format("truetype");
+    src: url("./assets/slkscr.ttf") format("truetype");
 }
 body {
     margin: 0;
@@ -117,8 +117,8 @@ canvas {
     }
 }
 
-.buttons-container{
-    transform: scale(1.5) ;
+.buttons-container {
+    transform: scale(1.5);
 }
 
 #characterAvatarSection {
@@ -493,7 +493,6 @@ canvas {
     top: -12px;
 }
 
-
 .statsAvatar {
     position: relative;
     top: -100px;
@@ -546,7 +545,6 @@ canvas {
 }
 
 .connectWalletButton {
-
     margin: auto;
 
     /* transform: scale(2); */
@@ -555,9 +553,9 @@ canvas {
     }
 }
 
-.button .button-wrapper{
+.button .button-wrapper {
     /* pointer-events: all; */
-        transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .button .button-wrapper:hover {
