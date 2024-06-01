@@ -167,6 +167,29 @@ export class Game extends Scene {
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();
 
+        //! ///////////////////////////////
+        const tiles = this.map.layers.flatMap((layer) => layer.data);
+        tiles.forEach((tileArray) => {
+            // console.log(tileArray);
+            this.tweens.add({
+                targets: tileArray,
+                duration: 1000,
+                alpha: { from: 0.1, to: 1 },
+            });
+        });
+
+        // setTimeout(() => {
+        //     tiles.forEach((elements) => {
+        //         // elements.setScale(0.5);
+        //         elements.forEach((element) => {
+        //             console.log(element);
+        //             element.scaleX = 0.5;
+        //             element.scaleY = 0.5;
+        //             // element.setScale(0.5);
+        //         });
+        //     });
+        // }, 3000);
+
         // setTimeout(() => {
         //     this.map.layers.forEach((layer) => {
         //         layer.alpha = 0.5;
