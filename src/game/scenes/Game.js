@@ -132,6 +132,8 @@ export class Game extends Scene {
         this.map = this.make.tilemap({ key: this.mapKey });
         linkTilemaps(this.map, this.mapKey);
 
+        console.log(this.map);
+
         //if (!houseRoomsPlacement[this.mapKey]) return;
         // change name to: roomAbove
         const mapIndex = MAPS_ORDER.indexOf(this.mapKey);
@@ -164,6 +166,37 @@ export class Game extends Scene {
         addAmbientAnimations(this, this.mapKey);
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();
+
+        //! ///////////////////////////////
+        console.log(this.map);
+
+        const tiles = this.map.layers.flatMap((layer) => layer.data);
+        tiles.forEach((tileArray) => {
+            this.tweens.add({
+                targets: tileArray,
+                alpha: { from: 0, to: 1 },
+            });
+        });
+
+        // setTimeout(() => {
+        //     this.map.layers.forEach((layer) => {
+        //         layer.alpha = 0.5;
+
+        //         // layer.setScale(3);
+        //     });
+        // }, 3000);
+
+        // this.scene.tweens.add({
+        //     targets: [this.map.layers],
+        //     ease: "Back.out",
+        //     duration: 700,
+        //     scale: 1,
+        //     onComplete: () => {
+        //         // this.x = this.config.x;
+        //         // this.y = this.config.y;
+        //         // this.createBody();
+        //     },
+        // });
     }
 
     async checkFeedPet(itemData) {

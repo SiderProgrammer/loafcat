@@ -52,16 +52,15 @@ export class UI extends Scene {
         // this.mainMenuButton = new Button(this, 0, 0, "mainMenuButton");
         // this.storeButton = new Button(this, 0, 0, "storeButton");
 
-        this.scale.on("resize", () => {
-            this.resize();
-        });
-        this.resize();
+        // this.scale.on("resize", () => {
+        //     this.resize();
+        // });
+        // this.resize();
     }
 
     resize() {
         //  this.cameras.resize(GameModel.GAME_WIDTH, GameModel.GAME_HEIGHT);
-        this.setSpritesPosition();
-
+        // this.setSpritesPosition();
         // this.avatarSectionHTML.style.scale = window.testScale;
         // this.bottomButtonsSectionHTML.style.scale = window.testScale;
         // this.statsDropDownMenuHTML.style.scale = window.testScale;

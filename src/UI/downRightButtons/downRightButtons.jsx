@@ -8,7 +8,7 @@ import { openShop } from "../shop/shop";
 import { openPetStats } from "../stats/petStats";
 export const DownRightButtons = () => {
     return (
-        <>
+        <div className="buttons-container">
             <Button onClick={openMainPetView} buttonIcon="statsButton"></Button>
             <Button
                 onClick={openInventory}
@@ -22,6 +22,6 @@ export const DownRightButtons = () => {
 
             <Button onClick={openMapSelection} buttonIcon="mapButton"></Button>
             <Button onClick={openCoinsBuy} buttonIcon="coinButton"></Button>
-        </>
+        </div>
     );
 };
