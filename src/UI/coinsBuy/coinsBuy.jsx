@@ -39,7 +39,7 @@ export const CoinsBuy = () => {
         // TODO : add process-deposit API call && integrate dynamic sol send amount changing via input
         try {
             if (!GameModel.solanaConnection) {
-                throw new Error("There is no solana connection!");
+                throw new Error("There is no solana connection!!!");
             }
             const publicKey = await window.solana.publicKey;
 
