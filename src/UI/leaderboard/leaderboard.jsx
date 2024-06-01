@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import { LeaderboardPlayer } from "./leaderboardPlayer";
 import { createSignal } from "react-use-signals";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
 import { HOST } from "../../sharedConstants/constants";
 import { getLeadersboard } from "../../game/helpers/requests";
+import gsap from 'gsap';
 export const visibilitySignal = createSignal("hidden");
 
 const sampleData = [{Rank:1, UserID:"asdasd"},{Rank:2, UserID:"asdasd"},{Rank:3, UserID:"asdasd"},{Rank:4, UserID:"asdasd"},{Rank:5, UserID:"asdasd"},{Rank:6, UserID:"asdasd"},{Rank:7, UserID:"asdasd"},{Rank:8, UserID:"asdasd"},{Rank:9, UserID:"asdasd"}]
@@ -23,6 +24,9 @@ export const closeLeaderboard = () => {
 export const Leaderboard = (props) => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [leaderboardData, setLeaderboardData] = useState([]);
+    const [profileVisible, setProfileVisible] = useState("hidden");
+    const leaderBoardRef = useRef(null);
+    const [firstTime, setFirstTime] = useState(true);
     useEffect( () => {
         const fetchData = async () =>{
             if (visibilitySignal.value === "visible") {
@@ -30,34 +34,63 @@ export const Leaderboard = (props) => {
                 setLeaderboardData(sampleData)
                 //setLeaderboardData(data.data.leadersBoard);
             }
+
+            if(firstTime) {
+                setFirstTime(false)
+                return
+            }
+            if(visibilitySignal.value === "visible") {
+                setProfileVisible("visible")
+                openTween()
+            } else {
+                closeTween()
+            }
         }
         fetchData()
         
         return () => {};
     }, [visibilitySignal.value]);
-    return (
-        <div
-            className="leaderboard ui popup center"
-            style={{ visibility: changeVisiblity.value }}
-        >
-               <Button onClick={closeLeaderboard} className="leaderboardCloseButton" buttonIcon="closeButton" ></Button>
-            <img src={HOST+"assets/ui/leaderboard/Leaderboard.png"}></img>
-            <div className="leaderboardTop">
-            <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
-            <div className="leaderboardLabel">
-            <img src={HOST+"assets/ui/leaderboard/leaderboardLabel.png"}></img>
-            <span>LEADERBOARD</span>
-            </div>
-            <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
-     
 
-            </div>
-   
-            <div className="leaderboardPlayers">
-                {leaderboardData.length &&
-                    leaderboardData.map((prop) => (
-                        <LeaderboardPlayer data={prop}></LeaderboardPlayer>
-                    ))}
+
+    const openTween = () => {
+        gsap.fromTo(
+            leaderBoardRef.current,
+            { scale: 0 , x: '+=300', y: '+=300'},
+            { scale: 1, x: '-=300', y: '-=300', ease: "back.out", duration: 0.6 })
+    }
+
+    const closeTween =  () => {
+         gsap.fromTo(
+            leaderBoardRef.current,
+            { scale: 1 },
+            { scale: 0, x: '+=300', y: '+=300', ease: "back.in", duration: 0.3, onComplete: ()=> {
+                setProfileVisible("hidden")
+                gsap.fromTo(
+                    leaderBoardRef.current,
+                    { scale: 0 },
+                    { scale: 0,  x: '-=300', y: '-=300', duration: 0 })
+            } })
+    }
+
+    return (
+        <div className="leaderboard ui popup center" style={{ visibility: profileVisible }}>
+            <div className="leader-board-wrapper"  ref={leaderBoardRef}>
+                <Button onClick={closeLeaderboard} className="leaderboardCloseButton" buttonIcon="closeButton" ></Button>
+                <img src={HOST+"assets/ui/leaderboard/Leaderboard.png"}></img>
+                <div className="leaderboardTop">
+                <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
+                <div className="leaderboardLabel">
+                <img src={HOST+"assets/ui/leaderboard/leaderboardLabel.png"}></img>
+                <span>LEADERBOARD</span>
+                </div>
+                <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
+                </div>
+                <div className="leaderboardPlayers">
+                    {leaderboardData.length &&
+                        leaderboardData.map((prop) => (
+                            <LeaderboardPlayer data={prop}></LeaderboardPlayer>
+                        ))}
+                </div>
             </div>
         </div>
     );
