@@ -97,7 +97,7 @@ function App() {
                 ></Route>
             </Routes>
 
-            <BlackOverlay></BlackOverlay>
+        
         </div>
     );
 }

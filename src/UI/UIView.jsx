@@ -11,6 +11,7 @@ import { CoinsBuy } from "./coinsBuy/coinsBuy";
 import { WorkPopUp } from "./work/WorkPopUp";
 import { FlyingValue } from "./flyingValue/flyingValue";
 import gsap from 'gsap';
+import { BlackOverlay } from "./blackOverlay/blackOverlay";
 
 
 export const UIView = (props) => {
@@ -34,9 +35,11 @@ export const UIView = (props) => {
         <MapSelection></MapSelection>
         <CoinsBuy></CoinsBuy>
         <WorkPopUp></WorkPopUp>
+   
         <div id="bottomButtonsSection" className="ui">
             <DownRightButtons></DownRightButtons>
         </div>
       <FlyingValue></FlyingValue>
+      <BlackOverlay></BlackOverlay>
     </div>)
 };
