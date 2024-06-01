@@ -110,7 +110,7 @@ export class UI extends Scene {
         //   scale * 55 + ((GameModel.GAME_HEIGHT - window.realHeight) / 2) * scale; //+ 50;
 
         // // TODO : try anchoring it from left side, this can fix overflow-y caused by big UI div
-        // // TODO : fix positioning
+
         // this.bottomButtonsSectionPhaser.x =
         //   gameWidth * scale -
         //   67 * scale -
