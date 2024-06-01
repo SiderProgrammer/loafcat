@@ -51,8 +51,14 @@ function App() {
             //     newWidth = window.innerHeight
             // }
             setWidth(newWidth);
-        }, 50);
+        }, 0);
     };
+
+    const [isGameLoaded, setGameLoaded] = useState(false)
+
+    const onGameLoaded = () => { 
+        setGameLoaded(true)
+    }
 
     useLayoutEffect(() => {
      
@@ -89,8 +95,9 @@ function App() {
                                 onStart={resizeUI}
                                     ref={phaserRef}
                                     currentScene={currentScene}
+                                    onGameLoaded={onGameLoaded}
                                 />
-                                <UIView width={width} height={height} />
+                              {isGameLoaded ? <UIView width={width} height={height} />: null } 
                             </>
                         
                     }

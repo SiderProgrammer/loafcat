@@ -65,7 +65,7 @@ export class Game extends Scene {
 
         this.petData = await getMyPetData();
         this.updatePetData(this.petData.data.pet);
-
+        EventBus.emit("current-scene-ready");
         this.alertSystem.updateAlerts();
 
         console.log(this.petData.data.pet);
