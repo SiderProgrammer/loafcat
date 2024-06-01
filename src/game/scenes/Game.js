@@ -167,17 +167,6 @@ export class Game extends Scene {
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();
 
-        //! ///////////////////////////////
-        console.log(this.map);
-
-        const tiles = this.map.layers.flatMap((layer) => layer.data);
-        tiles.forEach((tileArray) => {
-            this.tweens.add({
-                targets: tileArray,
-                alpha: { from: 0, to: 1 },
-            });
-        });
-
         // setTimeout(() => {
         //     this.map.layers.forEach((layer) => {
         //         layer.alpha = 0.5;
