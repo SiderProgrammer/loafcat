@@ -1,6 +1,6 @@
 @font-face {
     font-family: "slkscr";
-    src: url("/assets/slkscr.ttf") format("truetype");
+    src: url("./assets/slkscr.ttf") format("truetype");
 }
 body {
     margin: 0;
@@ -108,13 +108,19 @@ canvas {
 
 #bottomButtonsSection {
     transform-origin: bottom right;
-    bottom: 7px;
+    bottom: 10px;
+    /* transform: scale(4) ; */
     position: absolute;
-    right: 20px;
+    right: 90px;
     .button {
         margin-left: 9px;
     }
 }
+
+.buttons-container {
+    transform: scale(1.5);
+}
+
 #characterAvatarSection {
     position: absolute;
     top: 20px;
@@ -486,23 +492,6 @@ canvas {
     left: 168px;
     top: -12px;
 }
-.ui {
-    @media only screen and (min-width: 650px) {
-        transform: scale(1.5);
-    }
-
-    @media only screen and (min-width: 880px) {
-        transform: scale(2);
-    }
-
-    @media only screen and (min-width: 1150px) {
-        transform: scale(2.5);
-    }
-
-    @media only screen and (min-width: 1500px) {
-        transform: scale(3);
-    }
-}
 
 .statsAvatar {
     position: relative;
@@ -557,20 +546,36 @@ canvas {
 
 .connectWalletButton {
     margin: auto;
-    transform: scale(2);
+
+    /* transform: scale(2); */
     span {
         font-size: 5px !important;
     }
 }
 
-.connectWalletButton:hover {
-    transform: scale(2.1) !important;
+.button .button-wrapper {
+    /* pointer-events: all; */
+    transition: transform 0.3s ease;
 }
 
-.connectWalletButton:active {
-    transform: scale(2) !important;
+.button .button-wrapper:hover {
+    /* width: 10000px; */
+    transform: scale(1.1) !important;
+}
+
+.button .button-wrapper:active {
+    transform: scale(1) !important;
 }
 .preGameScreenContainer {
+    /* background: url("./assets/preGameBackground.png"); */
+    /* background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat; */
+    height: 100vh;
+    width: 100vw;
+}
+
+.pre-game-background {
     background: url("./assets/preGameBackground.png");
     background-size: cover;
     background-position: center center;
@@ -765,4 +770,22 @@ canvas {
 .flyingValue {
     position: absolute;
     transform: scale(2);
+}
+
+.ui {
+    @media only screen and (min-width: 650px) {
+        transform: scale(1.5);
+    }
+
+    @media only screen and (min-width: 880px) {
+        transform: scale(2);
+    }
+
+    @media only screen and (min-width: 1150px) {
+        transform: scale(2.5);
+    }
+
+    @media only screen and (min-width: 1500px) {
+        transform: scale(3);
+    }
 }
