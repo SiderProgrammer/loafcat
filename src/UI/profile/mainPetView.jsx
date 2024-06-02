@@ -26,14 +26,10 @@ export const MainPetView = () => {
     const [petData, setPetData] = useState([]);
     const [profileVisible, setProfileVisible] = useState("hidden");
     const profileRef = useRef(null);
-    const [firstTime, setFirstTime] = useState(true);
 
     useEffect(  () => {
         setPetData(PetModel.PET_DATA)
-        if(firstTime) {
-            setFirstTime(false)
-            return
-        }
+
         if(visibilitySignal.value === "visible") {
             setProfileVisible("visible")
             openTween()
@@ -47,20 +43,16 @@ export const MainPetView = () => {
     const openTween = () => {
         gsap.fromTo(
             profileRef.current,
-            { scale: 0 , x: '+=300', y: '+=300'},
-            { scale: 1, x: '-=300', y: '-=300', ease: "back.out", duration: 0.6 })
+            { scale: 0},
+            { scale: 1, ease: "back.out", duration: 0.6 })
     }
 
     const closeTween =  () => {
          gsap.fromTo(
             profileRef.current,
             { scale: 1 },
-            { scale: 0, x: '+=300', y: '+=300', ease: "back.in", duration: 0.3, onComplete: ()=> {
+            { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                gsap.fromTo(
-                    profileRef.current,
-                    { scale: 0 },
-                    { scale: 0,  x: '-=300', y: '-=300', duration: 0 })
             } })
     }
 

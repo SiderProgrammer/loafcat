@@ -19,64 +19,40 @@ export const ProfileSection = () =>{
         }
     };
 
-
     return (
-<div id="avatarSection" className="ui">
-<img
-    id="profileFrame"
-    src={HOST+"assets/ui/profileView/profileFrame.png"}
-/>
-<div id="characterAvatarSection">
-    <img
-        id="avatarFrame"
-        src={HOST+"assets/ui/profileView/avatarFrame.png"}
-    />
-    <img
-        id="avatarImage"
-        src={HOST+"assets/nftAvatar.jpg"}
-    />
-</div>
-<div>
-    <div id="coinSection">
-        <img id="coinIcon" src={HOST+"assets/coin.png"} />
-        <span id="coinValue">13</span>
-    </div>
-    <div id="addressSection">
-        <span id="walletAddress">{shortenText(UserModel.USER_ID)}</span>
-    </div>
-    <div id="levelSection">
-        {/* <img id="levelFrame" src={HOST+"./assets/ui/profileView/levelBox.png"} />  */}
-        <span id="levelValue">Lv.13</span>
-    </div>
-</div>
+        <div id="avatarSection" className="ui">
+        <img id="profileFrame" src={HOST+"assets/ui/profileView/profileFrame.png"}/>
+        <div id="characterAvatarSection">
+            <img id="avatarFrame" src={HOST+"assets/ui/profileView/avatarFrame.png"}/>
+            <img id="avatarImage" src={HOST+"assets/nftAvatar.jpg"}/>
+        </div>
+        <div>
+            <div id="coinSection">
+                <img id="coinIcon" src={HOST+"assets/coin.png"} />
+                <span id="coinValue">13</span>
+            </div>
+            <div id="addressSection">
+                <span id="walletAddress">{shortenText(UserModel.USER_ID)}</span>
+            </div>
+            <div id="levelSection">
+                {/* <img id="levelFrame" src={HOST+"./assets/ui/profileView/levelBox.png"} />  */}
+                <span id="levelValue">Lv.13</span>
+            </div>
+        </div>
 
-
-
-<div id="statsDropDownMenu" class="dropdown">
-<button className="dropbtn button hoverScale" onClick={openAlertStats}>
-    <img
-        id="alertBox"
-        src={HOST+"assets/ui/profileView/alertBox1.png"}
-    ></img>
-    <img id="alertIcon" src={HOST+"assets/alertIcon.png"} />
-    <img
-        id="alertArrow"
-        src={HOST+"assets/ui/profileView/alertArrowDown.png"}
-    ></img>
-</button>
-<div
-    className="dropdown-content"
-    style={{ display: alertStatsVisible }}
->
-    <img
-        id="alertStatsBoard"
-        src={HOST+"assets/ui/profileView/alertStatsBoard.png"}
-    ></img>
-    {/* // TODO : sort by lowest value to highest? */}
-    <Stats petData={petData}></Stats>
-</div>
-</div>
-</div>
+        <div id="statsDropDownMenu" class="dropdown">
+        <button className="dropbtn button hoverScale" onClick={openAlertStats}>
+            <img id="alertBox" src={HOST+"assets/ui/profileView/alertBox1.png"}></img>
+            <img id="alertIcon" src={HOST+"assets/alertIcon.png"} />
+            <img id="alertArrow" src={HOST+"assets/ui/profileView/alertArrowDown.png"}></img>
+        </button>
+        <div className="dropdown-content" style={{ display: alertStatsVisible }}>
+            <img id="alertStatsBoard" src={HOST+"assets/ui/profileView/alertStatsBoard.png"}></img>
+            {/* // TODO : sort by lowest value to highest? */}
+            <Stats petData={petData}></Stats>
+        </div>
+        </div>
+        </div>
     )
 
 }

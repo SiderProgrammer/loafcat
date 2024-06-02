@@ -21,9 +21,7 @@ export const openInventory = (itemsDraggable = false) => {
   };
   export const closeInventory = () => {
     visibilitySignal.value = "hidden"
-    hideOverlay()
-  
-        
+    hideOverlay() 
   };
  
 export const Inventory = ()=>{
@@ -32,8 +30,6 @@ export const Inventory = ()=>{
         const [itemDraggable, setItemDraggable] = useState(false);
         const [profileVisible, setProfileVisible] = useState("hidden");
         const inventoryRef = useRef(null);
-        const [firstTime, setFirstTime] = useState(true);
-  
 
         const fetchData = async () =>{
             if (visibilitySignal.value === "visible") {
@@ -46,10 +42,6 @@ export const Inventory = ()=>{
 
         useEffect( () => {
             fetchData()
-            if(firstTime) {
-              setFirstTime(false)
-              return
-          }
           if(visibilitySignal.value === "visible") {
               setProfileVisible("visible")
               openTween()
@@ -66,20 +58,16 @@ export const Inventory = ()=>{
       const openTween = () => {
         gsap.fromTo(
           inventoryRef.current,
-            { scale: 0 , x: '+=300', y: '+=300'},
-            { scale: 1, x: '-=300', y: '-=300', ease: "back.out", duration: 0.6 })
+            { scale: 0},
+            { scale: 1, ease: "back.out", duration: 0.6 })
     }
 
     const closeTween =  () => {
          gsap.fromTo(
           inventoryRef.current,
             { scale: 1 },
-            { scale: 0, x: '+=300', y: '+=300', ease: "back.in", duration: 0.3, onComplete: ()=> {
+            { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                gsap.fromTo(
-                  inventoryRef.current,
-                    { scale: 0 },
-                    { scale: 0,  x: '-=300', y: '-=300', duration: 0 })
             } })
     }
 
