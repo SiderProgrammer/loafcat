@@ -633,8 +633,11 @@ canvas {
 
 .nameSubmitButton {
     position: relative;
-    top: -70px;
+    top: -106px;
     left: 22px;
+}
+.nameSubmitButton .buttonText{
+    top: -19px;
 }
 
 #petNameInput {
@@ -809,18 +812,27 @@ canvas {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 90px;
+    top: 85px;
     color: black;
     font-size: 8px;
 }
-
+.youGetContainer  span{
+    margin-bottom: 5px;
+}
 .getAmount {
     position: relative;
-    top: -20px;
-    left: 30px;
-    /* transform: translate(-50%, -50%);
-    transform-origin: center */
+    top: -12px;
+    left: 42px;
+    width: 75px;
+    margin: 0px !important;
+    /* display: inline-block;
+    transition: transform 0.3s ease;
+    transform-origin: center; */
+     transform: translate(-50%, -50%);
+     text-align: center
+    /* transform-origin: center  */
 }
+
 
 .wrapper {
     pointer-events: all;

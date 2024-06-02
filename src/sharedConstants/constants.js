@@ -1,4 +1,4 @@
-const IS_DEV = false;
+const IS_DEV = true;
 export const HOST = "./../";
 export const navigatePrefixURL = IS_DEV ? "" : "/loafcat";
 export const HOST_URL = IS_DEV

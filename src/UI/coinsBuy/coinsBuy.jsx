@@ -33,6 +33,7 @@ export const CoinsBuy = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [getValue, setGetValue] = useState(0);
     const [buyCoinsVisible, setBuyCoinsVisible] = useState("hidden");
+    const [inputValue, setInputValue] = useState("0.00");
     const input = useRef();
     const coinsBuyRef = useRef(null);
     const updateGetValue = () => {
@@ -105,6 +106,7 @@ export const CoinsBuy = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setBuyCoinsVisible("hidden")
+                setInputValue("0.00")
             } })
     }
 
@@ -118,7 +120,7 @@ export const CoinsBuy = () => {
                         <span>Swap</span>
                         <span>Available {balance} USDT</span>
                         <img className={""} src={HOST+"assets/ui/valueHolder.png"}></img>
-                        <input min={5} max={balance} type="number"id="swapAmount"placeholder={"0.00"}ref={input}onChange={updateGetValue}/>
+                        <input min={5} max={balance} type="number"id="swapAmount"placeholder={inputValue} ref={input}onChange={updateGetValue}/>
                     </div>
                     <div className={"youGetContainer"}>
                         <span>You get</span>
