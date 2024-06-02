@@ -204,7 +204,7 @@ canvas {
     left: 45px;
 }
 .dropdown-content {
-    display: none;
+    display:block;
     position: absolute;
     z-index: -1;
     top: 40px;
@@ -238,18 +238,24 @@ canvas {
     }
 }
 
+
+
+
+.stats-container #alertStatsBoard {
+    top: -2px
+}
 .dropDownMenuStatsContainer {
     overflow-y: scroll;
     overflow-x: hidden;
     height: 50px;
     width: 40px;
     pointer-events: all;
-    height: 100px;
+    height: 89px;
+    margin-left: -4px;
+    margin-top: -12px;
 }
-
 .plus {
     position: absolute;
-
     left: 15px;
 }
 #alertIcon {
@@ -264,17 +270,18 @@ canvas {
     background: none;
     transform: scale(1.5);
 }
+.alertIcon {
+    position: absolute;
+    transform: translate(25%, 25%);
+}
+
+
+
 
 #alertArrow {
     position: absolute;
     left: 12px;
     top: 16px;
-}
-
-.alertIcon {
-    position: absolute;
-
-    transform: translate(25%, 25%);
 }
 
 .shop {

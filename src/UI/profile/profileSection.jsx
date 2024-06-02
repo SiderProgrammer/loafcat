@@ -1,23 +1,47 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Stats } from "../alert/stats";
 import { shortenText } from "../../utils/stringUtils";
 import { UserModel } from "../../game/models/UserModel";
 import { PetModel } from "../../game/models/PetModel";
 import { HOST } from "../../sharedConstants/constants";
+import gsap from 'gsap';
 import profileFramePNG from '../../../public/assets/ui/profileView/avatarFrame.png'
+
 export const ProfileSection = () =>{
-    const [alertStatsVisible, setAlertStatsVisibility] = useState("none");
-    
     const [petData,setPetData] = useState(PetModel.PET_DATA)
-  
-    const openAlertStats = () => {
-        if (alertStatsVisible === "block") {
-            setAlertStatsVisibility("none");
-        } else {
-            setAlertStatsVisibility("block");
-            setPetData(PetModel.PET_DATA)
-        }
+    const [areStatsVisible, setAreStatsVisible] = useState(false);
+    const statsContentRef = useRef(null);
+
+    const handleOpenAlertStats = async () => {
+        areStatsVisible ? statsContentCloseTween() : statsContentOpenTween()
     };
+
+    useEffect(() => {
+        if(areStatsVisible) statsContentOpenTween()
+    }, [areStatsVisible]);
+
+    const statsContentOpenTween = () => {
+        setAreStatsVisible(true)
+        if(!statsContentRef.current) return
+        gsap.fromTo(
+            statsContentRef.current,
+            { scaleY: 0, y: '-=80'},
+            { scaleY: 1, y: '+=80', ease: "back.out", duration: 0.6 })
+        
+    }
+
+    const statsContentCloseTween = () => {
+        gsap.fromTo(
+            statsContentRef.current,
+            { scaleY: 1 },
+            { scaleY: 0,  y: '-=80', ease: "back.in", duration: 0.3, onComplete: ()=> {
+                setAreStatsVisible(false)
+                gsap.fromTo(
+                    statsContentRef.current,
+                    { },
+                    { y: '+=80', duration: 0 })
+            } })
+    }
 
     return (
         <div id="avatarSection" className="ui">
@@ -41,16 +65,15 @@ export const ProfileSection = () =>{
         </div>
 
         <div id="statsDropDownMenu" class="dropdown">
-        <button className="dropbtn button hoverScale" onClick={openAlertStats}>
+        <button className="dropbtn button hoverScale" onClick={handleOpenAlertStats}>
             <img id="alertBox" src={HOST+"assets/ui/profileView/alertBox1.png"}></img>
             <img id="alertIcon" src={HOST+"assets/alertIcon.png"} />
             <img id="alertArrow" src={HOST+"assets/ui/profileView/alertArrowDown.png"}></img>
         </button>
-        <div className="dropdown-content" style={{ display: alertStatsVisible }}>
-            <img id="alertStatsBoard" src={HOST+"assets/ui/profileView/alertStatsBoard.png"}></img>
+        {areStatsVisible && <div className="dropdown-content"  ref={statsContentRef}>
             {/* // TODO : sort by lowest value to highest? */}
             <Stats petData={petData}></Stats>
-        </div>
+        </div> }
         </div>
         </div>
     )

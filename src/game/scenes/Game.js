@@ -68,8 +68,6 @@ export class Game extends Scene {
         EventBus.emit("current-scene-ready");
         // this.alertSystem.updateAlerts();
 
-        console.log(this.petData.data.pet);
-
         this.input.on("pointerup", async () => {
             if (!this.itemInUse) return;
             this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
@@ -131,8 +129,6 @@ export class Game extends Scene {
     createMap() {
         this.map = this.make.tilemap({ key: this.mapKey });
         linkTilemaps(this.map, this.mapKey);
-
-        console.log(this.map);
 
         //if (!houseRoomsPlacement[this.mapKey]) return;
         // change name to: roomAbove

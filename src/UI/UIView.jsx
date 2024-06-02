@@ -36,11 +36,10 @@ export const UIView = (props) => {
             <MapSelection></MapSelection>
             <CoinsBuy></CoinsBuy>
             <WorkPopUp></WorkPopUp>
-    
             <div id="bottomButtonsSection" className="ui">
                 <DownRightButtons></DownRightButtons>
             </div>
-        <FlyingValue></FlyingValue>
-        <BlackOverlay></BlackOverlay>
+            <FlyingValue></FlyingValue>
+            <BlackOverlay></BlackOverlay>
         </div>)
 };

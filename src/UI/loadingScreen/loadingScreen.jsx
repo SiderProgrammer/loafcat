@@ -11,7 +11,7 @@ export const showOverlay = () => {
     visibilitySignal.value = "hidden"
   };
 
-export const BlackOverlay = ()=>{
+export const LoadingScreen = ()=>{
   const [inventoryVisible, setInventoryVisible] = useState("hidden");
   const blackOverlayRef = useRef(null);
 
@@ -42,6 +42,6 @@ const closeTween =  () => {
 
     const changeVisiblity = visibilitySignal.useStateAdapter()
     return (
-        <div className="blackOverlay" style={{visibility:inventoryVisible}} ref={blackOverlayRef}></div>
+        <div className="loadingScreen" style={{visibility:inventoryVisible}} ref={blackOverlayRef}></div>
     )
 }
