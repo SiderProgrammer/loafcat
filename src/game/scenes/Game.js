@@ -66,7 +66,7 @@ export class Game extends Scene {
         this.petData = await getMyPetData();
         this.updatePetData(this.petData.data.pet);
         EventBus.emit("current-scene-ready");
-        this.alertSystem.updateAlerts();
+        // this.alertSystem.updateAlerts();
 
         console.log(this.petData.data.pet);
 
@@ -167,16 +167,16 @@ export class Game extends Scene {
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();
 
-        //! ///////////////////////////////
-        const tiles = this.map.layers.flatMap((layer) => layer.data);
-        tiles.forEach((tileArray) => {
-            // console.log(tileArray);
-            this.tweens.add({
-                targets: tileArray,
-                duration: 1000,
-                alpha: { from: 0.1, to: 1 },
-            });
-        });
+        // //! ///////////////////////////////
+        // const tiles = this.map.layers.flatMap((layer) => layer.data);
+        // tiles.forEach((tileArray) => {
+        //     // console.log(tileArray);
+        //     this.tweens.add({
+        //         targets: tileArray,
+        //         duration: 1000,
+        //         alpha: { from: 0.1, to: 1 },
+        //     });
+        // });
 
         // setTimeout(() => {
         //     tiles.forEach((elements) => {
@@ -232,7 +232,7 @@ export class Game extends Scene {
             ...PetModel.PET_DATA,
             HungerLevel: PetModel.PET_DATA.HungerLevel + 15,
         });
-        this.alertSystem.updateAlerts();
+        // this.alertSystem.updateAlerts();
         await this.pet.feed(1); // itemData.itemDetails.pointValue
 
         return true;
