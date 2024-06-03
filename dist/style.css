@@ -150,7 +150,7 @@ canvas {
 }
 #levelSection {
     position: absolute;
-    left: 55px;
+    left: 48px;
     top: 24px;
     #levelValue {
         position: absolute;
@@ -204,7 +204,7 @@ canvas {
     left: 45px;
 }
 .dropdown-content {
-    display: none;
+    display:block;
     position: absolute;
     z-index: -1;
     top: 40px;
@@ -238,18 +238,24 @@ canvas {
     }
 }
 
+
+
+
+.stats-container #alertStatsBoard {
+    top: -2px
+}
 .dropDownMenuStatsContainer {
     overflow-y: scroll;
     overflow-x: hidden;
     height: 50px;
     width: 40px;
     pointer-events: all;
-    height: 100px;
+    height: 89px;
+    margin-left: -4px;
+    margin-top: -12px;
 }
-
 .plus {
     position: absolute;
-
     left: 15px;
 }
 #alertIcon {
@@ -264,17 +270,18 @@ canvas {
     background: none;
     transform: scale(1.5);
 }
+.alertIcon {
+    position: absolute;
+    transform: translate(25%, 25%);
+}
+
+
+
 
 #alertArrow {
     position: absolute;
     left: 12px;
     top: 16px;
-}
-
-.alertIcon {
-    position: absolute;
-
-    transform: translate(25%, 25%);
 }
 
 .shop {
@@ -500,10 +507,15 @@ canvas {
 
 .statsAvatar {
     position: relative;
-    top: -100px;
-
+    top: -165px;
     height: 0px;
-    left: 10px;
+    left: -8px;
+}
+.statsAvatar .user-id-text {
+    position: absolute;
+    font-size: 6px;
+    color: black;
+    top:-5px
 }
 
 .statsView {
@@ -633,8 +645,11 @@ canvas {
 
 .nameSubmitButton {
     position: relative;
-    top: -70px;
+    top: -106px;
     left: 22px;
+}
+.nameSubmitButton .buttonText{
+    top: -19px;
 }
 
 #petNameInput {
@@ -666,7 +681,7 @@ canvas {
 
 .petStats .inventoryCloseButton{
     left: 140px;
-    top: -48
+    top: -48px
 }
 
 
@@ -809,18 +824,27 @@ canvas {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 90px;
+    top: 85px;
     color: black;
     font-size: 8px;
 }
-
+.youGetContainer  span{
+    margin-bottom: 5px;
+}
 .getAmount {
     position: relative;
-    top: -20px;
-    left: 30px;
-    /* transform: translate(-50%, -50%);
-    transform-origin: center */
+    top: -12px;
+    left: 42px;
+    width: 75px;
+    margin: 0px !important;
+    /* display: inline-block;
+    transition: transform 0.3s ease;
+    transform-origin: center; */
+     transform: translate(-50%, -50%);
+     text-align: center
+    /* transform-origin: center  */
 }
+
 
 .wrapper {
     pointer-events: all;
@@ -833,6 +857,49 @@ canvas {
     position: absolute;
     transform: scale(2);
 }
+
+
+
+
+.loading-screen {
+    /* position:fixed;
+    width: 200%;
+    height: 200%; */
+    background-color: rgb(146, 219, 255, 100);
+    border-radius: 200px;
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    /* top: -50%;
+    left: -50%; */
+  }
+.loading-screen .logo {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: auto;
+    max-width: 30%;
+    max-height: 30%;
+    /* object-fit: cover; */
+  }
+  .loading-screen .loading-icon {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: auto;
+    max-width: 40%;
+    max-height: 40%;
+    /* object-fit: cover; */
+  }
+
+
+
+
+
 
 .ui {
     @media only screen and (min-width: 650px) {
