@@ -17,7 +17,7 @@ export const closeMapSelection = () => {
     hideOverlay();
 };
 const selectMap = (map) => {
-    EventBus.emit("changeMap", { map });
+    EventBus.emit("changeMap", { map, restarted: true });
     closeMapSelection();
     hideOverlay();
 };

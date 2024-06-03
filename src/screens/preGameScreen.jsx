@@ -7,17 +7,20 @@ import { useNavigate } from "react-router-dom";
 import { EventBus } from "../game/EventBus";
 import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
 import { GameModel } from "../game/models/GameModel";
-import { navigatePrefixURL } from "../sharedConstants/constants";
+import { navigatePrefixURL } from "../sharedConstants/constants"
+import { showLoadingScreen, hideLoadingScreen } from '../UI/loadingScreen/loadingScreen';
 import gsap from 'gsap';
+
 export const PreGameScreen = (props) => {
     const [isWalletConnected, setWalletConnect] = useState(false);
     const [isButtonBlocked, setIsButtonBlocked] = useState(true);
     // const [backgroundOpenTween, setBackgroundOpenTween] = useState(false);
     const preGameScreenRef = useRef(null);
     const walletRef = useRef(null);
-
     const navigate = useNavigate();
+
     useLayoutEffect(() => {
+        showLoadingScreen()
         const connect = async () => {
             await  gsap.fromTo(
                 preGameScreenRef.current,
@@ -29,7 +32,7 @@ export const PreGameScreen = (props) => {
                     //     { scale: 1.3 },
                     //     { scale: 1, ease: "power1.out", duration: 2})
                 } })
-
+         
             await connectWalletClicked();
         };
         connect();
@@ -59,7 +62,6 @@ export const PreGameScreen = (props) => {
             // EventBus.emit("startPreloader")
              walletRef.current.closeTween()
             await closeBackgroundTween()
-            console.log("NAVIGATE")
             navigate(navigatePrefixURL+"/game/");
         }
     };

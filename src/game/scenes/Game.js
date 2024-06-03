@@ -18,22 +18,27 @@ import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 import { EventBus } from "../EventBus";
 import { PetStateSystem } from "../systems/StateSystem";
 import { getMyPetData } from "../helpers/requests";
+import {
+    showLoadingScreen,
+    hideLoadingScreen,
+} from "../../UI/loadingScreen/loadingScreen";
 
 export class Game extends Scene {
     constructor() {
         super("Game");
     }
 
-    async create({ map }) {
-        this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
+    async create({ map, restarted = false }) {
+        this.restarted = restarted;
+        this.input.setDefaultCursor('url("/assets/pointer.png"), pointer');
         // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
         // this.scale.refresh();
-        this.sound.add("theme").play({ loop: true });
+        if (!this.restarted) this.sound.add("theme").play({ loop: true });
 
         this.mapKey = map;
         GameModel.MAIN_SCENE = this;
         //this.scene.launch("UI");
-        this.cameras.main.setBackgroundColor(0x00ff00);
+        // this.cameras.main.setBackgroundColor(0x00ff00);
 
         //this.add.image(512, 384, "background").setAlpha(0.5);
         this.alertSystem = new AlertSystem();
@@ -43,6 +48,7 @@ export class Game extends Scene {
 
         this.pet = new Loafcat(this, 325.5, 277, "loafcat");
         this.pet.setDepth(1);
+        if (this.restarted) this.restartTween();
 
         //this.pet.playCurious();
         this.pet.moveRandomly();
@@ -116,6 +122,29 @@ export class Game extends Scene {
         EventBus.once("stopWork", () => {
             this.petStateSystem.actionStopped();
         });
+
+        hideLoadingScreen();
+        if (!this.restarted) this.openTween();
+        // const layers = this.map.layers;
+
+        // layers.forEach((layer) => {
+        //     this.tweens.add({
+        //         targets: layer.tilemapLayer,
+        //         scale: { from: 3, to: 1 }, // przesunięcie o 100 pikseli
+        //         duration: 1000,
+        //         ease: "Power2",
+        //     });
+        // });
+
+        // const tiles = this.map.layers.flatMap((layer) => layer.data);
+        // tiles.forEach((tileArray) => {
+        //     // console.log(tileArray);
+        //     this.tweens.add({
+        //         targets: tileArray,
+        //         duration: 1000,
+        //         alpha: { from: 0.1, to: 1 },
+        //     });
+        // });
     }
 
     update() {
@@ -162,49 +191,6 @@ export class Game extends Scene {
         addAmbientAnimations(this, this.mapKey);
         this.mapInteractionSystem.addInteractiveZones();
         this.mapInteractionSystem.addPointingArrows();
-
-        // //! ///////////////////////////////
-        // const tiles = this.map.layers.flatMap((layer) => layer.data);
-        // tiles.forEach((tileArray) => {
-        //     // console.log(tileArray);
-        //     this.tweens.add({
-        //         targets: tileArray,
-        //         duration: 1000,
-        //         alpha: { from: 0.1, to: 1 },
-        //     });
-        // });
-
-        // setTimeout(() => {
-        //     tiles.forEach((elements) => {
-        //         // elements.setScale(0.5);
-        //         elements.forEach((element) => {
-        //             console.log(element);
-        //             element.scaleX = 0.5;
-        //             element.scaleY = 0.5;
-        //             // element.setScale(0.5);
-        //         });
-        //     });
-        // }, 3000);
-
-        // setTimeout(() => {
-        //     this.map.layers.forEach((layer) => {
-        //         layer.alpha = 0.5;
-
-        //         // layer.setScale(3);
-        //     });
-        // }, 3000);
-
-        // this.scene.tweens.add({
-        //     targets: [this.map.layers],
-        //     ease: "Back.out",
-        //     duration: 700,
-        //     scale: 1,
-        //     onComplete: () => {
-        //         // this.x = this.config.x;
-        //         // this.y = this.config.y;
-        //         // this.createBody();
-        //     },
-        // });
     }
 
     async checkFeedPet(itemData) {
@@ -249,6 +235,47 @@ export class Game extends Scene {
             Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
             MAX_HEIGHT
         );
+    }
+
+    handleOpenTween() {
+        if (!this.restarted) {
+            this.openTween();
+        } else {
+            // this.restartTween();
+        }
+    }
+
+    openTween() {
+        const camera = this.cameras.main;
+        this.pet.startCreateTween(700);
+        this.tweens.add({
+            targets: camera,
+            zoom: { from: 4, to: 1 },
+            duration: 1500,
+            ease: "Power3",
+        });
+    }
+
+    restartTween() {
+        const camera = this.cameras.main;
+        this.pet.startCreateTween(200);
+        this.tweens.add({
+            targets: camera,
+            zoom: { from: 2, to: 1 },
+            duration: 800,
+            ease: "Power3",
+            onComplete: () => {},
+        });
+
+        // const layers = this.map.layers;
+        // layers.forEach((layer) => {
+        //     this.tweens.add({
+        //         targets: layer.tilemapLayer,
+        //         alpha: { from: 0, to: 1 },
+        //         duration: 1000,
+        //         ease: "Power2",
+        //     });
+        // });
     }
 }
 

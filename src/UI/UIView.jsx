@@ -12,7 +12,7 @@ import { WorkPopUp } from "./work/WorkPopUp";
 import { FlyingValue } from "./flyingValue/flyingValue";
 import gsap from 'gsap';
 import { BlackOverlay } from "./blackOverlay/blackOverlay";
-
+// import { LoadingScreen } from "./loadingScreen/loadingScreen";
 
 export const UIView = (props) => {
     const [UIVisible, setUIVisible] = useState("hidden");
@@ -23,7 +23,7 @@ export const UIView = (props) => {
         gsap.fromTo(
             UIRef.current,
             { scale: 0 },
-            { scale: 1, ease: "back.out", duration: 1 })
+            { scale: 1, ease: "back.out", duration: 1, delay: 0.3 })
     }, []);
 
     return (

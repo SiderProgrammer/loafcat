@@ -10,7 +10,7 @@ import { Shop } from "./UI/shop/shop";
 import { BlackOverlay } from "./UI/blackOverlay/blackOverlay";
 import { Leaderboard } from "./UI/leaderboard/leaderboard";
 import { PetStats } from "./UI/stats/petStats";
-
+import { LoadingScreen } from "./UI/loadingScreen/loadingScreen";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ProfileSection } from "./UI/profile/profileSection";
 import { UIView } from "./UI/UIView";
@@ -81,30 +81,16 @@ function App() {
     return (
         <div id="app">
             <Routes>
-                <Route
-                    path="/"
-                    element={<PreGameScreen width={width} height={height} />}
-                ></Route>
-
-                <Route
-                    path={navigatePrefixURL+"/game/"}
-                    element={
-                        
-                            <>
-                                <PhaserGame
-                                onStart={resizeUI}
-                                    ref={phaserRef}
-                                    currentScene={currentScene}
-                                    onGameLoaded={onGameLoaded}
-                                />
-                              {isGameLoaded ? <UIView width={width} height={height} />: null } 
-                            </>
-                        
+                <Route path="/" element={<PreGameScreen width={width} height={height} />}></Route>
+                <Route path={navigatePrefixURL+"/game/"} element={
+                    <>
+                        <PhaserGame onStart={resizeUI} ref={phaserRef} currentScene={currentScene} onGameLoaded={onGameLoaded}/>
+                        {isGameLoaded ? <UIView width={width} height={height} />: null } 
+                        <LoadingScreen></LoadingScreen>
+                    </>
                     }
                 ></Route>
             </Routes>
-
-        
         </div>
     );
 }

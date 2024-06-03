@@ -11,7 +11,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.effects = [];
         this.addLoafcatSprite();
 
-        this.startCreateTween();
+        // this.startCreateTween();
     }
     setBaseY() {
         this.y = this.baseY;
@@ -243,12 +243,13 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.effects.push(this.soap);
     }
 
-    startCreateTween() {
-        this.character.setScale(0.1);
+    startCreateTween(delay) {
+        this.character.setScale(0);
         this.scene.tweens.add({
             targets: this.character,
             ease: "Back.out",
             duration: 1000,
+            delay: delay,
             scale: 1,
             onComplete: () => {},
         });
