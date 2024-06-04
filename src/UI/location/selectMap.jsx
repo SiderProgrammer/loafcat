@@ -63,7 +63,7 @@ export const MapSelection = () => {
         <div className="locationSelection ui popup center" style={{visibility: profileVisible, display: "flex",flexDirection: "column",}}>
             {/* <Button  className="inventoryCloseButton" buttonIcon="closeButton" ></Button> */}
             <div className="dup"  ref={mapsRef}>
-                <img className= "background-image" src="/assets/ui/leaderboard/Leaderboard.png" ></img>
+                <img className= "background-image" src={HOST+"assets/ui/leaderboard/Leaderboard.png"} ></img>
                 <Button onClick={closeMapSelection} className="inventoryCloseButton" buttonIcon="closeButton"></Button>
                 <div className="maps-container"  >
                     <div className="maps-wrapper">

@@ -143,10 +143,10 @@ canvas {
     position: absolute;
     left: 2px;
     top: 2.5px;
-    transform: scale(0.029);
+    transform: scale(0.162);
     transform-origin: top left;
     border-radius: 0.5;
-    border-radius: 100px;
+    border-radius: 25px;
 }
 #levelSection {
     position: absolute;
@@ -258,22 +258,22 @@ canvas {
     position: absolute;
     left: 15px;
 }
-#alertIcon {
+/* #alertIcon {
     visibility: hidden;
     position: absolute;
     left: 11px;
     top: 1px;
-}
+} */
 #alertStatsBoard {
     position: absolute;
     z-index: -1;
     background: none;
     transform: scale(1.5);
 }
-.alertIcon {
+/* .alertIcon {
     position: absolute;
     transform: translate(25%, 25%);
-}
+} */
 
 
 
@@ -505,7 +505,82 @@ canvas {
     top: -12px;
 }
 
-.statsAvatar {
+
+
+
+.petStats .stats-context {
+    position: relative
+}
+.profile-image-container {
+    position: absolute;
+    top: -215px;
+    left: -61px
+}
+.profile-image-container .statsAvatarImage {
+    transform: scale(0.5);
+    border-radius: 14px;
+} 
+.profile-image-container .user-id-text {
+    position: absolute;
+    font-size: 5px;
+    color: black;
+    top: 137px;
+    left: 44px
+}
+.stats-context .stats-container {
+    position: absolute;
+    top: -237px;
+    left: 83px;
+
+} 
+.stats-container .petViewNameBoard {
+    position: absolute;
+    top: 58px;
+    left: -16px;
+    transform: scale(0.85);
+} 
+.stats-container .pet-name-text {
+    position: absolute;
+    width: 75px;
+    color: black;
+    font-size: 8px;
+    top: 73px;
+    left: -4px;
+    text-align: center;
+}
+.stats-container .pet-information-container {
+    position: absolute;
+    top: 87px;
+    left: -5px;
+} 
+.stats-container .pet-information-container span{
+    color: black;
+    font-size: 10px;
+} 
+.pet-information-container .information-section{
+    display: flex;
+    margin-top: 6px;
+    align-items: center;
+    text-align: center;
+} 
+.stats-context .stats-diagrams-container{
+    transform: scale(1.5);
+    position: relative;
+    top: -69px;
+    left: 26px;
+    /* height: 0px; */
+} 
+.stats-diagrams-container .stats {
+    display: flex;
+    position: absolute;
+    top: 0;
+    /* flex-wrap: wrap; */
+    width: 50px;
+}
+
+
+
+/* .statsAvatar {
     position: relative;
     top: -165px;
     height: 0px;
@@ -517,11 +592,11 @@ canvas {
     color: black;
     top:-5px
 }
-
 .statsView {
+    transform: scale(1.5);
     position: relative;
-    top: -130px;
-    left: 64px;
+    top: -160px;
+    left: 125px;
     height: 0px;
 }
 
@@ -542,24 +617,89 @@ canvas {
 
     left: 2px;
     top: 2px;
+} */
+
+
+
+
+
+
+
+.stat-icon-container {
+    width: 14px;
+    height: 14px;
+    position: relative;
+    overflow: hidden; 
+  }
+  .stat-icon-container .border-image {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+  }
+  .stat-icon-container .alertIcon {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+  }
+  .stat-icon-container .statsGreenFill {
+    width:100%;
+    transform-origin: center bottom;
+  }
+  .stat-icon-container .statFillContainer {
+    display: flex;
+    align-items: end;
+    width: 11px;
+    height: 11px;
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+  }
+  .stats {
+    display: flex;
+    position: absolute;
+    top: 0;
+    flex-wrap: wrap;
+    width: 50px;
 }
 
-.petViewStats {
-    display: flex;
+
+/* 
+.stat-icon-container {
+    height: 13px;
+    width: 13px;
 }
-.statsGreenFill {
+.stat-icon-container .border-image{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+} */
+
+
+
+
+
+
+
+
+
+/* .petViewStats {
+    display: flex;
+} */
+/* .statsGreenFill {
     width: 100%;
     margin-bottom: 2px;
-}
+} */
 
-.statFillContainer {
+/* .statFillContainer {
     display: flex;
     align-items: end;
     position: relative;
     left: -50%;
     width: 10px;
-    /* width: 100%; */
-}
+} */
 
 .connectWalletButton {
     margin: auto;
@@ -661,12 +801,12 @@ canvas {
     pointer-events: all;
 }
 
-.petViewNameBoard {
+/* .petViewNameBoard {
     position: absolute;
     top: 45px;
     left: -21px;
     transform: scale(0.7);
-}
+} */
 
 .petViewMainInfoContainer {
     display: flex;
@@ -815,8 +955,17 @@ canvas {
     left: 140px
 }
 
-
-
+.work-popup {
+    position: absolute;
+    transform-origin: center;
+    image-rendering: pixelated;
+    /* top: 300px */
+}
+.work-popup .work-popup-wrapper{
+    transform-origin: center;
+    image-rendering: pixelated;
+    /* top: 300px */
+}
 
 
 
@@ -866,7 +1015,7 @@ canvas {
     width: 200%;
     height: 200%; */
     background-color: rgb(146, 219, 255, 100);
-    border-radius: 200px;
+    border-radius: 150px;
     position: absolute;
     width: 110%;
     height: 110%;
@@ -875,9 +1024,9 @@ canvas {
   }
 .loading-screen .logo {
     position: absolute;
-    top: 40%;
+    top: 43%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(2);
     width: 100px;
     height: auto;
     max-width: 30%;
@@ -886,9 +1035,9 @@ canvas {
   }
   .loading-screen .loading-icon {
     position: absolute;
-    top: 60%;
+    top: 57%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.6);
     width: 100px;
     height: auto;
     max-width: 40%;

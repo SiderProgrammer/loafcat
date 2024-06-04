@@ -1,6 +1,7 @@
 import { Button } from "../UI/buttons/button"
 import React,{useImperativeHandle , useRef, useEffect} from "react";
 import gsap from 'gsap';
+import { navigatePrefixURL } from "../sharedConstants/constants";
 
 export const WalletConnect = React.forwardRef((props, ref) => {
     const buttonRef = useRef(null);
@@ -33,7 +34,7 @@ export const WalletConnect = React.forwardRef((props, ref) => {
         {/* <div>
             Connect your wallet to continue!
         </div> */}
-        <Button className={"connectWalletButton"} onClick={props.connectWalletClicked} buttonIcon={"connectWallet"} text={"Connect Wallet"} ref={buttonRef} ></Button>
+        <Button className={"connectWalletButton"} path={"." + navigatePrefixURL + "/"} onClick={props.connectWalletClicked} buttonIcon={"connectWallet"} text={"Connect Wallet"} ref={buttonRef} ></Button>
     </div>
     )
 })
