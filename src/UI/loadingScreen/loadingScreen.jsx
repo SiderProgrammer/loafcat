@@ -37,7 +37,7 @@ const closeTween =  () => {
         loadingScreenRef.current,
           { scale: 1 },
           { scale: 0, ease: "back.in", duration: 0.4, onComplete: ()=> {
-              setProfileVisible("hidden")
+            setScreenVisible("hidden")
           } })
 }
 

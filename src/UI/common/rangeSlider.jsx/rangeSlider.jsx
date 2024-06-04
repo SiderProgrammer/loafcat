@@ -25,10 +25,10 @@ export const RangeSlider = ({ min, max, value, step, onChange }) => {
     const maxPos = ((maxValue - min) / (max - min)) * 100;
 
     return (
-      <div class="wrapper">
-        <div class="input-wrapper">
+      <div className="wrapper">
+        <div className="input-wrapper">
           <input
-            class="inputSlider"
+            classname="inputSlider"
             type="range"
             value={minValue}
             min={min}
@@ -39,15 +39,15 @@ export const RangeSlider = ({ min, max, value, step, onChange }) => {
      
         </div>
   
-        <div class="control-wrapper">
-          <div class="control" style={{ left: `${minPos}%` }} />
-          <div class="rail">
+        <div className="control-wrapper">
+          <div className="control" style={{ left: `${minPos}%` }} />
+          <div className="rail">
             <div
-              class="inner-rail" 
+              className="inner-rail" 
               style={{ left: `${minPos}%`, right: `${100 - maxPos}%` }}
             />
           </div>
-          <div class="control" style={{ left: `${maxPos}%` }} />
+          <div className="control" style={{ left: `${maxPos}%` }} />
         </div>
       </div>
     );

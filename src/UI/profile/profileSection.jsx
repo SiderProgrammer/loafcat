@@ -22,7 +22,7 @@ export const ProfileSection = () =>{
 
     const statsContentOpenTween = () => {
         setAreStatsVisible(true)
-        if(!statsContentRef.current) return
+        if(!statsContentRef) return
         gsap.fromTo(
             statsContentRef.current,
             { scaleY: 0, y: '-=80'},
@@ -31,14 +31,14 @@ export const ProfileSection = () =>{
     }
 
     const statsContentCloseTween = () => {
+        if(!statsContentRef) return
         gsap.fromTo(
             statsContentRef.current,
             { scaleY: 1 },
             { scaleY: 0,  y: '-=80', ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setAreStatsVisible(false)
-                gsap.fromTo(
+                gsap.to(
                     statsContentRef.current,
-                    { },
                     { y: '+=80', duration: 0 })
             } })
     }
@@ -48,7 +48,7 @@ export const ProfileSection = () =>{
             <img id="profileFrame" src={HOST+"assets/ui/profileView/profileFrame.png"}/>
         <div id="characterAvatarSection">
             <img id="avatarFrame" src={HOST+"assets/ui/profileView/avatarFrame.png"}/>
-            <img id="avatarImage" src={HOST+"assets/nftAvatar.jpg"}/>
+            <img id="avatarImage" src={HOST+"assets/nftAvatar.png"}/>
         </div>
         <div className="avatar-information">
             <div id="coinSection">
@@ -63,7 +63,7 @@ export const ProfileSection = () =>{
                 <span id="levelValue">Lv.13</span>
             </div>
         </div>
-        <div id="statsDropDownMenu" class="dropdown">
+        <div id="statsDropDownMenu" className="dropdown">
             <button className="dropbtn button hoverScale" onClick={handleOpenAlertStats}>
             <img id="alertBox" src={HOST+"assets/ui/profileView/alertBox1.png"}></img>
             <img id="alertIcon" src={HOST+"assets/alertIcon.png"} />

@@ -67,8 +67,8 @@ export const MapSelection = () => {
                 <Button onClick={closeMapSelection} className="inventoryCloseButton" buttonIcon="closeButton"></Button>
                 <div className="maps-container"  >
                     <div className="maps-wrapper">
-                        {MAPS_ORDER.map((map) => (
-                                <Button onClick={() => selectMap(map)} className={"mapSelectButton"} buttonIcon={map + "Icon"} ext={"png"} ></Button>
+                        {MAPS_ORDER.map((map, index) => (
+                                <Button key ={index} onClick={() => selectMap(map)} className={"mapSelectButton"} buttonIcon={map + "Icon"} ext={"png"} ></Button>
                         ))}
                     </div>
                 </div>

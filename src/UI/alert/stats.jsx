@@ -14,7 +14,7 @@ export const Stats = ({ petData }) => {
                 <div className={"dropDownMenuStatsContainer"}>
                     {statsConstant.map((stat) => (
                         <div style={{ display: "flex" }}>
-                            <Stat fill={petData[stat.valueKey]} className="petViewStats" icon={stat.icon} reversedValue={stat.reversedValue}></Stat>
+                            <Stat fill={petData[stat.valueKey]} icon={stat.icon} reversedValue={stat.reversedValue}></Stat>
                             {stat.reversedValue && petData[stat.valueKey] > 70 && (
                             <Button className={"plus pulseAnimation"} buttonIcon={"minus"} imgPath="assets/"></Button>
                             )}
