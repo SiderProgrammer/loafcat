@@ -28,7 +28,7 @@ export const RangeSlider = ({ min, max, value, step, onChange }) => {
       <div className="wrapper">
         <div className="input-wrapper">
           <input
-            classname="inputSlider"
+            className="inputSlider"
             type="range"
             value={minValue}
             min={min}

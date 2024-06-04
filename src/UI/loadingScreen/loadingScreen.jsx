@@ -44,7 +44,7 @@ const closeTween =  () => {
     // const changeVisiblity = visibilitySignal.useStateAdapter()
     return (
         <div className="loading-screen" style={{visibility:screenVisible}} ref={loadingScreenRef}>
-            <img className="logo" src= {HOST+ "assets/ui/loadingScreen/loading_animation.svg"}  alt="Loading_logo" />
+            <img className="logo" src= {HOST+ "assets/ui/loadingScreen/loading_gif.gif"}  alt="Loading_logo" />
             <img className="loading-icon" src= {HOST+ "assets/ui/loadingScreen/loading_animation.svg"}  alt="Loading_icon" />
         </div>
     );

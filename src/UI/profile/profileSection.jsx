@@ -22,7 +22,7 @@ export const ProfileSection = () =>{
 
     const statsContentOpenTween = () => {
         setAreStatsVisible(true)
-        if(!statsContentRef) return
+        if(statsContentRef.current === null) return
         gsap.fromTo(
             statsContentRef.current,
             { scaleY: 0, y: '-=80'},
@@ -31,7 +31,7 @@ export const ProfileSection = () =>{
     }
 
     const statsContentCloseTween = () => {
-        if(!statsContentRef) return
+        if(statsContentRef.current === null) return
         gsap.fromTo(
             statsContentRef.current,
             { scaleY: 1 },

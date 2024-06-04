@@ -12,8 +12,8 @@ export const Stats = ({ petData }) => {
             <div className={"stats-container"}>
                 <img id="alertStatsBoard" src={HOST+"assets/ui/profileView/alertStatsBoard.png"}></img>
                 <div className={"dropDownMenuStatsContainer"}>
-                    {statsConstant.map((stat) => (
-                        <div style={{ display: "flex" }}>
+                    {statsConstant.map((stat, index) => (
+                        <div key={index} style={{ display: "flex" }}>
                             <Stat fill={petData[stat.valueKey]} icon={stat.icon} reversedValue={stat.reversedValue}></Stat>
                             {stat.reversedValue && petData[stat.valueKey] > 70 && (
                             <Button className={"plus pulseAnimation"} buttonIcon={"minus"} imgPath="assets/"></Button>

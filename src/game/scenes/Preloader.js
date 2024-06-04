@@ -171,11 +171,11 @@ export class Preloader extends Scene {
         this.load.image("logo", "logo.png");
         this.load.image("wallOverlay", "wallOverlay.png");
         this.load.image("gearButton", "gearButton.png");
-        this.load.image("coin", "coin.png");
+        // this.load.image("coin", "coin.png");
         this.load.image("storeButton", "storeButton.png");
         this.load.image("statsButton", "statsButton.png");
         this.load.image("mainMenuButton", "mainMenuButton.png");
-        this.load.image("closeButton", "closeButton.png");
+        // this.load.image("closeButton", "closeButton.png");
         this.load.image("leaderboardButton", "leaderboardButton.png");
 
         this.load.image("hourGlassIcon", "hourGlassIcon.png");
@@ -188,7 +188,7 @@ export class Preloader extends Scene {
         this.load.image("avatarFrame", "avatarFrame.png");
         this.load.image("levelFrame", "levelFrame.png");
         this.load.image("statsBoard", "statsBoard.png");
-        this.load.image("blackBackground", "blackBackground.png");
+        // this.load.image("blackBackground", "blackBackground.png");
         this.load.image("apple", "apple.png");
         this.load.image("petPopup", "petPopup.png");
         this.load.image("arrow", "arrow.png");
@@ -203,8 +203,8 @@ export class Preloader extends Scene {
 
         this.load.audio("theme", ["audio/theme.wav"]);
 
-        this.loadUI();
-        this.loadStats();
+        // this.loadUI();
+        // this.loadStats();
         this.loadAmbient();
     }
 

@@ -258,22 +258,22 @@ canvas {
     position: absolute;
     left: 15px;
 }
-#alertIcon {
+/* #alertIcon {
     visibility: hidden;
     position: absolute;
     left: 11px;
     top: 1px;
-}
+} */
 #alertStatsBoard {
     position: absolute;
     z-index: -1;
     background: none;
     transform: scale(1.5);
 }
-.alertIcon {
+/* .alertIcon {
     position: absolute;
     transform: translate(25%, 25%);
-}
+} */
 
 
 
@@ -624,22 +624,82 @@ canvas {
 
 
 
-.petViewStats {
+
+.stat-icon-container {
+    width: 14px;
+    height: 14px;
+    position: relative;
+    overflow: hidden; 
+  }
+  .stat-icon-container .border-image {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+  }
+  .stat-icon-container .alertIcon {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+  }
+  .stat-icon-container .statsGreenFill {
+    width:100%;
+    transform-origin: center bottom;
+  }
+  .stat-icon-container .statFillContainer {
     display: flex;
-}
-.statsGreenFill {
-    width: 100%;
-    margin-bottom: 2px;
+    align-items: end;
+    width: 11px;
+    height: 11px;
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+  }
+  .stats {
+    display: flex;
+    position: absolute;
+    top: 0;
+    flex-wrap: wrap;
+    width: 50px;
 }
 
-.statFillContainer {
+
+/* 
+.stat-icon-container {
+    height: 13px;
+    width: 13px;
+}
+.stat-icon-container .border-image{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+} */
+
+
+
+
+
+
+
+
+
+/* .petViewStats {
+    display: flex;
+} */
+/* .statsGreenFill {
+    width: 100%;
+    margin-bottom: 2px;
+} */
+
+/* .statFillContainer {
     display: flex;
     align-items: end;
     position: relative;
     left: -50%;
     width: 10px;
-    /* width: 100%; */
-}
+} */
 
 .connectWalletButton {
     margin: auto;
@@ -955,7 +1015,7 @@ canvas {
     width: 200%;
     height: 200%; */
     background-color: rgb(146, 219, 255, 100);
-    border-radius: 200px;
+    border-radius: 150px;
     position: absolute;
     width: 110%;
     height: 110%;
@@ -964,9 +1024,9 @@ canvas {
   }
 .loading-screen .logo {
     position: absolute;
-    top: 40%;
+    top: 43%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(2);
     width: 100px;
     height: auto;
     max-width: 30%;
@@ -975,9 +1035,9 @@ canvas {
   }
   .loading-screen .loading-icon {
     position: absolute;
-    top: 60%;
+    top: 57%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(0.6);
     width: 100px;
     height: auto;
     max-width: 40%;
