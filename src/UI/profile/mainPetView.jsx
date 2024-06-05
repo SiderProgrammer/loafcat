@@ -40,8 +40,9 @@ export const MainPetView = () => {
             closeTween()
         }
         // return () => {};
+
     }, [visibilitySignal.value]);
-    
+
 
     const openTween = () => {
         gsap.fromTo(
@@ -67,6 +68,7 @@ export const MainPetView = () => {
                 <div className="stats-context">
                     <div className="profile-image-container">
                         <img className="statsAvatarImage" src={HOST+"assets/nftAvatar.png"}></img>
+                        <img className="avatarBorder" src={HOST+"assets/ui/profileView/avatarBorder.png"}></img>
                         <span className="user-id-text">{shortenText(UserModel.USER_ID) }</span>
                     </div>
                     <div className="stats-container">
@@ -92,44 +94,14 @@ export const MainPetView = () => {
                     </div>
                     <div className="stats-diagrams-container">
                         <div className="stats">
-                            {statsConstant.map((stat,index) => (
-                            <Stat key ={index} fill={petData ? petData[stat.valueKey] : 0 } reversedValue={stat.reversedValue}  icon={stat.icon}></Stat>
+                            {statsConstant.map((stat,index) => ( 
+                            <div key ={index} className="stat-container">
+                                <Stat fill={petData ? petData[stat.valueKey] : 0 } reversedValue={stat.reversedValue}  icon={stat.icon} ></Stat>
+                            </div>
                             ))}
                         </div>
                     </div>
                 </div>
-            
-                {/* <div>
-                    <div className="statsAvatar">
-                        <span className="user-id-text">{shortenText(UserModel.USER_ID) }</span>
-                        <img src={HOST+"assets/ui/petStats/statsProfile.png"}></img>
-                        <img className="statsAvatarImage" src={HOST+"assets/nftAvatar.jpg"}></img>
-                        <img className="petViewNameBoard" src={HOST+"assets/ui/linkPet/nameInput.png"}></img>
-                        <span style={{position:"absolute",fontSize:"8px",color:"black",top:"60px",left:"-10px"}}>{petData.Name }</span>
-                        <div className={"petViewMainInfoContainer"}>
-                            <span>Lv.13</span>
-                            <div>
-                                <img src={HOST+"assets/coin.png"}></img>
-                                <span>{13}</span>
-                            </div>
-                            <div>
-                                <img src={HOST+"assets/hearthIcon.png"}></img>
-                                <span>{petData.lives}</span>
-                            </div>
-                            <div>
-                                <img src={HOST+"assets/hourGlassIcon.png"}></img>
-                                <span>{7}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="statsView">
-                        <div className="stats">
-                            {statsConstant.map(stat => (
-                            <Stat fill={petData ? petData[stat.valueKey] : 0 } reversedValue={stat.reversedValue} className="petViewStats" icon={stat.icon}></Stat>
-                            ))}
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </div>
     );

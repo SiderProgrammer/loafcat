@@ -1,9 +1,15 @@
 import { Scene } from "phaser";
 import { HOST } from "../../sharedConstants/constants";
+import { SAFE_GAME_HEIGHT, SAFE_GAME_WIDTH } from "../constants/viewport";
+import LoadingScreen from "../components/LoadingScreen";
 
 export class Preloader extends Scene {
     constructor() {
         super("Preloader");
+    }
+
+    init() {
+        new LoadingScreen(this);
     }
 
     loadUI() {

@@ -1,27 +1,87 @@
 import { MAX_WIDTH, SAFE_GAME_WIDTH } from "../constants/viewport";
 import { Async } from "../utils/Async";
 import { MathUtils } from "../utils/Math";
+import { EventBus } from "../EventBus";
+import { PetModel } from "../models/PetModel";
+// import { PetStateSystem } from "../systems/StateSystem";
 
 export default class Loafcat extends Phaser.GameObjects.Container {
-    constructor(scene, x, y, sprite) {
+    constructor(scene, config) {
+        const { x, y } = config;
         super(scene, x, y);
-        scene.add.existing(this);
-        this.baseY = y;
-        this.sprite = sprite;
+        this.config = config;
+        this.scene.add.existing(this);
+
+        this.character = this.createCharacter();
+        // this.stateSystem = new PetStateSystem(this.scene, this);
+
+        this.moveTween = null;
         this.effects = [];
-        this.addLoafcatSprite();
 
-        // this.startCreateTween();
+        this.add([this.character]);
+
+        // this.moveRandomly();
+        this.setState("walk");
     }
+
+    createCharacter() {
+        return this.scene.add.sprite(0, 0, this.config.sprite);
+        // .play("idle");
+    }
+
+    async setState(state) {
+        // this.moveTween && this.moveTween.pause();
+        if (this.moveTween) this.moveTween.pause();
+
+        // console.log(state);
+        switch (state) {
+            case "idle":
+                this.cleanEffects();
+                this.setStateCatIdle();
+                break;
+            case "walk":
+                this.setStateCatWalk();
+                break;
+            case "feed":
+                await this.setStateCatFeed();
+                break;
+            case "bath":
+                // this.stateSystem.setState(state);
+                await this.setStateBathing();
+                break;
+            case "toilet":
+                // this.stateSystem.setState(state);
+                await this.setStateCatPoop();
+                break;
+            case "teeth-brush":
+                await this.setStateCatTeethBrush();
+                break;
+            case "TV":
+                // this.stateSystem.setState(state);
+                await this.setStateCatWatchTV();
+                break;
+            case "bed":
+                // this.stateSystem.setState(state);
+                await this.sleep();
+                break;
+            case "sink":
+                // await this.stateSystem.setState(state);
+                await this.teethBrush();
+                break;
+            case "smoke":
+                // this.stateSystem.setState(state);
+                await this.smoke();
+                break;
+            case "work":
+                // this.stateSystem.setState(state);
+                await this.work();
+                break;
+        }
+        this.actionStopped();
+    }
+
     setBaseY() {
-        this.y = this.baseY;
-    }
-    addLoafcatSprite() {
-        this.character = this.scene.add
-            .sprite(0, 0, this.sprite)
-
-            .play("idle");
-        this.add(this.character);
+        this.y = this.config.y;
     }
 
     moveRandomly() {
@@ -45,96 +105,66 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             },
         });
 
-        this.setState("walk");
+        // this.setState("walk");
     }
-    setState(state) {
-        switch (state) {
-            case "idle":
-                this.cleanEffects();
-                this.setStateCatIdle();
-                break;
-            case "walk":
-                this.setStateCatWalk();
-                break;
-            case "feed":
-                this.setStateCatFeed();
-                break;
-            case "bath":
-                this.setStateBathing();
-                break;
-            case "toiletPoop":
-                this.setStateCatPoop();
-                break;
-            case "teeth-brush":
-                this.setStateCatTeethBrush();
-                break;
-            case "TV":
-                this.setStateCatWatchTV();
-                break;
-            case "sleep":
-                this.sleep();
-                break;
-        }
-    }
-    work() {
-        this.setStateCatIdle();
-        this.character.play("working");
-        this.setScale(1, 1);
-        this.officeSet = this.scene.add
-            .sprite(0, 0, "office-set")
-            .play("office-set");
 
-        this.add(this.officeSet);
-        this.effects.push(this.officeSet);
+    async work() {
+        this.handlePlayEffect("working", "office-set", "office-set", 0, 0);
+        this.x = 422;
+        this.y = 266.5;
+        await Async.delay(100000000);
     }
 
     playCurious() {
-        this.setStateCatIdle();
-        this.character.play("curious");
-        this.curiousSprite = this.scene.add
-            .sprite(0, 0, "curious")
-            .play("curious-idle");
-
-        this.add(this.curiousSprite);
-        this.effects.push(this.curiousSprite);
+        this.handlePlayEffect("curious", "curious", "curious-idle");
     }
-    sleep() {
-        this.setStateCatIdle();
-        this.character.play("sleep");
-        this.sleepSprite = this.scene.add
-            .sprite(0, 0, "sleep")
-            .play("sleep-idle");
 
-        this.add(this.sleepSprite);
-        this.effects.push(this.sleepSprite);
+    async sleep() {
+        this.handlePlayEffect("sleep", "sleep", "sleep-idle");
+        this.x = 410;
+        this.y = 261;
+        await Async.delay(10000);
     }
-    setStateCatWatchTV() {
-        this.setStateCatIdle();
-        this.character.play("watch-tv");
-        this.popcorn = this.scene.add
-            .sprite(0, 0, "tv-popcorn")
-            .play("tv-popcorn");
-
-        this.add(this.popcorn);
-        this.effects.push(this.popcorn);
+    async setStateCatWatchTV() {
+        this.handlePlayEffect("watch-tv", "tv-popcorn", "tv-popcorn");
+        this.setPosition(336, 260.5);
+        this.setScale(1, 1);
+        // this.pet.setState("TV");
+        //takeAction("toothBrush")
+        this.scene.updatePetData({
+            ...PetModel.PET_DATA,
+            CleanlinessLevel: PetModel.PET_DATA.CleanlinessLevel + 15,
+        });
+        await Async.delay(3000);
     }
     drinkCoffee() {
-        this.setStateCatIdle();
-        this.character.play("drink-coffee");
-        this.coffee = this.scene.add
-            .sprite(0, 0, "cap-coffee")
-            .play("coffee-idle");
-
-        this.add(this.coffee);
-        this.effects.push(this.coffee);
+        this.handlePlayEffect("drink-coffee", "cap-coffee", "coffee-idle");
     }
+
+    async teethBrush() {
+        this.setState("teeth-brush");
+        EventBus.emit("actionUpdate", {
+            value: 15,
+            img: "Happiness",
+            pos: this.scene.input.activePointer,
+        });
+        this.x = 248;
+        this.scene.updatePetData({
+            ...PetModel.PET_DATA,
+            HappinessLevel: PetModel.PET_DATA.HappinessLevel + 15,
+        });
+
+        await Async.delay(3000);
+    }
+
     setStateCatFeed() {
         this.setStateCatIdle();
         this.character.play("feed-me");
     }
     setStateCatWalk() {
         this.character.play("walk");
-        this.moveTween.resume();
+        this.moveRandomly();
+        // this.moveTween.resume();
     }
     setStateCatIdle() {
         this.character.play("idle");
@@ -146,17 +176,11 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.character.play("dead");
     }
     async smoke() {
-        this.setStateCatIdle();
-
-        this.character.play("smoke");
-
-        this.smokeSprite = this.scene.add
-            .sprite(16, -2, "smoke")
-            .play("smoke-idle");
-
-        this.add([this.smokeSprite]);
-        this.effects.push(this.smokeSprite);
+        this.handlePlayEffect("smoke", "smoke", "smoke-idle", 16, -2);
+        this.x = 127;
+        await Async.delay(3000);
     }
+
     async feed(feedValue) {
         this.character.play("eat");
         await Async.delay(2000);
@@ -170,77 +194,188 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.cleanEffects();
     }
 
-    cleanEffects() {
-        this.effects.forEach((effect) => {
-            this.remove(effect, true);
-        });
-    }
     fart() {
-        this.character.play("fart");
-        this.fartImage = this.scene.add.sprite(0, 0, "fart").play("fart-idle");
-
-        this.add(this.fartImage);
-        this.effects.push(this.fartImage);
+        this.handlePlayEffect("fart", "fart", "fart-idle");
     }
 
-    setStateCatPoop() {
-        this.setStateCatIdle();
-        this.character.play("toiletPoop");
-        this.newspaper = this.scene.add
-            .sprite(0, 0, "newspaper")
-            .play("newspaper-idle");
+    async setStateCatPoop() {
+        this.handlePlayEffect("toiletPoop", "newspaper", "newspaper-idle");
+        // TODO : best to have select menu between poop/pee when toilet clicked
 
-        this.add(this.newspaper);
+        // TODO: play here pee then poop just after
+        this.x = 185;
+        this.y = 268;
+        // this.pet.setState("toiletPoop");
+        //takeAction("poo")
+        //takeAction("pee")
 
-        this.effects.push(this.newspaper);
+        this.scene.updatePetData({
+            ...PetModel.PET_DATA,
+            PoopLevel: 0,
+            PeeLevel: 0,
+        });
+
+        await Async.delay(3000);
     }
 
     setStateCatTeethBrush() {
         // this.setBaseY();
-        this.setStateCatIdle();
-        this.character.play("teeth-brushing");
-        this.teethBrush = this.scene.add
-            .sprite(0, 0, "teeth-brushing")
-            .play("teeth-brushing-idle");
-
-        this.add(this.teethBrush);
-        this.effects.push(this.teethBrush);
+        this.handlePlayEffect(
+            "teeth-brushing",
+            "teeth-brushing",
+            "teeth-brushing-idle"
+        );
     }
 
     listenMusic() {
-        this.character.play("listen-music");
-
-        this.notes = this.scene.add
-            .sprite(-35, 5, "musical-nutes")
-            .play("nutes-idle");
-
-        this.add(this.notes);
-        this.effects.push(this.notes);
+        this.handlePlayEffect(
+            "listen-music",
+            "musical-nutes",
+            "nutes-idle",
+            -35,
+            5
+        );
     }
 
     pee() {
-        this.setStateCatIdle();
-        this.character.play("front-pee");
-
-        this.peeSprite = this.scene.add
-            .sprite(0, 0, "front-pee")
-            .play("front-pee-idle");
-
-        this.add(this.peeSprite);
-        this.swap(this.peeSprite, this.character);
-        this.effects.push(this.peeSprite);
+        this.handlePlayEffect("front-pee", "front-pee", "front-pee-idle");
+        // this.swap(this.peeSprite, this.character);
     }
 
     setStateBathing() {
+        this.handlePlayEffect("bathing", "soap", "soap-idle");
+    }
+
+    bathAction() {
+        this.x = 369;
+        this.y = 272;
+        // this.itemInUse = this.add
+        //   .image(
+        //     this.input.activePointer.worldX,
+        //     this.input.activePointer.worldY,
+        //     "soapImage"
+        //   )
+        //   .setDepth(3);
+        // TODO : refactor it
+        return new Promise((resolve) => {
+            this.scene.input.setDefaultCursor(
+                'url("./assets/soapImage.png"), pointer'
+            );
+            this.scene.map.getLayer("Bath").tilemapLayer.setDepth(2);
+            // this.pet.setState("bath");
+
+            this.character.setInteractive();
+            let soapIn = false;
+            let lastEventPoint = {
+                x: this.scene.input.activePointer.worldX,
+                y: this.scene.input.activePointer.worldY,
+            };
+            let dc = null;
+            let counter = 0;
+            // TODO : soap too big in some scales, bigger hitbox, check zooming in
+            this.character.on("pointerover", () => {
+                const pointerPos = {
+                    x: this.scene.input.activePointer.worldX,
+                    y: this.scene.input.activePointer.worldY,
+                };
+                if (
+                    Phaser.Math.Distance.BetweenPoints(
+                        pointerPos,
+                        lastEventPoint
+                    ) < 5
+                )
+                    return;
+
+                if (counter == 25) {
+                    this.stopBathAction();
+                    resolve();
+                    clearTimeout(dc);
+                    return;
+                }
+                lastEventPoint = {
+                    x: this.scene.input.activePointer.worldX,
+                    y: this.scene.input.activePointer.worldY,
+                };
+
+                if (!dc) {
+                    if (counter === 0) {
+                        this.character.play("bathing");
+                        this.soap.play("soap-idle");
+                    }
+
+                    this.soap.anims.resume();
+                    this.character.anims.resume();
+                    dc = setTimeout(() => {
+                        this.soap.anims.restart();
+                        this.character.anims.restart();
+                        this.soap.anims.pause();
+                        this.character.anims.pause();
+                        dc = null;
+                    }, 500);
+                } else if (dc) {
+                    clearTimeout(dc);
+                    dc = setTimeout(() => {
+                        this.soap.anims.restart();
+
+                        this.soap.anims.pause();
+                        this.character.anims.pause();
+                        dc = null;
+                    }, 500);
+                }
+                counter++;
+            });
+        });
+    }
+
+    stopBathAction() {
+        this.scene.input.setDefaultCursor(
+            'url("./assets/pointer.png"), pointer'
+        );
+        this.setBaseY();
+        // this.pet.moveRandomly();
+        this.setState("idle");
+        this.soap.destroy();
+        this.character.removeInteractive();
+        this.scene.map.getLayer("Bath").tilemapLayer.setDepth(0);
+        this.scene.mapInteractionSystem.setAllInteractive();
+        //takeAction("bath")
+        this.scene.updatePetData({
+            ...PetModel.PET_DATA,
+            CleanlinessLevel: 100,
+        });
+    }
+
+    actionStopped() {
+        this.cleanEffects();
         this.setStateCatIdle();
-        this.moveTween.destroy();
+        this.setStateCatWalk();
+        this.scene.mapInteractionSystem.setAllInteractive();
+        this.setBaseY();
+    }
 
-        //this.character.play("bathing");
+    handlePlayEffect(
+        characterStateKey,
+        effectSetKey,
+        effectAnimationKey,
+        x = 0,
+        y = 0,
+        scale = 1
+    ) {
+        this.setStateCatIdle();
+        this.character.play(characterStateKey);
+        const officeSet = this.scene.add
+            .sprite(x, y, effectSetKey)
+            .play(effectAnimationKey)
+            .setScale(scale);
 
-        this.soap = this.scene.add.sprite(0, 0, "soap"); //.play("soap-idle");
+        this.add(officeSet);
+        this.effects.push(officeSet);
+    }
 
-        this.add(this.soap);
-        this.effects.push(this.soap);
+    cleanEffects() {
+        this.effects.forEach((effect) => {
+            this.remove(effect, true);
+        });
     }
 
     startCreateTween(delay) {

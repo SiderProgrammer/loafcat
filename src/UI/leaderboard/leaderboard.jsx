@@ -79,8 +79,8 @@ export const Leaderboard = (props) => {
                 </div>
                 <div className="leaderboardPlayers">
                     {leaderboardData.length &&
-                        leaderboardData.map((prop) => (
-                            <LeaderboardPlayer data={prop}></LeaderboardPlayer>
+                        leaderboardData.map((prop, index) => (
+                            <LeaderboardPlayer key= {index} data={prop}></LeaderboardPlayer>
                         ))}
                 </div>
             </div>

@@ -16,7 +16,6 @@ import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
 import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 import { EventBus } from "../EventBus";
-import { PetStateSystem } from "../systems/StateSystem";
 import { getMyPetData } from "../helpers/requests";
 import {
     showLoadingScreen,
@@ -46,14 +45,13 @@ export class Game extends Scene {
         this.mapInteractionSystem = new MapInteractionSystem(this);
         this.createMap();
 
-        this.pet = new Loafcat(this, 325.5, 277, "loafcat");
-        this.pet.setDepth(1);
+        this.pet = this.createPet();
+        // this.pet.moveRandomly();
         if (this.restarted) this.restartTween();
 
         //this.pet.playCurious();
-        this.pet.moveRandomly();
+
         //this.pet.drinkCoffee();
-        this.petStateSystem = new PetStateSystem(this, this.pet);
         // this.pet.smoke();
         // setTimeout(() => {
         //     this.pet.setStateCatDead();
@@ -120,7 +118,7 @@ export class Game extends Scene {
             this.setState("work");
         });
         EventBus.once("stopWork", () => {
-            this.petStateSystem.actionStopped();
+            this.pet.actionStopped();
         });
 
         hideLoadingScreen();
@@ -193,6 +191,15 @@ export class Game extends Scene {
         this.mapInteractionSystem.addPointingArrows();
     }
 
+    createPet() {
+        const config = {
+            x: 325.5,
+            y: 277,
+            textureKey: "loafcat",
+        };
+        return new Loafcat(this, config).setDepth(1);
+    }
+
     async checkFeedPet(itemData) {
         // TODO : memory leak?
         const petRect = new Phaser.Geom.Rectangle(
@@ -225,7 +232,7 @@ export class Game extends Scene {
     }
 
     setState(state) {
-        this.petStateSystem.setState(state);
+        this.pet.setState(state);
     }
 
     resize() {
@@ -235,14 +242,6 @@ export class Game extends Scene {
             Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
             MAX_HEIGHT
         );
-    }
-
-    handleOpenTween() {
-        if (!this.restarted) {
-            this.openTween();
-        } else {
-            // this.restartTween();
-        }
     }
 
     openTween() {

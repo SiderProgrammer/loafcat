@@ -255,15 +255,16 @@ canvas {
     margin-top: -12px;
 }
 .plus {
-    position: absolute;
-    left: 15px;
+    position: relative;
+    margin-left: 3px;
+    /* left: 15px; */
 }
-/* #alertIcon {
-    visibility: hidden;
+#alertIcon {
+    /* visibility: hidden; */
     position: absolute;
     left: 11px;
     top: 1px;
-} */
+}
 #alertStatsBoard {
     position: absolute;
     z-index: -1;
@@ -520,6 +521,11 @@ canvas {
     transform: scale(0.5);
     border-radius: 14px;
 } 
+.profile-image-container .avatarBorder {
+    position: absolute;
+    top: 43px;
+    left: 43px
+} 
 .profile-image-container .user-id-text {
     position: absolute;
     font-size: 5px;
@@ -549,9 +555,13 @@ canvas {
     text-align: center;
 }
 .stats-container .pet-information-container {
+    background: rgba(255, 255, 255, 0.37);
     position: absolute;
     top: 87px;
     left: -5px;
+    width: 74px;
+    padding-left: 3px;
+    padding-bottom: 3px;
 } 
 .stats-container .pet-information-container span{
     color: black;
@@ -564,6 +574,7 @@ canvas {
     text-align: center;
 } 
 .stats-context .stats-diagrams-container{
+    background: #000000;
     transform: scale(1.5);
     position: relative;
     top: -69px;
@@ -571,11 +582,18 @@ canvas {
     /* height: 0px; */
 } 
 .stats-diagrams-container .stats {
+    background: #00000027;
     display: flex;
     position: absolute;
     top: 0;
-    /* flex-wrap: wrap; */
-    width: 50px;
+    left: -7px;
+    flex-wrap: wrap;
+    width: 116px;
+    height: 60px;
+}
+
+.stats-diagrams-container .stat-container {
+    margin: 2px;
 }
 
 
@@ -657,13 +675,7 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%); 
   }
-  .stats {
-    display: flex;
-    position: absolute;
-    top: 0;
-    flex-wrap: wrap;
-    width: 50px;
-}
+
 
 
 /* 
