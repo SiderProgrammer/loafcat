@@ -1,5 +1,6 @@
 import { HOST } from "../../sharedConstants/constants";
 import { Button } from "../buttons/button";
+import "./CSS/itemShelf.css";;
 
 export const ItemShelf = (props) => {
     props.data.ItemID.item_name = 'apple'
@@ -11,17 +12,15 @@ export const ItemShelf = (props) => {
   
     return (
         <div className="shelf">
-            <img src={HOST+"assets/ui/shop/Board light.png"}></img>
-            <div className="shelfHangBoard">
+            <img className="board-image" src={HOST+"assets/ui/shop/Board light.png"}></img>
+            <div className="price-label">
                 <img src={HOST+"assets/ui/shop/Hanging sign small.png"}></img>
-                <span className="shelfItemPrice">
-                  {props.data.ItemID.Price}
+                <div className="price">
+                    <span className="shelfItemPrice">  {props.data.ItemID.Price}</span>
                     <img src={HOST+"assets/coin.png"}></img>
-                    {/* <span className="closingBracket">)</span> */}
-                </span>
+                </div>
             </div>
-        <Button onClick={showBuyPopUp} className={"shelfItem"} imgPath={"assets/"} buttonIcon={`${props.data.ItemID.item_name}`}></Button>
-       
+            <Button onClick={showBuyPopUp} className={"shelfItem"} imgPath={"assets/"} buttonIcon={`${props.data.ItemID.item_name}`}></Button>
         </div>
     );
 };

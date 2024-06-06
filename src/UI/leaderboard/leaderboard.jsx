@@ -7,6 +7,7 @@ import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
 import { HOST } from "../../sharedConstants/constants";
 import { getLeadersboard } from "../../game/helpers/requests";
+import { FetchLoading } from "../fetchLoading/fetchLoading";
 import gsap from 'gsap';
 export const visibilitySignal = createSignal("hidden");
 
@@ -29,15 +30,12 @@ export const Leaderboard = (props) => {
 
     useEffect( () => {
         const fetchData = async () =>{
-            if (visibilitySignal.value === "visible") {
-                const data = await getLeadersboard()
-                setLeaderboardData(sampleData)
-                //setLeaderboardData(data.data.leadersBoard);
-            }
-
             if(visibilitySignal.value === "visible") {
                 setProfileVisible("visible")
                 openTween()
+                const data = await getLeadersboard()
+                setLeaderboardData(data.data.leadersBoard)
+                // setLeaderboardData(sampleData)
             } else {
                 closeTween()
             }
@@ -70,13 +68,14 @@ export const Leaderboard = (props) => {
                 <Button onClick={closeLeaderboard} className="leaderboardCloseButton" buttonIcon="closeButton" ></Button>
                 <img src={HOST+"assets/ui/leaderboard/Leaderboard.png"}></img>
                 <div className="leaderboardTop">
-                <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
-                <div className="leaderboardLabel">
-                <img src={HOST+"assets/ui/leaderboard/leaderboardLabel.png"}></img>
-                <span>LEADERBOARD</span>
+                    <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
+                    <div className="leaderboardLabel">
+                    <img src={HOST+"assets/ui/leaderboard/leaderboardLabel.png"}></img>
+                    <span>LEADERBOARD</span>
+                    </div>
+                    <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
                 </div>
-                <img src={HOST+"assets/ui/leaderboard/Paw.png"}></img>
-                </div>
+                {leaderboardData.length === 0 && <FetchLoading/>}
                 <div className="leaderboardPlayers">
                     {leaderboardData.length &&
                         leaderboardData.map((prop, index) => (

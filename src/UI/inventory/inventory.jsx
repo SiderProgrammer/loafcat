@@ -8,6 +8,7 @@ import { UserModel } from '../../game/models/UserModel';
 import Draggable from 'react-draggable';
 import { getUserItems } from '../../game/helpers/requests';
 import { HOST } from '../../sharedConstants/constants';
+import { FetchLoading } from "../fetchLoading/fetchLoading";
 import gsap from 'gsap';
 
 export const visibilitySignal = createSignal("hidden");
@@ -34,9 +35,7 @@ export const Inventory = ()=>{
         const fetchData = async () =>{
             if (visibilitySignal.value === "visible") {
               const data = await getUserItems()
-            
-            setInventoryData(data.data)
-             
+              setInventoryData(data.data)
             }
         }
 
@@ -83,6 +82,7 @@ export const Inventory = ()=>{
               <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
               <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
             </div>
+            {inventoryData.length === 0 && <FetchLoading/>}
             <div className="itemSlotsContainer">
                {inventoryData.map((item,i)=>(
             <ItemSlot key={i} onClick={draggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>))}

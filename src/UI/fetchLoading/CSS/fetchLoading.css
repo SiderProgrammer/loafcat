@@ -1,0 +1,10 @@
+.fetch-loading-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.fetch-loading-container .fetch-loading-image{
+    width: 50px;
+}

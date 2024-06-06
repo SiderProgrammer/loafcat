@@ -292,55 +292,16 @@ canvas {
 
 .shelfs {
     position: absolute;
-    top: 100px;
+    top: 118px;
     left: 66px;
     display: flex;
-
     width: 250px;
-    height: 100px;
+    height: 98px;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.shelf {
-    height: 50px;
-    width: 180px;
 
-    flex: 1 0 21%;
-    img {
-        position: absolute;
-    }
-    .shelfHangBoard {
-        margin-top: 18px;
-        font-size: 6px;
-        position: absolute;
-    }
-    .shelfItem {
-        /* margin-left: 20px;
-        margin-top: -5px; */
-        position: absolute;
-        width: 60px;
-        height: 30px;
-        img {
-            left: 20px;
-            top: -5px;
-        }
-    }
-
-    .shelfItemPrice {
-        font-size: 8px;
-        position: absolute;
-        margin-top: 10px;
-        margin-left: 20px;
-        letter-spacing: -1px;
-        img {
-            margin-top: -1px;
-        }
-
-        .closingBracket {
-            margin-left: 6px;
-        }
-    }
-}
 .shopTabs {
     position: absolute;
     top: -10px;
@@ -370,10 +331,13 @@ canvas {
 .shopRefreshButton {
     position: absolute;
     left: 230px;
-    top: 70px;
+    top: 72px;
+}
+.shopRefreshButton .buttonText{
+    top: -20px
 }
 .shopCloseButton {
-    left: 325px;
+    left: 311px;
     top: -5px;
     position: absolute;
 }
@@ -905,6 +869,11 @@ canvas {
     position: relative;
     top: -95px;
 }
+.item-cost-label {
+    position: relative;
+    left: 48px;
+    top: 13px
+}
 
 .buyPopUpBoard {
     top: -100px;
@@ -914,12 +883,17 @@ canvas {
 
 .buyButton {
     position: relative;
-    top: -90px;
+    top: -72px;
+}
+.buyButton .buttonText{
+    top: -21px;
 }
 .buyPopUpPrice {
+    font-size: 12px;
     position: relative;
-    top: -100px;
-    left: -70px;
+    top: -102px;
+    left: -61px;
+    text-align: center;
 }
 
 .buyPopUpItem {
@@ -929,8 +903,9 @@ canvas {
 }
 
 .shopClosePopUpButton {
-    top: 0;
+    top: -12px;
     position: absolute;
+    left: 163px
 }
 
 #swapAmount {
