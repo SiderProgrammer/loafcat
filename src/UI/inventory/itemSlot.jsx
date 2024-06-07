@@ -8,15 +8,15 @@ import { HOST } from "../../sharedConstants/constants";
 export const ItemSlot = (props) => {
     const [isDragging,setDrag] = useState(false)
     const [itemVisible, setItemVisibility] = useState("hidden")
+
     const onClick = ()=>{
         //props.onDragStart()
        // closeInventory()
+       if(props.onClick === false) return
        props.onClick()
        EventBus.emit("itemGrab",props)
-
        // TODO : need to update item inventory data
        EventBus.once("itemDrop",props.openInventory)
-
     }
     const onDragEnd = async ()=>{
         // TODO : finish item drop
@@ -24,25 +24,22 @@ export const ItemSlot = (props) => {
         //props.data
         openInventory(true)
     }
+
     useEffect(()=>{
-        if(    isDragging || visibilitySignal.value ==='visible') {
+        if(isDragging || visibilitySignal.value ==='visible') {
             setItemVisibility("visible")   
         } else {
             setItemVisibility("hidden")   
         }
-       
     },[isDragging, visibilitySignal.value])
 
     return (
-      
         <div className="itemSlot">
             <img draggable={false} src={HOST+"assets/ui/inventory/itemSlot.png"}></img>
-
-
             <img onPointerDown={onClick} draggable={false} className={`inventoryItem ${isDragging && "grabCursor"}`}style={{visibility:itemVisible}} src={`${HOST}assets/${props.item}.png`}></img>
-  
-         
-            <span>{props.quantity}</span>
+            <div className="count-text-container">
+                <span className="count"> {props.quantity}</span>
+            </div>
         </div>
     );
 };

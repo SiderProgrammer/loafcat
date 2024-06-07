@@ -10,15 +10,13 @@ import { getUserItems } from '../../game/helpers/requests';
 import { HOST } from '../../sharedConstants/constants';
 import { FetchLoading } from "../fetchLoading/fetchLoading";
 import gsap from 'gsap';
-
 export const visibilitySignal = createSignal("hidden");
-
 let draggable = false
 
 export const openInventory = (itemsDraggable = false) => {
     draggable = itemsDraggable
-        visibilitySignal.value = "visible"
-        showOverlay()
+    visibilitySignal.value = "visible"
+    showOverlay()
   };
   export const closeInventory = () => {
     visibilitySignal.value = "hidden"
@@ -32,9 +30,156 @@ export const Inventory = ()=>{
         const [profileVisible, setProfileVisible] = useState("hidden");
         const inventoryRef = useRef(null);
 
+        const dupa = [
+          {
+              "id": 18,
+              "index": 1,
+              "quantity": 2,
+              "itemDetails": {
+                  "ItemID": 118,
+                  "name": "Apple",
+                  "description": "A fruity helmet for brainy pets. Increases wisdom with a crisp bite.",
+                  "pointValue": 10,
+                  "price": 5,
+                  "category": "food"
+              }
+          },
+          {
+              "id": 19,
+              "index": 1,
+              "quantity": 79,
+              "itemDetails": {
+                  "ItemID": 113,
+                  "name": "Water",
+                  "description": "Clear and pure, a thirst's sure cure, water's a drink that pets adore.",
+                  "pointValue": 4,
+                  "price": 2,
+                  "category": "liquid"
+              }
+          },
+          {
+              "id": 20,
+              "index": 1,
+              "quantity": 5,
+              "itemDetails": {
+                  "ItemID": 134,
+                  "name": "Burrito",
+                  "description": "A rolled-up fiesta of flavor, perfect for siesta after.",
+                  "pointValue": 12,
+                  "price": 6,
+                  "category": "food"
+              }
+          },
+          {
+              "id": 22,
+              "index": 1,
+              "quantity": 2,
+              "itemDetails": {
+                  "ItemID": 270,
+                  "name": "Radio",
+                  "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+                  "pointValue": 8,
+                  "price": 4,
+                  "category": "Electronics"
+              }
+          },
+          {
+            "id": 22,
+            "index": 1,
+            "quantity": 2,
+            "itemDetails": {
+                "ItemID": 270,
+                "name": "Radio",
+                "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+                "pointValue": 8,
+                "price": 4,
+                "category": "Electronics"
+            }
+        },
+        {
+          "id": 22,
+          "index": 1,
+          "quantity": 2,
+          "itemDetails": {
+              "ItemID": 270,
+              "name": "Radio",
+              "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+              "pointValue": 8,
+              "price": 4,
+              "category": "Electronics"
+          }
+      },
+      {
+        "id": 22,
+        "index": 1,
+        "quantity": 2,
+        "itemDetails": {
+            "ItemID": 270,
+            "name": "Radio",
+            "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+            "pointValue": 8,
+            "price": 4,
+            "category": "Electronics"
+        }
+    },
+    {
+      "id": 22,
+      "index": 1,
+      "quantity": 2,
+      "itemDetails": {
+          "ItemID": 270,
+          "name": "Radio",
+          "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+          "pointValue": 8,
+          "price": 4,
+          "category": "Electronics"
+      }
+  },
+  {
+    "id": 22,
+    "index": 1,
+    "quantity": 2,
+    "itemDetails": {
+        "ItemID": 270,
+        "name": "Radio",
+        "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+        "pointValue": 8,
+        "price": 4,
+        "category": "Electronics"
+    }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+}
+      ]
+
         const fetchData = async () =>{
             if (visibilitySignal.value === "visible") {
               const data = await getUserItems()
+              // setInventoryData(dupa)
               setInventoryData(data.data)
             }
         }
@@ -84,8 +229,8 @@ export const Inventory = ()=>{
             </div>
             {inventoryData.length === 0 && <FetchLoading/>}
             <div className="itemSlotsContainer">
-               {inventoryData.map((item,i)=>(
-            <ItemSlot key={i} onClick={draggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>))}
+            {inventoryData.map((item,i)=>(
+              <ItemSlot key={i} onClick={draggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>))}
           </div>
         </div>
     </div>

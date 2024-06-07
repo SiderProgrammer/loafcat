@@ -161,6 +161,7 @@ export const Shop = () => {
                         <img className={"buyPopUpShelf"} src={HOST+"assets/ui/shop/Board light.png"}></img>
                         <img className={"buyPopUpItem"} src={HOST+"assets/" + itemPopUpData.data.ItemID.item_name +".png"}></img>
                         <img className={"buyPopUpBoard"} src={HOST+"assets/ui/shop/Description Box Mini.png"}></img>
+                        <span className="item-describe">{itemPopUpData.data.ItemID.Description } </span>
                         <div className="item-cost-label">
                             <img className="buyPopUpPriceBoard" src={HOST+"assets/ui/linkPet/nameInput.png"}></img>
                             <span className="buyPopUpPrice">{itemPopUpData.data.ItemID.Price} 
