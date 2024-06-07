@@ -255,15 +255,16 @@ canvas {
     margin-top: -12px;
 }
 .plus {
-    position: absolute;
-    left: 15px;
+    position: relative;
+    margin-left: 3px;
+    /* left: 15px; */
 }
-/* #alertIcon {
-    visibility: hidden;
+#alertIcon {
+    /* visibility: hidden; */
     position: absolute;
     left: 11px;
     top: 1px;
-} */
+}
 #alertStatsBoard {
     position: absolute;
     z-index: -1;
@@ -291,55 +292,16 @@ canvas {
 
 .shelfs {
     position: absolute;
-    top: 100px;
+    top: 118px;
     left: 66px;
     display: flex;
-
     width: 250px;
-    height: 100px;
+    height: 98px;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
-.shelf {
-    height: 50px;
-    width: 180px;
 
-    flex: 1 0 21%;
-    img {
-        position: absolute;
-    }
-    .shelfHangBoard {
-        margin-top: 18px;
-        font-size: 6px;
-        position: absolute;
-    }
-    .shelfItem {
-        /* margin-left: 20px;
-        margin-top: -5px; */
-        position: absolute;
-        width: 60px;
-        height: 30px;
-        img {
-            left: 20px;
-            top: -5px;
-        }
-    }
-
-    .shelfItemPrice {
-        font-size: 8px;
-        position: absolute;
-        margin-top: 10px;
-        margin-left: 20px;
-        letter-spacing: -1px;
-        img {
-            margin-top: -1px;
-        }
-
-        .closingBracket {
-            margin-left: 6px;
-        }
-    }
-}
 .shopTabs {
     position: absolute;
     top: -10px;
@@ -369,10 +331,13 @@ canvas {
 .shopRefreshButton {
     position: absolute;
     left: 230px;
-    top: 70px;
+    top: 72px;
+}
+.shopRefreshButton .buttonText{
+    top: -20px
 }
 .shopCloseButton {
-    left: 325px;
+    left: 311px;
     top: -5px;
     position: absolute;
 }
@@ -392,26 +357,46 @@ canvas {
 .itemSlotsContainer {
     position: absolute;
     overflow-y: scroll;
-    top: 41px;
-    left: 15px;
+    top: 32px;
+    left: 16px;
     display: flex;
-    width: 235px;
-    height: 150px;
+    width: 231px;
+    height: 159px;
     flex-wrap: wrap;
     pointer-events: all;
+    /* justify-content: space-between; */
+    align-content: baseline;
+    padding-right: 1px
+    /* padding: 5px; */;
 }
 .itemSlot {
-    width: 41px;
-    height: 41px;
-    span {
-        position: relative;
-        top: -32px;
-        left: 19px;
-        font-size: 8px;
-        letter-spacing: -1px;
-        color: black;
-    }
+    width: 38px;
+    height: 38px;
+    margin: 3px;
+    transition: transform 0.3s ease;
 }
+.itemSlot .count{
+    /* position: relative;
+    top: -23px;
+    left: 3px;
+    font-size: 8px;
+    letter-spacing: -1px;
+    color: black; */
+}
+.itemSlot .count-text-container {
+    position: relative;
+    top: -28px;
+    left: 3px;
+    font-size: 7px;
+    letter-spacing: -1px;
+    color: black;
+    width: 32px;
+    height: 7px;
+    display: flex;
+    justify-content: end;
+    align-content: baseline;
+}
+
 
 .itemSlot:hover {
     transform: scale(1.05);
@@ -423,11 +408,9 @@ canvas {
 
 .inventoryItem {
     position: relative;
-
-    top: -37px;
-    left: 22px;
+    top: -29px;
+    left: 10px;
 }
-
 .inventoryCloseButton {
     position: absolute;
     left: 140px;
@@ -520,6 +503,11 @@ canvas {
     transform: scale(0.5);
     border-radius: 14px;
 } 
+.profile-image-container .avatarBorder {
+    position: absolute;
+    top: 43px;
+    left: 43px
+} 
 .profile-image-container .user-id-text {
     position: absolute;
     font-size: 5px;
@@ -549,9 +537,13 @@ canvas {
     text-align: center;
 }
 .stats-container .pet-information-container {
+    background: rgba(255, 255, 255, 0.37);
     position: absolute;
     top: 87px;
     left: -5px;
+    width: 74px;
+    padding-left: 3px;
+    padding-bottom: 3px;
 } 
 .stats-container .pet-information-container span{
     color: black;
@@ -564,6 +556,7 @@ canvas {
     text-align: center;
 } 
 .stats-context .stats-diagrams-container{
+    background: #000000;
     transform: scale(1.5);
     position: relative;
     top: -69px;
@@ -571,11 +564,18 @@ canvas {
     /* height: 0px; */
 } 
 .stats-diagrams-container .stats {
+    background: #00000027;
     display: flex;
     position: absolute;
     top: 0;
-    /* flex-wrap: wrap; */
-    width: 50px;
+    left: -7px;
+    flex-wrap: wrap;
+    width: 116px;
+    height: 60px;
+}
+
+.stats-diagrams-container .stat-container {
+    margin: 2px;
 }
 
 
@@ -657,13 +657,7 @@ canvas {
     left: 50%;
     transform: translate(-50%, -50%); 
   }
-  .stats {
-    display: flex;
-    position: absolute;
-    top: 0;
-    flex-wrap: wrap;
-    width: 50px;
-}
+
 
 
 /* 
@@ -883,6 +877,16 @@ canvas {
     }
     flex-direction: column;
 }
+.itemBuyContent .item-describe {
+    position: absolute;
+    font-size: 4px;
+    color: black;
+    top: 70px;
+    left: 70px;
+    width: 57px;
+    height: 33px;
+    line-height: 6px;
+}
 
 .buyPopUpShelf {
     position: relative;
@@ -893,6 +897,11 @@ canvas {
     position: relative;
     top: -95px;
 }
+.item-cost-label {
+    position: relative;
+    left: 48px;
+    top: 13px
+}
 
 .buyPopUpBoard {
     top: -100px;
@@ -902,12 +911,17 @@ canvas {
 
 .buyButton {
     position: relative;
-    top: -90px;
+    top: -72px;
+}
+.buyButton .buttonText{
+    top: -21px;
 }
 .buyPopUpPrice {
+    font-size: 12px;
     position: relative;
-    top: -100px;
-    left: -70px;
+    top: -102px;
+    left: -61px;
+    text-align: center;
 }
 
 .buyPopUpItem {
@@ -917,8 +931,9 @@ canvas {
 }
 
 .shopClosePopUpButton {
-    top: 0;
+    top: -12px;
     position: absolute;
+    left: 163px
 }
 
 #swapAmount {

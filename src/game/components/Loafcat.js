@@ -258,9 +258,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         //   .setDepth(3);
         // TODO : refactor it
         return new Promise((resolve) => {
-            this.scene.input.setDefaultCursor(
-                'url("./assets/soapImage.png"), pointer'
-            );
+            this.scene.setSoapCursor();
             this.scene.map.getLayer("Bath").tilemapLayer.setDepth(2);
             // this.pet.setState("bath");
 
@@ -328,9 +326,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
 
     stopBathAction() {
-        this.scene.input.setDefaultCursor(
-            'url("./assets/pointer.png"), pointer'
-        );
+        this.scene.setIdleCursor();
         this.setBaseY();
         // this.pet.moveRandomly();
         this.setState("idle");

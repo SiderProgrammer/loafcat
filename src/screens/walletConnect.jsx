@@ -34,7 +34,7 @@ export const WalletConnect = React.forwardRef((props, ref) => {
         {/* <div>
             Connect your wallet to continue!
         </div> */}
-        <Button className={"connectWalletButton"} path={"." + navigatePrefixURL + "/"} onClick={props.connectWalletClicked} buttonIcon={"connectWallet"} text={"Connect Wallet"} ref={buttonRef} ></Button>
+        <Button className={"connectWalletButton"} hostURLPrefix={false} onClick={props.connectWalletClicked} buttonIcon={"connectWallet"} text={"Connect Wallet"} ref={buttonRef} ></Button>
     </div>
     )
 })

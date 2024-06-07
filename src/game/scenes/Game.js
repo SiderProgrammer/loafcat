@@ -21,6 +21,7 @@ import {
     showLoadingScreen,
     hideLoadingScreen,
 } from "../../UI/loadingScreen/loadingScreen";
+import { HOST } from "../../sharedConstants/constants";
 
 export class Game extends Scene {
     constructor() {
@@ -29,7 +30,7 @@ export class Game extends Scene {
 
     async create({ map, restarted = false }) {
         this.restarted = restarted;
-        this.input.setDefaultCursor('url("/assets/pointer.png"), pointer');
+        this.setIdleCursor();
         // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
         // this.scale.refresh();
         if (!this.restarted) this.sound.add("theme").play({ loop: true });
@@ -74,7 +75,7 @@ export class Game extends Scene {
 
         this.input.on("pointerup", async () => {
             if (!this.itemInUse) return;
-            this.input.setDefaultCursor('url("./assets/pointer.png"), pointer');
+            this.setIdleCursor();
             this.itemInUse.destroy();
             const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
 
@@ -93,9 +94,7 @@ export class Game extends Scene {
                 // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
                 // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
 
-                this.input.setDefaultCursor(
-                    'url("./assets/pointerHold.png"), pointer'
-                );
+                this.setGrabCursor();
                 this.pet.setState("feed");
                 this.itemInUse = GameModel.MAIN_SCENE.add
                     .image(
@@ -143,6 +142,24 @@ export class Game extends Scene {
         //         alpha: { from: 0.1, to: 1 },
         //     });
         // });
+    }
+
+    setIdleCursor() {
+        this.input.setDefaultCursor(
+            `url("${HOST}assets/pointer.png"), pointer`
+        );
+    }
+
+    setGrabCursor() {
+        this.input.setDefaultCursor(
+            `url("${HOST}assets/pointerHold.png"), pointer`
+        );
+    }
+
+    setSoapCursor() {
+        this.scene.input.setDefaultCursor(
+            `url("${HOST}assets/soapImage.png"), pointer`
+        );
     }
 
     update() {

@@ -5,7 +5,6 @@ import { UserModel } from "../../game/models/UserModel";
 import { PetModel } from "../../game/models/PetModel";
 import { HOST } from "../../sharedConstants/constants";
 import gsap from 'gsap';
-import profileFramePNG from '../../../public/assets/ui/profileView/avatarFrame.png'
 
 export const ProfileSection = () =>{
     const [petData,setPetData] = useState(PetModel.PET_DATA)
