@@ -3,12 +3,14 @@ import { UserModel } from "../models/UserModel";
 import { openInventory } from "../../UI/inventory/inventory";
 import { openShop } from "../../UI/shop/shop";
 import { openWorkPopUp } from "../../UI/work/WorkPopUp";
+import { HOST } from "../../sharedConstants/constants";
 
 export class MapInteractionSystem {
     constructor(scene) {
         this.scene = scene;
         this.canInteract = true;
         this.zones = [];
+        this.cursorUrl = `${HOST}assets/pointerPoint.png`;
     }
     addInteractiveZones() {
         const zones = this.scene.map.getObjectLayer("interactive");
@@ -17,7 +19,7 @@ export class MapInteractionSystem {
             const zone = this.scene.add
                 .zone(area.x, area.y, area.width, area.height)
                 .setInteractive({
-                    cursor: 'url("./assets/pointerPoint.png"), pointer',
+                    cursor: `url(${this.cursorUrl}), pointer`,
                 })
                 .setOrigin(0, 0);
 
@@ -35,7 +37,7 @@ export class MapInteractionSystem {
     setAllInteractive() {
         this.zones.forEach((zone) => {
             zone.setInteractive({
-                cursor: 'url("./assets/pointerPoint.png"), pointer',
+                cursor: `url(${this.cursorUrl}), pointer`,
             });
             zone.arrow.setVisible(true);
         });
@@ -96,7 +98,6 @@ export class MapInteractionSystem {
             case "bed":
                 this.scene.setState("bed");
                 break;
-
             case "work":
                 openWorkPopUp();
                 break;

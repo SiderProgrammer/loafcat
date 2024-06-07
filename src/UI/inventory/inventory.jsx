@@ -173,7 +173,84 @@ export const Inventory = ()=>{
       "price": 4,
       "category": "Electronics"
   }
-}
+},{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
+{
+  "id": 22,
+  "index": 1,
+  "quantity": 2,
+  "itemDetails": {
+      "ItemID": 270,
+      "name": "Radio",
+      "description": "For jamming out to 'Who Let the Dogs Out' on repeat.",
+      "pointValue": 8,
+      "price": 4,
+      "category": "Electronics"
+  }
+},
       ]
 
         const fetchData = async () =>{
@@ -221,11 +298,11 @@ export const Inventory = ()=>{
             <Button onClick={closeInventory} className="inventoryCloseButton" buttonIcon="closeButton" ></Button>
             <img src={HOST+"assets/ui/inventory/inventoryFrame.png"}></img>
             <div className="inventoryTabs">
+              {/* <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
               <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
               <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
               <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
-              <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
-              <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img>
+              <img src={HOST+"assets/ui/inventory/inventoryTab.png"}></img> */}
             </div>
             {inventoryData.length === 0 && <FetchLoading/>}
             <div className="itemSlotsContainer">
