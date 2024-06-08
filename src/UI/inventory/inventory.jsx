@@ -11,10 +11,13 @@ import { HOST } from '../../sharedConstants/constants';
 import { FetchLoading } from "../fetchLoading/fetchLoading";
 import gsap from 'gsap';
 export const visibilitySignal = createSignal("hidden");
-let draggable = false
+export const draggableSignal = createSignal(false);
+
+// let draggable = false
 
 export const openInventory = (itemsDraggable = false) => {
-    draggable = itemsDraggable
+    // draggable = itemsDraggable
+    draggableSignal.value = itemsDraggable
     visibilitySignal.value = "visible"
     showOverlay()
   };
@@ -28,6 +31,7 @@ export const Inventory = ()=>{
         const [inventoryData, setInventoryData] = useState([]);
         const [itemDraggable, setItemDraggable] = useState(false);
         const [profileVisible, setProfileVisible] = useState("hidden");
+        const [isDraggable, setIsDraggable] = useState(false);
         const inventoryRef = useRef(null);
 
         const dupa = [
@@ -272,9 +276,10 @@ export const Inventory = ()=>{
         }, [visibilitySignal.value]);
 
         useEffect( () => {
-          setItemDraggable(draggable)
+          setItemDraggable(draggableSignal.value)
+          setIsDraggable(draggableSignal.value)
           return () => {};
-      }, [draggable]);
+      }, [draggableSignal.value]);
 
       const openTween = () => {
         gsap.fromTo(
@@ -307,7 +312,7 @@ export const Inventory = ()=>{
             {inventoryData.length === 0 && <FetchLoading/>}
             <div className="itemSlotsContainer">
             {inventoryData.map((item,i)=>(
-              <ItemSlot key={i} onClick={draggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>))}
+              <ItemSlot key={i} onClick={isDraggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>))}
           </div>
         </div>
     </div>

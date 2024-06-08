@@ -333,6 +333,10 @@ canvas {
     left: 230px;
     top: 72px;
 }
+.shopRefreshButton .button-wrapper{
+    width: 84px;
+    height: 24px;
+}
 .shopRefreshButton .buttonText{
     top: -20px
 }

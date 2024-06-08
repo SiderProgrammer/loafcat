@@ -67,8 +67,8 @@ export const ProfileSection = () =>{
             <img id="alertBox" src={HOST+"assets/ui/profileView/alertBox1.png"}></img>
             <img id="alertIcon" src={HOST+"assets/alertIcon.png"} />
             <img id="alertArrow" src={HOST+"assets/ui/profileView/alertArrowDown.png"}></img>
-        </button>
-        {areStatsVisible && <div className="dropdown-content"  ref={statsContentRef}>
+            </button>
+            {areStatsVisible && <div className="dropdown-content"  ref={statsContentRef}>
             {/* // TODO : sort by lowest value to highest? */}
             <Stats petData={petData}></Stats>
         </div> }

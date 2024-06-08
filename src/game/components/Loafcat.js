@@ -29,7 +29,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         // .play("idle");
     }
 
-    async setState(state) {
+    async setState(state, value) {
         // this.moveTween && this.moveTween.pause();
         if (this.moveTween) this.moveTween.pause();
 
@@ -43,7 +43,11 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                 this.setStateCatWalk();
                 break;
             case "feed":
+                console.log("FEEEEDDD");
                 await this.setStateCatFeed();
+                break;
+            case "eat":
+                await this.eat(value);
                 break;
             case "bath":
                 // this.stateSystem.setState(state);
@@ -157,9 +161,10 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         await Async.delay(3000);
     }
 
-    setStateCatFeed() {
+    async setStateCatFeed() {
         this.setStateCatIdle();
         this.character.play("feed-me");
+        await Async.delay(3000);
     }
     setStateCatWalk() {
         this.character.play("walk");
@@ -181,7 +186,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         await Async.delay(3000);
     }
 
-    async feed(feedValue) {
+    async eat(feedValue) {
         this.character.play("eat");
         await Async.delay(2000);
         // should be only when food is not liquid
@@ -242,11 +247,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         // this.swap(this.peeSprite, this.character);
     }
 
-    setStateBathing() {
+    async setStateBathing() {
         this.handlePlayEffect("bathing", "soap", "soap-idle");
+        await this.bathAction();
     }
 
-    bathAction() {
+    async bathAction() {
         this.x = 369;
         this.y = 272;
         // this.itemInUse = this.add

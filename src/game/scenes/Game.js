@@ -79,7 +79,7 @@ export class Game extends Scene {
             this.itemInUse.destroy();
             const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
 
-            this.pet.setState("walk");
+            // this.pet.setState("walk");
 
             EventBus.emit("itemDrop");
             //callback();
@@ -95,7 +95,7 @@ export class Game extends Scene {
                 // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
 
                 this.setGrabCursor();
-                this.pet.setState("feed");
+                // this.pet.setState("feed");
                 this.itemInUse = GameModel.MAIN_SCENE.add
                     .image(
                         this.input.activePointer.worldX,
@@ -157,7 +157,7 @@ export class Game extends Scene {
     }
 
     setSoapCursor() {
-        this.scene.input.setDefaultCursor(
+        this.input.setDefaultCursor(
             `url("${HOST}assets/soapImage.png"), pointer`
         );
     }
@@ -239,8 +239,7 @@ export class Game extends Scene {
             HungerLevel: PetModel.PET_DATA.HungerLevel + 15,
         });
         // this.alertSystem.updateAlerts();
-        await this.pet.feed(1); // itemData.itemDetails.pointValue
-
+        await this.pet.setState("eat", 1); // itemData.itemDetails.pointValue
         return true;
     }
 

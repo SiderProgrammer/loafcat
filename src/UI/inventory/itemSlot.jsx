@@ -16,14 +16,14 @@ export const ItemSlot = (props) => {
        props.onClick()
        EventBus.emit("itemGrab",props)
        // TODO : need to update item inventory data
-       EventBus.once("itemDrop",props.openInventory)
+       EventBus.once("itemDrop",()=>props.openInventory(true))
     }
-    const onDragEnd = async ()=>{
-        // TODO : finish item drop
-        EventBus.emit("itemDrop")
-        //props.data
-        openInventory(true)
-    }
+    // const onDragEnd = async ()=>{
+    //     // TODO : finish item drop
+    //     EventBus.emit("itemDrop")
+    //     //props.data
+    //     openInventory(true)
+    // }
 
     useEffect(()=>{
         if(isDragging || visibilitySignal.value ==='visible') {
