@@ -426,6 +426,21 @@ canvas {
     left: 235px;
     top: -13px;
 }
+.itemSlot .description-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    width: 60px;
+    height: 60px;
+    position: relative;
+    top: -62px;
+    left: 34px;
+    padding: 5px;
+    z-index: 1;
+}
+.description-container .description{
+    font-size: 5px;
+    color: white;
+}
 
 .popup {
     z-index: 1;
@@ -576,10 +591,26 @@ canvas {
     flex-wrap: wrap;
     width: 116px;
     height: 60px;
+    justify-content: space-between;
+}
+
+.stats .bigger-stats {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stats .smaller-stats {
+    width: 65%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    /* align-content: center; */
 }
 
 .stats-diagrams-container .stat-container {
-    margin: 2px;
+    margin: 3px;
 }
 
 

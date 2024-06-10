@@ -262,6 +262,8 @@ export const Inventory = ()=>{
               const data = await getUserItems()
               // setInventoryData(dupa)
               setInventoryData(data.data)
+
+              console.log(data.data)
             }
         }
 
@@ -312,7 +314,7 @@ export const Inventory = ()=>{
             {inventoryData.length === 0 && <FetchLoading/>}
             <div className="itemSlotsContainer">
             {inventoryData.map((item,i)=>(
-              <ItemSlot key={i} onClick={isDraggable && closeInventory} openInventory={openInventory} item="apple" quantity={item.quantity} data={item}></ItemSlot>))}
+              <ItemSlot key={i} onClick={isDraggable && closeInventory} openInventory={openInventory} data={item}></ItemSlot>))}
           </div>
         </div>
     </div>
