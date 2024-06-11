@@ -27,6 +27,9 @@ export class MapInteractionSystem {
 
             zone.on("pointerdown", () => {
                 // TODO : also should block some of UI
+                this.scene.input.setDefaultCursor(
+                    `url("${HOST}assets/pointer.png"), pointer`
+                );
                 this.disableAll();
 
                 this.startInteraction(area.name);

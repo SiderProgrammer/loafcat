@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef, useEffect } from "react";
 import { Button } from "../UI/buttons/button";
 import { UserModel } from "../game/models/UserModel";
 import { WalletConnect } from "./walletConnect";
@@ -9,14 +9,17 @@ import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
 import { GameModel } from "../game/models/GameModel";
 import { navigatePrefixURL } from "../sharedConstants/constants"
 import { showLoadingScreen, hideLoadingScreen } from '../UI/loadingScreen/loadingScreen';
+import { HOST } from "../sharedConstants/constants";
 import gsap from 'gsap';
 
 export const PreGameScreen = (props) => {
     const [isWalletConnected, setWalletConnect] = useState(false);
     const [isButtonBlocked, setIsButtonBlocked] = useState(true);
+    const [isCorrectIconVisible, setIsCorrectIconVisible] = useState("hidden");
     // const [backgroundOpenTween, setBackgroundOpenTween] = useState(false);
     const preGameScreenRef = useRef(null);
     const walletRef = useRef(null);
+    const correctIconRef = useRef(null);
     const navigate = useNavigate();
 
     useLayoutEffect(() => {
@@ -58,7 +61,10 @@ export const PreGameScreen = (props) => {
         if (window.solana && window.solana.publicKey) {
             UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
             setWalletConnect(true);
+            setIsCorrectIconVisible("visible")
             setIsButtonBlocked(true)
+            await openCorrectIcon()
+            closeCorrectIcon()
             // EventBus.emit("startPreloader")
              walletRef.current.closeTween()
             await closeBackgroundTween()
@@ -66,9 +72,29 @@ export const PreGameScreen = (props) => {
         }
     };
 
-    const closeBackgroundTween = async ()=>{
-        // backgroundOpenTween.pause()
+    // useEffect(() => {
+    //     gsap.fromTo(
+    //         correctIconRef.current,
+    //         { scale: 1 },
+    //         { scale: 0, ease: "back.in", duration: 0.8})
 
+    // }, [isWalletConnected]);
+
+    const openCorrectIcon = async  () => {
+        await  gsap.fromTo(
+            correctIconRef.current,
+            { scale: 0 },
+            { scale: 0.05, ease: "back.out", duration: 0.8})
+    }
+
+    const closeCorrectIcon = async  () => {
+        await  gsap.fromTo(
+            correctIconRef.current,
+            { scale: 0.05 },
+            { scale: 0, ease: "back.in", duration: 0.5})
+    }
+
+    const closeBackgroundTween = async ()=>{
        await gsap.fromTo(
             preGameScreenRef.current,
             { scale: 1 },
@@ -76,14 +102,10 @@ export const PreGameScreen = (props) => {
     }
 
     return (
-        <div
-            className="UIContainer preGameScreenContainer" 
-            // style={{ height: props.height, width: props.width}}
-        >
+        <div className="UIContainer preGameScreenContainer" >
          <div className="UIContainer pre-game-background"  ref={preGameScreenRef} />
-
-                <WalletConnect connectWalletClicked={isButtonBlocked ? "" : connectWalletClicked} ref={walletRef}/>
-
+            <WalletConnect connectWalletClicked={isButtonBlocked ? "" : connectWalletClicked} ref={walletRef}/>
+            <img className= "UIContainer correct-icon" src={HOST +"assets/correct_icon.png"}  style={{visibility: isCorrectIconVisible}} ref={correctIconRef}></img>
         </div>
     );
 };

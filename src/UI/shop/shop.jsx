@@ -3,7 +3,9 @@ import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { Button } from "../buttons/button";
 import { FetchLoading } from "../fetchLoading/fetchLoading";
 import { ItemShelf } from "./itemShelf";
+import { Timestamp } from "./timestamp/Timestamp";
 import { createSignal } from "react-use-signals";
+import { EventBus } from "../../game/EventBus";
 import axios from "axios";
 import { UserModel } from "../../game/models/UserModel";
 import { HOST } from "../../sharedConstants/constants";
@@ -25,7 +27,6 @@ export const Shop = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
     const [shopData, setShopData] = useState([]);
     const [itemPopUpData, setItemPopUpData] = useState({});
-    const [shopTimestampText, setShopTimestampText] = useState("21:37:59");
     const [refreshCost, setRefreshCost] = useState(300);
     const [profileVisible, setProfileVisible] = useState("hidden");
     const [isItemBuyPopUp, setIsItemBuyPopUp] = useState(false);
@@ -52,12 +53,14 @@ export const Shop = () => {
         await buyItem(data.ItemID.id)
       const newItems = await getDailyItems()
       setShopData(newItems.data)
+
   };
 
     const fetchData = async () => {
         if (visibilitySignal.value === "visible") {
             const newItems = await getDailyItems()
             setShopData(newItems.data);
+            console.log(newItems)
         }
     };
 
@@ -118,6 +121,7 @@ export const Shop = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
+                EventBus.emit("handleMapInteraction",true)
             } })
     }
 
@@ -143,7 +147,7 @@ export const Shop = () => {
                     </div> */}
                     <div className="shopTimeTab">
                         <img src={HOST+"assets/ui/shop/Time stamp Tab.png"}></img>
-                        <div className="shopTimestampText">REFRESH IN: {shopTimestampText}</div>
+                        <Timestamp/>
                     </div>
                 </div>
                 <div className="shelfs">

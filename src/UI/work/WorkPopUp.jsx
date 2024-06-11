@@ -63,7 +63,7 @@ export const WorkPopUp = () => {
 
 
     return (
-            <div className={"work-popup popup ui"} style={{ visibility: workPopupVisible }}>
+            <div className={"work-popup popup ui center"} style={{ visibility: workPopupVisible }}>
                 <div className="work-popup-wrapper"  ref={workPopupRef} >
                     <img style={{ transform: "scale(1.5)" }} src={HOST+"assets/ui/linkPet/linkPetBoard.png"}></img>
                     <div className={"coinBuyMainContainer"}>

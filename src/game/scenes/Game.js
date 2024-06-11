@@ -119,6 +119,9 @@ export class Game extends Scene {
         EventBus.once("stopWork", () => {
             this.pet.actionStopped();
         });
+        EventBus.on("handleMapInteraction", (value) => {
+            if (value) this.mapInteractionSystem.setAllInteractive();
+        });
 
         hideLoadingScreen();
         if (!this.restarted) this.openTween();

@@ -3,6 +3,7 @@ import { ItemSlot } from './itemSlot';
 import { Button } from '../buttons/button';
 import { hideOverlay, showOverlay } from '../blackOverlay/blackOverlay';
 import { useEffect, useState, useRef } from 'react';
+import { EventBus } from "../../game/EventBus";
 import axios from 'axios';
 import { UserModel } from '../../game/models/UserModel';
 import Draggable from 'react-draggable';
@@ -12,7 +13,6 @@ import { FetchLoading } from "../fetchLoading/fetchLoading";
 import gsap from 'gsap';
 export const visibilitySignal = createSignal("hidden");
 export const draggableSignal = createSignal(false);
-
 // let draggable = false
 
 export const openInventory = (itemsDraggable = false) => {
@@ -24,6 +24,7 @@ export const openInventory = (itemsDraggable = false) => {
   export const closeInventory = () => {
     visibilitySignal.value = "hidden"
     hideOverlay() 
+    EventBus.emit("handleMapInteraction",true)
   };
  
 export const Inventory = ()=>{
@@ -32,7 +33,10 @@ export const Inventory = ()=>{
         const [itemDraggable, setItemDraggable] = useState(false);
         const [profileVisible, setProfileVisible] = useState("hidden");
         const [isDraggable, setIsDraggable] = useState(false);
+        const [isItemDescriptionHovered, setIsItemDescriptionHovered] = useState("hidden");
         const inventoryRef = useRef(null);
+        const itemDescriptionRef = useRef(null);
+
 
         const dupa = [
           {
@@ -262,10 +266,16 @@ export const Inventory = ()=>{
               const data = await getUserItems()
               // setInventoryData(dupa)
               setInventoryData(data.data)
-
               console.log(data.data)
             }
         }
+
+        const handleItemDescribeVisible = (value, itemData) => {
+          value ? setIsItemDescriptionHovered("visible") : setIsItemDescriptionHovered("hidden")
+          if(!value) return
+          itemDescriptionRef.current.textContent = itemData.itemDetails.description; 
+        }
+
 
         useEffect( () => {
             fetchData()
@@ -314,7 +324,10 @@ export const Inventory = ()=>{
             {inventoryData.length === 0 && <FetchLoading/>}
             <div className="itemSlotsContainer">
             {inventoryData.map((item,i)=>(
-              <ItemSlot key={i} onClick={isDraggable && closeInventory} openInventory={openInventory} data={item}></ItemSlot>))}
+              <ItemSlot key={i} onClick={isDraggable && closeInventory} onHover={handleItemDescribeVisible} openInventory={openInventory} data={item}></ItemSlot>))}
+          </div>
+          <div className="item-description-container" style={{ visibility: isItemDescriptionHovered}}>
+            <span className="description-text" ref={itemDescriptionRef} ></span>
           </div>
         </div>
     </div>
@@ -322,3 +335,6 @@ export const Inventory = ()=>{
     
     
 }
+
+
+

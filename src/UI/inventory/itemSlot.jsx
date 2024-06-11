@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { closeInventory, openInventory } from "./inventory";
 import { visibilitySignal } from "./inventory";
 import { EventBus } from "../../game/EventBus";
@@ -11,6 +11,7 @@ export const ItemSlot = (props) => {
     // const [itemVisible, setItemVisibility] = useState("hidden")
     const [isHovered, setHovered] = useState(false);
     const [isClicked, setClicked] = useState(false);
+    const itemSlotRef = useRef(null);
 
     const onClick = ()=>{
         //props.onDragStart()
@@ -24,13 +25,17 @@ export const ItemSlot = (props) => {
     }
 
     const onMouseEnter = () => {
-        setHovered(true);
+        // setHovered(true);
+        // console.log("X:", rect.x, "Y:", rect.y);
+        props.onHover(true, props.data)
     };
 
     const onMouseLeave = () => {
-        setHovered(false);
-        setClicked(false); 
+        props.onHover(false)
+        // setHovered(false);
+        // setClicked(false); 
     };
+
     // const onDragEnd = async ()=>{
     //     // TODO : finish item drop
     //     EventBus.emit("itemDrop")
@@ -47,19 +52,27 @@ export const ItemSlot = (props) => {
     // },[isDragging, visibilitySignal.value])
 
     return (
-        <div className="itemSlot" onMouseEnter={onMouseEnter}  onMouseLeave={onMouseLeave}>
-            <img draggable={false} src={HOST+"assets/ui/inventory/itemSlot.png"}></img>
-            <img onPointerDown={onClick} draggable={false} className={`inventoryItem ${isDragging && "grabCursor"}`}src={`${HOST}assets/apple.png`}></img>
+        <div className="itemSlot"ref={itemSlotRef} >
+            <div className="hitbox" onMouseEnter={onMouseEnter}  onMouseLeave={onMouseLeave}>
+                <img draggable={false} src={HOST+"assets/ui/inventory/itemSlot.png"}></img>
+                <img onPointerDown={onClick} draggable={false} className={`inventoryItem ${isDragging && "grabCursor"}`}src={`${HOST}assets/apple.png`}></img>
+            </div>
             <div className="count-text-container">
                 <span className="count"> {props.data.quantity}</span>
             </div>
-            {(isHovered || isClicked) && (
-                <div className="description-container">
+                {/* <div className="description-container">
                     <span className="description"> {props.data.itemDetails.description}</span>
-                </div>
-            )}
+                </div> */}
         </div>
     );
 };
 // data.itemDetails.description
 // data.itemDetails.ItemID
+
+
+
+// {(isHovered || isClicked) && (
+//     <div className="description-container">
+//         <span className="description"> {props.data.itemDetails.description}</span>
+//     </div>
+// )}
