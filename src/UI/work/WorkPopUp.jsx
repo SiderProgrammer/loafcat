@@ -8,6 +8,8 @@ import { RangeSlider } from "../common/rangeSlider.jsx/rangeSlider";
 import { EventBus } from "../../game/EventBus";
 import { HOST } from "../../sharedConstants/constants";
 export const visibilitySignal = createSignal("hidden");
+import { Timestamp } from "../../UI/shop/timestamp/Timestamp";
+import "./CSS/WorkPopUp.css";
 import gsap from 'gsap';
 
 export const openWorkPopUp = () => {
@@ -21,10 +23,11 @@ export const closeWorkPopUp = () => {
 
 export const WorkPopUp = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
-    const [value, setValue] = React.useState({ min: 0, max: 100 });
-    const [isWorking, setIsWorking] = React.useState(false);
-    const workPopupRef = useRef(null);
+    const [numberOfHours, setNumberOfHours] = useState({ min: 1, max: 10 });
+    const [isWorking, setIsWorking] = useState(false);
     const [workPopupVisible, setWorkPopupVisible] = useState("hidden");
+    const [isWorkingFinished, setIsWorkingFinished] = useState(false);
+    const workPopupRef = useRef(null);
 
     const startWork = () => {
         setIsWorking(true);
@@ -35,6 +38,18 @@ export const WorkPopUp = () => {
         EventBus.emit("stopWork");
         closeWorkPopUp();
     };
+
+    const restartWork = () => {
+        setIsWorkingFinished(false)
+        setIsWorking(false);
+    }
+
+    const finishWork = () => {
+        setIsWorkingFinished(true)
+        setIsWorking(false);
+        EventBus.emit("stopWork");
+        console.log("Work finished")
+    }
 
     useEffect( () => {
       if(visibilitySignal.value === "visible") {
@@ -58,42 +73,46 @@ export const WorkPopUp = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setWorkPopupVisible("hidden")
+                EventBus.emit("handleMapInteraction", true);
             } })
     }
 
 
     return (
-            <div className={"work-popup popup ui center"} style={{ visibility: workPopupVisible }}>
-                <div className="work-popup-wrapper"  ref={workPopupRef} >
-                    <img style={{ transform: "scale(1.5)" }} src={HOST+"assets/ui/linkPet/linkPetBoard.png"}></img>
-                    <div className={"coinBuyMainContainer"}>
-                        {isWorking ? (
-                            <div style={{ letterSpacing: "-1px", textAlign: "center"}}>
-                                <div>You pet is currently busy in work!</div>
-                                <div style={{ marginTop: "3px" }}> {value.min / 10 - 1}:59 hours left</div>
-                            </div>
-                        ) : (
-                            <>
-                                <span>Set working hours</span>
-                                <RangeSlider min={0} max={100} step={10} value={value} onChange={setValue}/>
-                                <div style={{ display: "flex", gap: "5.5px", marginLeft: "4px"}}>
-                                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
-                                        (hour, index) => (
-                                            <div key = {index}>{hour}</div>
-                                        )
-                                    )}
-                                </div>
-                                <span style={{ marginTop: "40px", letterSpacing: "-1px",}}> You will earn {value.min / 2} coins </span>
-                            </>
-                        )}
+        <div className={"work-popup popup ui center"} style={{ visibility: workPopupVisible }}>
+            <div className="work-popup-wrapper"  ref={workPopupRef} >
+                <Button onClick={closeWorkPopUp} className="workPopupCloseButton" buttonIcon="closeButton" ></Button>
+                <img style={{ transform: "scale(1.5)" }} src={HOST+"assets/ui/linkPet/linkPetBoard.png"}></img>
+                <div className={"coinBuyMainContainer"}>
+                {isWorking && 
+                    <div style={{ letterSpacing: "-1px", lineHeight:"8px"}}>
+                        <div style={{ marginTop: "3px", transform: "scale(1.1)" }}>Your pet is currently busy in work!</div>
+                        <div style={{ marginTop: "17px" }}>Your exemplary alertness will be rewarded but only after completing your duty.</div>
+                        <img className="coffee-icon" src= {HOST+ "assets/coffee_cup_icon.png"}  alt="Loading_icon" />
+                        <div style={{ marginTop: "66px", textAlign: "center",  transform: "scale(1.4)"}}> <Timestamp timeStart = {numberOfHours.min * 60 * 60 * 1000} callback = {finishWork}/></div>
+                        {/* <div style={{ marginTop: "66px", textAlign: "center",  transform: "scale(1.4)"}}> <Timestamp timeStart = { 2 * 1000} callback = {finishWork}/></div> */}
+                        <div style={{ marginTop: "2px", textAlign: "center"}}> hours left</div>
+                     </div>
+                } 
+                {!isWorking && !isWorkingFinished && 
+                    <>
+                        <span style={{ textAlign: "center", transform: "scale(1.3)", marginBottom: "15px"}}>Office work</span>
+                        <span style={{ lineHeight:"8px"}}> Working in an office is demanding and commendable. Work to get paid and don't upset your boss!</span>
+                        <RangeSlider min={1} max={10} step={1} value={numberOfHours} onChange={setNumberOfHours}/>
+                        <span style={{ marginTop: "10px", letterSpacing: "-1px",}}> Work for {numberOfHours.min} {numberOfHours.min > 1 ? "hours" : "hour"}.</span>
+                        <span style={{ marginTop: "0px", letterSpacing: "-1px",}}> You will earn {numberOfHours.min * 2} coins. </span>
+                    </>
+                }
+                  {isWorkingFinished &&
+                     <div>
+                        <span style={{ textAlign: "center", transform: "scale(1.3)", marginBottom: "15px"}}>fINISHED WORK!</span>
                     </div>
-                    {/* //TODO : show start work button when hours are set > 0 */}
-                    {isWorking ? (
-                        <Button onClick={stopWork} className={"nameSubmitButton"} buttonIcon={"submitButton"} text={"Stop working"}/>
-                    ) : (
-                        <Button onClick={startWork} className={"nameSubmitButton"} buttonIcon={"submitButton"} text={"Start work"}/>
-                    )}
+                }
                 </div>
+                {isWorking && <Button onClick={stopWork} className={"nameSubmitButton"} buttonIcon={"submitButton"} text={"Stop working"}/>}
+                {!isWorking && !isWorkingFinished && <Button onClick={startWork} className={"nameSubmitButton"} buttonIcon={"submitButton"} text={"Start work"}/>}
+                {isWorkingFinished && <Button onClick={restartWork} className={"nameSubmitButton"} buttonIcon={"submitButton"} text={"Ok"}/>}
             </div>
+        </div>
     );
 };

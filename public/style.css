@@ -310,9 +310,24 @@ canvas {
     span {
         font-size: 9px;
     }
+    
 
     .shopTimeTab {
         margin-top: 4px;
+    }
+    .refresh-timer{
+        font-size: 6px;
+        position: absolute;
+        margin-top: -11px;
+        margin-left: 13px;
+        letter-spacing: -1px;
+    }
+    .refresh-timer .timestamp-text{
+        font-size: 6px;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 2px;
+        /* letter-spacing: -1px; */
     }
 
     .shopText {
@@ -835,14 +850,14 @@ canvas {
     position: relative;
 }
 
-.nameSubmitButton {
+/* .nameSubmitButton {
     position: relative;
     top: -106px;
     left: 22px;
 }
 .nameSubmitButton .buttonText{
     top: -19px;
-}
+} */
 
 #petNameInput {
     left: -55px;
@@ -894,6 +909,7 @@ canvas {
     width: 225px;
     transform: scale(0.9);
     overflow-y: scroll;
+    scroll-behavior: smooth;
     overflow-x: none;
 }
 .mapSelectButton {
@@ -995,29 +1011,17 @@ canvas {
 }
 
 #swapAmount {
-    position: relative;
+    position: absolute;
     text-align: center;
     border: none;
-    top: -34px;
-    left: 9px;
-    width: 131px;
+    top: 40px;
+    left: 1px;
+    width: 125px;
     height: 23px;
     outline: none;
     background: rgb(255, 255, 255);
 }
 
-.coinBuyMainContainer {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    top: -163px;
-    pointer-events: all;
-    color: black;
-    font-size: 6px;
-}
-.coinBuyMainContainer span{
-    margin-bottom: 10px;
-}
 .coins-buy-container {
     margin-right: 127px;
     z-index: 3;
@@ -1027,19 +1031,6 @@ canvas {
     top: -45px;
     left: 140px
 }
-
-.work-popup {
-    position: absolute;
-    transform-origin: center;
-    image-rendering: pixelated;
-    /* top: 300px */
-}
-.work-popup .work-popup-wrapper{
-    transform-origin: center;
-    image-rendering: pixelated;
-    /* top: 300px */
-}
-
 
 
 .youGetContainer {

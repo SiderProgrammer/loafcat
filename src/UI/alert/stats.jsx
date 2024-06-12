@@ -16,10 +16,10 @@ export const Stats = ({ petData }) => {
                         <div key={index} style={{ display: "flex" }}>
                             <Stat fill={petData[stat.valueKey]} icon={stat.icon} reversedValue={stat.reversedValue}></Stat>
                             {stat.reversedValue && petData[stat.valueKey] > 70 && (
-                            <Button className={"plus pulseAnimation"} buttonIcon={"minus"} imgPath="assets/"></Button>
+                            <Button className={"plus pulseAnimation"} onClick = {()=> {}} buttonIcon={"minus"} imgPath="assets/"></Button>
                             )}
                             {!stat.reversedValue && petData[stat.valueKey] < 30 && (
-                            <Button className={"plus pulseAnimation"} buttonIcon={"plus"} imgPath="assets/"></Button>
+                            <Button className={"plus pulseAnimation"} onClick = {()=> {}} buttonIcon={"plus"} imgPath="assets/"></Button>
                             )}
                         </div>
                     ))}

@@ -1,0 +1,46 @@
+.work-popup {
+    position: absolute;
+    transform-origin: center;
+    image-rendering: pixelated;
+    /* top: 300px */
+}
+.work-popup .work-popup-wrapper{
+    transform-origin: center;
+    image-rendering: pixelated;
+    /* top: 300px */
+}
+
+.coinBuyMainContainer {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: -14px;
+    pointer-events: all;
+    color: black;
+    font-size: 6px;
+    left: 10px;
+}
+.coinBuyMainContainer span{
+    margin-bottom: 10px;
+}
+
+.nameSubmitButton {
+    position: absolute;
+    left: 22px;
+    top: 136px;
+}
+.nameSubmitButton .buttonText{
+    top: -19px;
+}
+.workPopupCloseButton {
+    position: absolute;
+    left: 144px;
+    top: -44px;
+}
+
+.coffee-icon {
+    position: absolute;
+    transform: scale(2);
+    left: 66px;
+    top: 87px;
+}

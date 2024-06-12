@@ -147,7 +147,7 @@ export const Shop = () => {
                     </div> */}
                     <div className="shopTimeTab">
                         <img src={HOST+"assets/ui/shop/Time stamp Tab.png"}></img>
-                        <Timestamp/>
+                        <div className="refresh-timer"> REFRESH IN: {<Timestamp timeStart = {24 * 60 * 60 * 1000}/>}</div> 
                     </div>
                 </div>
                 <div className="shelfs">

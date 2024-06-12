@@ -113,11 +113,11 @@ export class Game extends Scene {
             this.scene.start("Game", map);
         });
 
-        EventBus.once("startWork", () => {
+        EventBus.on("startWork", () => {
             this.setState("work");
         });
-        EventBus.once("stopWork", () => {
-            this.pet.actionStopped();
+        EventBus.on("stopWork", () => {
+            this.pet.breakStateDuration();
         });
         EventBus.on("handleMapInteraction", (value) => {
             if (value) this.mapInteractionSystem.setAllInteractive();

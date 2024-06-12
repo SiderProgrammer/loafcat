@@ -14,7 +14,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
         this.character = this.createCharacter();
         // this.stateSystem = new PetStateSystem(this.scene, this);
-
+        this.actualStateDelay = null;
         this.moveTween = null;
         this.effects = [];
 
@@ -32,6 +32,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     async setState(state, value) {
         // this.moveTween && this.moveTween.pause();
         if (this.moveTween) this.moveTween.pause();
+        this.scene.mapInteractionSystem.disableAll();
 
         // console.log(state);
         switch (state) {
@@ -112,11 +113,15 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         // this.setState("walk");
     }
 
+    breakStateDuration() {
+        Async.break();
+    }
+
     async work() {
         this.handlePlayEffect("working", "office-set", "office-set", 0, 0);
         this.x = 422;
         this.y = 266.5;
-        await Async.delay(100000000);
+        this.actualStateDelay = await Async.delay(100000000);
     }
 
     playCurious() {

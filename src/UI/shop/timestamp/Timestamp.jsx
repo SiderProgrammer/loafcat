@@ -12,9 +12,9 @@ export const closeShop = () => {
     // EventBus.emit("handleMapInteraction",true)
 };
 
-export const Timestamp = () => {
-    const [shopTimestampText, setShopTimestampText] = useState("21:37:59");
-    const [timeLeft, setTimeLeft] = useState(24 * 60 * 60 * 1000);
+export const Timestamp = (props) => {
+    // const [shopTimestampText, setShopTimestampText] = useState("21:37:59");
+    const [timeLeft, setTimeLeft] = useState(props.timeStart);
     // const shopeRef = useRef(null);
 
     const formatTime = (time) => {
@@ -29,6 +29,7 @@ export const Timestamp = () => {
         setTimeLeft((prevTime) => {
             if (prevTime <= 1000) {
             clearInterval(timer);
+            if(props.callback) props.callback()
             return 0;
             }
             return prevTime - 1000;
@@ -39,8 +40,6 @@ export const Timestamp = () => {
   }, []);
 
     return (
-        <div className="timestamp-container">
-            <div className="timestamp-text">REFRESH IN: {formatTime(timeLeft)}</div>
-        </div>
+        <span className="timestamp-text">{formatTime(timeLeft)}</span>
     );
 };

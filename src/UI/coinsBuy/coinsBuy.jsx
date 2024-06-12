@@ -119,7 +119,7 @@ export const CoinsBuy = () => {
                     <div className={"coinBuyMainContainer"}>
                         <span>Swap</span>
                         <span>Available {balance} USDT</span>
-                        <img className={""} src={HOST+"assets/ui/valueHolder.png"}></img>
+                        <img style={{ transform: "scale(1.7)", position: "absolute", top:"41px", left: "23px"}} src={HOST+"assets/ui/valueHolder.png"}></img>
                         <input min={5} max={balance} type="number"id="swapAmount"placeholder={inputValue} ref={input}onChange={updateGetValue}/>
                     </div>
                     <div className={"youGetContainer"}>
