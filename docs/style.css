@@ -320,18 +320,15 @@ canvas {
         margin-left: -50px;
         margin-top: 8px;
     }
-    .shopTimestampText {
-        font-size: 6px;
-        position: absolute;
-        margin-top: -11px;
-        margin-left: 13px;
-        letter-spacing: -1px;
-    }
 }
 .shopRefreshButton {
     position: absolute;
     left: 230px;
     top: 72px;
+}
+.shopRefreshButton .button-wrapper{
+    width: 84px;
+    height: 24px;
 }
 .shopRefreshButton .buttonText{
     top: -20px
@@ -346,6 +343,25 @@ canvas {
     transform-origin: center;
     image-rendering: pixelated;
 }
+
+.inventory .item-description-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    display: flex;
+    line-height: 2;
+    width: 60px;
+    height: auto;
+    position: absolute;
+    top: 28px;
+    left: 256px;
+    padding: 5px;
+    z-index: 1;
+  }
+  .item-description-container .description-text{
+    font-size: 5px;
+    color: white;
+  }
+
 
 .inventoryTabs {
     position: absolute;
@@ -375,6 +391,9 @@ canvas {
     margin: 3px;
     transition: transform 0.3s ease;
 }
+.itemSlot .hitbox {
+    height: 38px
+}
 .itemSlot .count{
     /* position: relative;
     top: -23px;
@@ -385,7 +404,7 @@ canvas {
 }
 .itemSlot .count-text-container {
     position: relative;
-    top: -28px;
+    top: -9px;
     left: 3px;
     font-size: 7px;
     letter-spacing: -1px;
@@ -421,6 +440,23 @@ canvas {
     position: absolute;
     left: 235px;
     top: -13px;
+}
+.itemSlot .description-container {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 0px;
+    display: flex;
+    line-height: 2;
+    width: 60px;
+    height: auto;
+    position: relative;
+    top: -62px;
+    left: -70px;
+    padding: 5px;
+    z-index: 1;
+}
+.description-container .description{
+    font-size: 5px;
+    color: white;
 }
 
 .popup {
@@ -572,10 +608,26 @@ canvas {
     flex-wrap: wrap;
     width: 116px;
     height: 60px;
+    justify-content: space-between;
+}
+
+.stats .bigger-stats {
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.stats .smaller-stats {
+    width: 65%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    /* align-content: center; */
 }
 
 .stats-diagrams-container .stat-container {
-    margin: 2px;
+    margin: 3px;
 }
 
 
@@ -733,6 +785,12 @@ canvas {
     background-repeat: no-repeat;
     height: 140vh;
     width: 140vw;
+}
+.UIContainer .correct-icon{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 70%;
+    left: 50%
 }
 
 .petsContainer {
