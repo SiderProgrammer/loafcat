@@ -1,0 +1,8 @@
+.blackOverlay {
+    position: absolute;
+    width: 110%;
+    height: 110%;
+    background-color: rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    pointer-events: all;
+}

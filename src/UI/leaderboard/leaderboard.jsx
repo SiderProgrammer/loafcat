@@ -8,6 +8,7 @@ import { Button } from "../buttons/button";
 import { HOST } from "../../sharedConstants/constants";
 import { getLeadersboard } from "../../game/helpers/requests";
 import { FetchLoading } from "../fetchLoading/fetchLoading";
+import { EventBus } from "../../game/EventBus";
 import gsap from 'gsap';
 export const visibilitySignal = createSignal("hidden");
 
@@ -15,6 +16,7 @@ const sampleData = [{Rank:1, UserID:"asdasd"},{Rank:2, UserID:"asdasd"},{Rank:3,
 export const openLeaderboard = async () => {
     visibilitySignal.value = "visible";
     showOverlay();
+    EventBus.emit("handleMapInteraction",false)
 };
 export const closeLeaderboard = () => {
     visibilitySignal.value = "hidden";
@@ -59,6 +61,7 @@ export const Leaderboard = (props) => {
             { scale: 1 },
             { scale: 0,ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
+                EventBus.emit("handleMapInteraction",true)
             } })
     }
 

@@ -27,6 +27,7 @@ export const WorkPopUp = () => {
     const [isWorking, setIsWorking] = useState(false);
     const [workPopupVisible, setWorkPopupVisible] = useState("hidden");
     const [isWorkingFinished, setIsWorkingFinished] = useState(false);
+    const [coinsToEarn, setCoinsToEarn] = useState(null);
     const workPopupRef = useRef(null);
 
     const startWork = () => {
@@ -36,7 +37,7 @@ export const WorkPopUp = () => {
     const stopWork = () => {
         setIsWorking(false);
         EventBus.emit("stopWork");
-        closeWorkPopUp();
+        // closeWorkPopUp();
     };
 
     const restartWork = () => {
@@ -52,13 +53,17 @@ export const WorkPopUp = () => {
     }
 
     useEffect( () => {
-      if(visibilitySignal.value === "visible") {
-        setWorkPopupVisible("visible")
-          openTween()
-      } else {
-          closeTween()
-      }
-    }, [visibilitySignal.value]);
+        if(visibilitySignal.value === "visible") {
+          setWorkPopupVisible("visible")
+            openTween()
+        } else {
+            closeTween()
+        }
+      }, [visibilitySignal.value]);
+
+    useEffect( () => {
+        setCoinsToEarn(numberOfHours.min * 2)
+    }, [numberOfHours]);
 
     const openTween = () => {
         gsap.fromTo(
@@ -99,13 +104,17 @@ export const WorkPopUp = () => {
                         <span style={{ textAlign: "center", transform: "scale(1.3)", marginBottom: "15px"}}>Office work</span>
                         <span style={{ lineHeight:"8px"}}> Working in an office is demanding and commendable. Work to get paid and don't upset your boss!</span>
                         <RangeSlider min={1} max={10} step={1} value={numberOfHours} onChange={setNumberOfHours}/>
-                        <span style={{ marginTop: "10px", letterSpacing: "-1px",}}> Work for {numberOfHours.min} {numberOfHours.min > 1 ? "hours" : "hour"}.</span>
-                        <span style={{ marginTop: "0px", letterSpacing: "-1px",}}> You will earn {numberOfHours.min * 2} coins. </span>
+                        <span style={{ marginTop: "10px", letterSpacing: "-1px",}}> Work for <span style={{ fontWeight: 'bold' }}>{numberOfHours.min}</span> {numberOfHours.min > 1 ? "hours" : "hour"}.</span>
+                        <span style={{ marginTop: "0px", letterSpacing: "-1px",}}> You will earn <span style={{ fontWeight: 'bold' }}>{coinsToEarn}</span> coins. </span>
                     </>
                 }
                   {isWorkingFinished &&
-                     <div>
-                        <span style={{ textAlign: "center", transform: "scale(1.3)", marginBottom: "15px"}}>fINISHED WORK!</span>
+                     <div className="work-finish-label">
+                        <span style={{ textAlign: "center", transform: "scale(1.3)", marginTop: "4px"}}>Work finished!</span>
+                        <span style={{ marginTop: "14px", lineHeight:"1.5"}}>You managed to finish your job without any disturbance.</span>
+                        <span style={{ marginTop: "10px", textAlign: "center"}}>Here's your reward:</span>
+                        <span style={{marginTop: "1px", textAlign: "center"}}><span style={{ fontWeight: 'bold' }}>{coinsToEarn}</span> coins.</span>
+                        <img className="coin-icon" src= {HOST+ "assets/coin.png"}  alt="Loading_icon" />
                     </div>
                 }
                 </div>

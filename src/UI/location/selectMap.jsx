@@ -11,6 +11,7 @@ export const visibilitySignal = createSignal("hidden");
 export const openMapSelection = async () => {
     visibilitySignal.value = "visible";
     showOverlay();
+   EventBus.emit("handleMapInteraction",false)
 };
 export const closeMapSelection = () => {
     visibilitySignal.value = "hidden";
@@ -52,10 +53,7 @@ export const MapSelection = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                gsap.fromTo(
-                    mapsRef.current,
-                    { scale: 0 },
-                    { scale: 0, duration: 0 })
+                EventBus.emit("handleMapInteraction",true)
             } })
     }
 

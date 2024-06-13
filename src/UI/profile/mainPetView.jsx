@@ -4,6 +4,7 @@ import { Button } from "../buttons/button";
 import { hideOverlay, showOverlay } from "../blackOverlay/blackOverlay";
 import { createSignal } from "react-use-signals";
 import axios from "axios";
+import { EventBus } from "../../game/EventBus";
 import { UserModel } from "../../game/models/UserModel";
 import { PetView } from "../stats/petView";
 // import { MainPetContent } from "./mainPetContent";
@@ -18,6 +19,7 @@ export const visibilitySignal = createSignal("hidden");
 export const openMainPetView = () => {
     visibilitySignal.value = "visible";
     showOverlay();
+    EventBus.emit("handleMapInteraction",false)
 };
 export const closeMainPetView = () => {
     visibilitySignal.value = "hidden";
@@ -57,6 +59,7 @@ export const MainPetView = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
+                EventBus.emit("handleMapInteraction",true)
             } })
     }
 

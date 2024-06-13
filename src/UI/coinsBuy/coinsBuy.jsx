@@ -14,15 +14,20 @@ import { GameModel } from "../../game/models/GameModel";
 import * as buffer from "buffer";
 import { processDeposit } from "../../game/helpers/requests";
 import { HOST } from "../../sharedConstants/constants";
+import { EventBus } from "../../game/EventBus";
 import gsap from 'gsap';
 
 window.Buffer = buffer.Buffer;
 
 export const visibilitySignal = createSignal("hidden");
+let canOpen = true
 
 export const openCoinsBuy = () => {
+    if(!canOpen) return
     visibilitySignal.value = "visible";
     showOverlay();
+    EventBus.emit("handleMapInteraction",false)
+    canOpen = false
 };
 export const closeCoinsBuy = () => {
     visibilitySignal.value = "hidden";
@@ -67,7 +72,7 @@ export const CoinsBuy = () => {
             const signedTransaction = await window.solana.signTransaction(
                 transaction
             );
-
+           
             // Broadcast the transaction to the Solana network
             const signature =
                 await GameModel.solanaConnection.sendRawTransaction(
@@ -107,6 +112,8 @@ export const CoinsBuy = () => {
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setBuyCoinsVisible("hidden")
                 setInputValue("0.00")
+                EventBus.emit("handleMapInteraction",true)
+                canOpen = true
             } })
     }
 
@@ -118,7 +125,7 @@ export const CoinsBuy = () => {
                     <img style={{ transform: "scale(1.5)" }} src={HOST+"assets/ui/linkPet/linkPetBoard.png"}></img>
                     <div className={"coinBuyMainContainer"}>
                         <span>Swap</span>
-                        <span>Available {balance} USDT</span>
+                        <span>Available <span style={{ fontWeight: 'bold' }}>{balance}</span> USDT</span>
                         <img style={{ transform: "scale(1.7)", position: "absolute", top:"41px", left: "23px"}} src={HOST+"assets/ui/valueHolder.png"}></img>
                         <input min={5} max={balance} type="number"id="swapAmount"placeholder={inputValue} ref={input}onChange={updateGetValue}/>
                     </div>

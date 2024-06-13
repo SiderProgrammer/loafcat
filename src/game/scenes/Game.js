@@ -120,7 +120,9 @@ export class Game extends Scene {
             this.pet.breakStateDuration();
         });
         EventBus.on("handleMapInteraction", (value) => {
-            if (value) this.mapInteractionSystem.setAllInteractive();
+            value
+                ? this.mapInteractionSystem.setAllInteractive()
+                : this.mapInteractionSystem.disableAll();
         });
 
         hideLoadingScreen();

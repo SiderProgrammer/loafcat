@@ -13,10 +13,14 @@ import { getDailyItemsData, refreshItems } from "../../game/helpers/requests";
 export const visibilitySignal = createSignal("hidden");
 import gsap from 'gsap';
 
-export const openShop = () => {
-    visibilitySignal.value = "visible";
+let canOpen = true
 
+export const openShop = () => {
+    if(!canOpen) return
+    visibilitySignal.value = "visible";
+    EventBus.emit("handleMapInteraction",false)
     showOverlay();
+    canOpen = false
 };
 export const closeShop = () => {
     visibilitySignal.value = "hidden";
@@ -30,7 +34,7 @@ export const Shop = () => {
     const [refreshCost, setRefreshCost] = useState(300);
     const [profileVisible, setProfileVisible] = useState("hidden");
     const [isItemBuyPopUp, setIsItemBuyPopUp] = useState(false);
-
+    const [isItemBuying, setIsItemBuying] = useState(false);
     const shopeRef = useRef(null);
     const itemBuyPopUpRef = useRef(null);
 
@@ -44,16 +48,17 @@ export const Shop = () => {
         setItemPopUpData({});
     };
 
-  const getDailyItems =async () => {
+  const getDailyItems = async () => {
     return  getDailyItemsData()
   }
   
     const buyItem = async (data) => {
         // closePopUp()
+        setIsItemBuying(true)
         await buyItem(data.ItemID.id)
       const newItems = await getDailyItems()
+      setIsItemBuying(false)
       setShopData(newItems.data)
-
   };
 
     const fetchData = async () => {
@@ -122,6 +127,7 @@ export const Shop = () => {
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
                 EventBus.emit("handleMapInteraction",true)
+                canOpen = true
             } })
     }
 
@@ -147,7 +153,7 @@ export const Shop = () => {
                     </div> */}
                     <div className="shopTimeTab">
                         <img src={HOST+"assets/ui/shop/Time stamp Tab.png"}></img>
-                        <div className="refresh-timer"> REFRESH IN: {<Timestamp timeStart = {24 * 60 * 60 * 1000}/>}</div> 
+                        <div className="refresh-timer"> REFRESH IN: {<Timestamp timeStart = {24 * 60 * 60 * 1000} restart ={true}/>}</div> 
                     </div>
                 </div>
                 <div className="shelfs">
@@ -172,7 +178,8 @@ export const Shop = () => {
                                 <img src={HOST+"assets/coin.png"} style={{ transform: "Scale(1.3" }}></img>
                             </span>
                         </div>
-                        <Button onClick={() => buyItem(itemPopUpData)} className={"buyButton"} buttonIcon={"Buy Button"} text={"Buy"}/>
+                        {isItemBuying && <FetchLoading/>}
+                        {!isItemBuying && <Button onClick={() => buyItem(itemPopUpData)} className={"buyButton"} buttonIcon={"Buy Button"} text={"Buy"}/>}
                     </div>
                 </div>}
             </div>

@@ -10,6 +10,7 @@ export class MapInteractionSystem {
         this.scene = scene;
         this.canInteract = true;
         this.zones = [];
+        this.arrows = [];
         this.cursorUrl = `${HOST}assets/pointerPoint.png`;
     }
     addInteractiveZones() {
@@ -43,13 +44,27 @@ export class MapInteractionSystem {
                 cursor: `url(${this.cursorUrl}), pointer`,
             });
             zone.arrow.setVisible(true);
+            this.scene.tweens.add({
+                targets: zone.arrow,
+                scale: 1,
+                ease: "back.out",
+                duration: 300,
+            });
         });
     }
 
     disableAll() {
         this.zones.forEach((zone) => {
             zone.disableInteractive();
-            zone.arrow.setVisible(false);
+            this.scene.tweens.add({
+                targets: zone.arrow,
+                scale: 0,
+                ease: "back.in",
+                duration: 200,
+                onComplete: () => {
+                    zone.arrow.setVisible(false);
+                },
+            });
         });
     }
 
@@ -70,6 +85,7 @@ export class MapInteractionSystem {
             });
 
             zone.arrow = arrow;
+            this.arrows.push(arrow);
         });
     }
     startInteraction(elementName) {

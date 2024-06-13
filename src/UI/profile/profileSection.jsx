@@ -9,9 +9,12 @@ import gsap from 'gsap';
 export const ProfileSection = () =>{
     const [petData,setPetData] = useState(PetModel.PET_DATA)
     const [areStatsVisible, setAreStatsVisible] = useState(false);
+    const [canClickOpenStatsButton, setCanClickOpenStatsButton] = useState(true);
     const statsContentRef = useRef(null);
 
     const handleOpenAlertStats = async () => {
+   if(!canClickOpenStatsButton) return
+        setCanClickOpenStatsButton(false)
         areStatsVisible ? statsContentCloseTween() : statsContentOpenTween()
     };
 
@@ -25,7 +28,9 @@ export const ProfileSection = () =>{
         gsap.fromTo(
             statsContentRef.current,
             { scaleY: 0, y: '-=80'},
-            { scaleY: 1, y: '+=80', ease: "back.out", duration: 0.6 })
+            { scaleY: 1, y: '+=80', ease: "back.out", duration: 0.6, onComplete: ()=> {
+                setCanClickOpenStatsButton(true)
+            } })
         
     }
 
@@ -36,6 +41,7 @@ export const ProfileSection = () =>{
             { scaleY: 1 },
             { scaleY: 0,  y: '-=80', ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setAreStatsVisible(false)
+                setCanClickOpenStatsButton(true)
                 gsap.to(
                     statsContentRef.current,
                     { y: '+=80', duration: 0 })

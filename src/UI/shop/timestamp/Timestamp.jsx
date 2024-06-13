@@ -2,20 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import "./CSS/Timestamp.css";
 
 export const openShop = () => {
-    // visibilitySignal.value = "visible";
 
-    // showOverlay();
-};
-export const closeShop = () => {
-    // visibilitySignal.value = "hidden";
-    // hideOverlay();
-    // EventBus.emit("handleMapInteraction",true)
 };
 
 export const Timestamp = (props) => {
     // const [shopTimestampText, setShopTimestampText] = useState("21:37:59");
     const [timeLeft, setTimeLeft] = useState(props.timeStart);
-    // const shopeRef = useRef(null);
 
     const formatTime = (time) => {
         const hours = String(Math.floor(time / (1000 * 60 * 60))).padStart(2, '0');
@@ -24,20 +16,25 @@ export const Timestamp = (props) => {
         return `${hours}:${minutes}:${seconds}`;
       };
 
+    const restartCountdown = () => {
+        setTimeLeft(props.timeStart);
+    };
+
     useEffect(() => {
         const timer = setInterval(() => {
         setTimeLeft((prevTime) => {
             if (prevTime <= 1000) {
             clearInterval(timer);
+            if(props.restart) restartCountdown()
             if(props.callback) props.callback()
-            return 0;
+            return props.timeStart;
             }
             return prevTime - 1000;
         });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [timeLeft]);
 
     return (
         <span className="timestamp-text">{formatTime(timeLeft)}</span>

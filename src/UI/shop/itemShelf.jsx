@@ -17,7 +17,7 @@ export const ItemShelf = (props) => {
                 <img src={HOST+"assets/ui/shop/Hanging sign small.png"}></img>
                 <div className="price">
                     <span className="shelfItemPrice">  {props.data.ItemID.Price}</span>
-                    <img src={HOST+"assets/coin.png"}></img>
+                    <img className="coin-image" src={HOST+"assets/coin.png"}></img>
                 </div>
             </div>
             <Button onClick={showBuyPopUp} className={"shelfItem"} imgPath={"assets/"} buttonIcon={`${props.data.ItemID.item_name}`}></Button>

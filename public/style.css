@@ -478,14 +478,6 @@ canvas {
     z-index: 1;
 }
 
-.blackOverlay {
-    position: absolute;
-    width: 110%;
-    height: 110%;
-    background-color: rgba(0, 0, 0, 0.5);
-    visibility: hidden;
-}
-
 .leaderboardPlayers {
     position: absolute;
     display: flex;
@@ -615,7 +607,7 @@ canvas {
     /* height: 0px; */
 } 
 .stats-diagrams-container .stats {
-    background: #00000027;
+    background: rgba(0, 0, 0, 0.062);
     display: flex;
     position: absolute;
     top: 0;
@@ -961,6 +953,9 @@ canvas {
     height: 33px;
     line-height: 6px;
 }
+.itemBuyContent .fetch-loading-container {
+    top: 180px
+}
 
 .buyPopUpShelf {
     position: relative;
@@ -1024,12 +1019,13 @@ canvas {
 
 .coins-buy-container {
     margin-right: 127px;
+    margin-bottom: 123px;
     z-index: 3;
 }
 .coins-buy-container .coinsBuyCloseButton{
     position: absolute;
     top: -45px;
-    left: 140px
+    left: 140px;
 }
 
 

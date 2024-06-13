@@ -1,5 +1,6 @@
 import { createSignal } from 'react-use-signals';
 import { useEffect, useState, useRef } from 'react';
+import "./CSS/blackOverlay.css";
 import gsap from 'gsap';
 
 export const visibilitySignal = createSignal("hidden");
@@ -14,6 +15,7 @@ export const showOverlay = () => {
 export const BlackOverlay = ()=>{
   const [inventoryVisible, setInventoryVisible] = useState("hidden");
   const blackOverlayRef = useRef(null);
+  const changeVisiblity = visibilitySignal.useStateAdapter()
 
   useEffect( () => {
   if(visibilitySignal.value === "visible") {
@@ -35,13 +37,12 @@ const closeTween =  () => {
    gsap.fromTo(
     blackOverlayRef.current,
       { alpha: 1 },
-      { alpha: 0, duration: 0.5, onComplete: ()=> {
+      { alpha: 0, duration: 0.3, onComplete: ()=> {
         setInventoryVisible("hidden")
       } })
 }
 
-    const changeVisiblity = visibilitySignal.useStateAdapter()
-    return (
-        <div className="blackOverlay" style={{visibility:inventoryVisible}} ref={blackOverlayRef}></div>
-    )
+  return (
+    <div className="blackOverlay" style={{visibility:inventoryVisible}} ref={blackOverlayRef}></div>
+  )
 }
