@@ -235,6 +235,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             "teeth-brushing",
             "teeth-brushing-idle"
         );
+
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, 3000);
+        });
     }
 
     listenMusic() {
@@ -269,7 +275,8 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         //   .setDepth(3);
         // TODO : refactor it
         return new Promise((resolve) => {
-            this.scene.setSoapCursor();
+            // this.scene.setSoapCursor();
+            this.scene.cursorController.soap();
             this.scene.map.getLayer("Bath").tilemapLayer.setDepth(2);
             // this.pet.setState("bath");
 
@@ -337,7 +344,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
 
     stopBathAction() {
-        this.scene.setIdleCursor();
+        this.scene.cursorController.idle();
         this.setBaseY();
         // this.pet.moveRandomly();
         this.setState("idle");

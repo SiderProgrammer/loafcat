@@ -24,6 +24,15 @@
     margin-bottom: 10px;
 }
 
+.coins-count-container {
+    display: flex;
+  align-items: center;
+}
+.coins-count-container .coin-icon{
+    transform: translate(-50%, -50%);
+    margin-left: 4px;
+}
+
 .nameSubmitButton {
     position: absolute;
     left: 22px;
@@ -55,9 +64,20 @@
     flex-direction: column;
 }
 
-.work-finish-label .coin-icon{
+.work-finish-label .coins-count-container{
+    position: absolute;
+    transform: translate(-50%, -50%) scale(2) ;
+    top: 132px;
+    left: 50%;
+}
+
+.coin-icon{
+    transform: translate(-50%, -50%) scale(0.8) !important
+}
+
+/* .work-finish-label .coin-icon{
     position: absolute;
     transform: scale(2) translate(-50%, -50%);
     top: 132px;
     left: 50%;
-}
+} */

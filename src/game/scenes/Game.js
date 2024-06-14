@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
+import CursorController from "../CursorController";
 import { linkTilemaps } from "../helpers/linkTilemaps";
 import { MAPS_ORDER } from "../constants/houseRooms";
 import { MapInteractionSystem } from "../systems/MapInteractionSystem";
@@ -17,6 +18,7 @@ import { PetModel } from "../models/PetModel";
 import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 import { EventBus } from "../EventBus";
 import { getMyPetData } from "../helpers/requests";
+
 import {
     showLoadingScreen,
     hideLoadingScreen,
@@ -30,13 +32,13 @@ export class Game extends Scene {
 
     async create({ map, restarted = false }) {
         this.restarted = restarted;
-        this.setIdleCursor();
-        // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
-        // this.scale.refresh();
-        if (!this.restarted) this.sound.add("theme").play({ loop: true });
-
         this.mapKey = map;
         GameModel.MAIN_SCENE = this;
+
+        this.cursorController = new CursorController(this);
+        // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
+        // this.scale.refresh();
+
         //this.scene.launch("UI");
         // this.cameras.main.setBackgroundColor(0x00ff00);
 
@@ -44,7 +46,7 @@ export class Game extends Scene {
         this.alertSystem = new AlertSystem();
 
         this.mapInteractionSystem = new MapInteractionSystem(this);
-        this.createMap();
+        this.map = this.createMap();
 
         this.pet = this.createPet();
         // this.pet.moveRandomly();
@@ -75,7 +77,7 @@ export class Game extends Scene {
 
         this.input.on("pointerup", async () => {
             if (!this.itemInUse) return;
-            this.setIdleCursor();
+            this.cursorController.idle();
             this.itemInUse.destroy();
             const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
 
@@ -94,7 +96,7 @@ export class Game extends Scene {
                 // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
                 // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
 
-                this.setGrabCursor();
+                this.cursorController.grab();
                 // this.pet.setState("feed");
                 this.itemInUse = GameModel.MAIN_SCENE.add
                     .image(
@@ -147,24 +149,7 @@ export class Game extends Scene {
         //         alpha: { from: 0.1, to: 1 },
         //     });
         // });
-    }
-
-    setIdleCursor() {
-        this.input.setDefaultCursor(
-            `url("${HOST}assets/pointer.png"), pointer`
-        );
-    }
-
-    setGrabCursor() {
-        this.input.setDefaultCursor(
-            `url("${HOST}assets/pointerHold.png"), pointer`
-        );
-    }
-
-    setSoapCursor() {
-        this.input.setDefaultCursor(
-            `url("${HOST}assets/soapImage.png"), pointer`
-        );
+        if (!this.restarted) this.sound.add("theme").play({ loop: true });
     }
 
     update() {
@@ -175,9 +160,9 @@ export class Game extends Scene {
         );
     }
 
-    createMap() {
-        this.map = this.make.tilemap({ key: this.mapKey });
-        linkTilemaps(this.map, this.mapKey);
+    createTilemap() {
+        const map = this.make.tilemap({ key: this.mapKey });
+        linkTilemaps(map, this.mapKey);
 
         //if (!houseRoomsPlacement[this.mapKey]) return;
         // change name to: roomAbove
@@ -203,6 +188,11 @@ export class Game extends Scene {
             }
         }
 
+        return map;
+    }
+
+    createMap() {
+        this.map = this.createTilemap();
         // for (const room in houseRoomsPlacement) {
         //     if (houseRoomsPlacement[room].nextFloor === this.mapKey)
         //         roomBelow = room;

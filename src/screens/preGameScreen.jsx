@@ -15,33 +15,38 @@ import gsap from 'gsap';
 export const PreGameScreen = (props) => {
     const [isWalletConnected, setWalletConnect] = useState(false);
     const [isButtonBlocked, setIsButtonBlocked] = useState(true);
+    const [hasPhantom, setHasPhantom] = useState(true)
     const [isCorrectIconVisible, setIsCorrectIconVisible] = useState("hidden");
-    // const [backgroundOpenTween, setBackgroundOpenTween] = useState(false);
     const preGameScreenRef = useRef(null);
     const walletRef = useRef(null);
     const correctIconRef = useRef(null);
     const navigate = useNavigate();
+    const phantomExtensionURL = "https://phantom.app"
 
-    useLayoutEffect(() => {
+    // useLayoutEffect(async () => {
+    //     showLoadingScreen()
+    //     connect();
+    // }, []);
+
+    useEffect(() => {
         showLoadingScreen()
-        const connect = async () => {
-            await  gsap.fromTo(
-                preGameScreenRef.current,
-                { scale: 4 },
-                { scale: 1, ease: "back.out", duration: 0.9, onComplete: ()=> {
-                    setIsButtonBlocked(false)
-                    // gsap.fromTo(
-                    //     preGameScreenRef.current,
-                    //     { scale: 1.3 },
-                    //     { scale: 1, ease: "power1.out", duration: 2})
-                } })
-         
-            await connectWalletClicked();
-        };
-        connect();
+        openTween()
     }, []);
 
-    const connectToWallet = async () => {
+    const handleConnect = async () => {
+        const hasPhantomWallet = checkHasPhantom()
+        if(!hasPhantomWallet) {
+            setHasPhantom(false)
+            return
+        }
+        await connectBlockchain()
+        await connectWallet();
+        handleNextScene()
+    };
+
+    const checkHasPhantom = () => window.solana && window.solana.isPhantom;
+
+    const connectBlockchain = async () => {
         try {
             if (window.solana) {
                 window.solana.on("connect", () => {});
@@ -56,29 +61,27 @@ export const PreGameScreen = (props) => {
         }
     };
 
-    const connectWalletClicked = async () => {
-        await connectToWallet();
+    const connectWallet = async () => {
         if (window.solana && window.solana.publicKey) {
             UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
             setWalletConnect(true);
             setIsCorrectIconVisible("visible")
             setIsButtonBlocked(true)
             await openCorrectIcon()
-            closeCorrectIcon()
-            // EventBus.emit("startPreloader")
-             walletRef.current.closeTween()
-            await closeBackgroundTween()
-            navigate(navigatePrefixURL+"/game/");
         }
     };
 
-    // useEffect(() => {
-    //     gsap.fromTo(
-    //         correctIconRef.current,
-    //         { scale: 1 },
-    //         { scale: 0, ease: "back.in", duration: 0.8})
+    const handleNextScene = async () => {
+        closeCorrectIcon()
+        // EventBus.emit("startPreloader")
+         walletRef.current.closeTween()
+        await closeBackgroundTween()
+        navigate(navigatePrefixURL+"/game/");
+    }
 
-    // }, [isWalletConnected]);
+    const openPhantomURL = () => {
+        window.open(phantomExtensionURL, '_blank');
+      };
 
     const openCorrectIcon = async  () => {
         await  gsap.fromTo(
@@ -101,11 +104,26 @@ export const PreGameScreen = (props) => {
             { scale: 4, ease: "back.in", duration: 0.8})
     }
 
+    const openTween = async () => {
+        await  gsap.fromTo(
+            preGameScreenRef.current,
+            { scale: 4 },
+            { scale: 1, ease: "back.out", duration: 0.9, onComplete: ()=> {
+                setIsButtonBlocked(false)
+                handleConnect();
+            } })
+    }
+
     return (
         <div className="UIContainer preGameScreenContainer" >
          <div className="UIContainer pre-game-background"  ref={preGameScreenRef} />
-            <WalletConnect connectWalletClicked={isButtonBlocked ? "" : connectWalletClicked} ref={walletRef}/>
-            <img className= "UIContainer correct-icon" src={HOST +"assets/correct_icon.png"}  style={{visibility: isCorrectIconVisible}} ref={correctIconRef}></img>
+            {hasPhantom && <WalletConnect connectWalletClicked={isButtonBlocked ? "" : handleConnect} ref={walletRef}/>}
+            {hasPhantom && <img className= "UIContainer correct-icon" src={HOST +"assets/correct_icon.png"}  style={{visibility: isCorrectIconVisible}} ref={correctIconRef}></img>}
+            {!hasPhantom && <div className="ui install-phantom-section" >
+                <h2 >To use this app, please install the extension Phantom to your browser</h2>
+                <h2 >You can download it here:</h2>
+                <h2 style={{ fontWeight: 'bold', color:"aqua" ,transform: "scale(1.3)"}} onClick={openPhantomURL} >Phantom</h2>
+            </div>}
         </div>
     );
 };

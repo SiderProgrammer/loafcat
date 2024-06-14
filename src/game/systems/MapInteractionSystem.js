@@ -71,11 +71,9 @@ export class MapInteractionSystem {
     // TODO : show arrow again on interaction complete
     addPointingArrows() {
         this.zones.forEach((zone) => {
-            const arrow = this.scene.add.image(
-                zone.x + zone.width / 2,
-                zone.y - 15,
-                "arrow"
-            );
+            const arrow = this.scene.add
+                .image(zone.x + zone.width / 2, zone.y - 15, "arrow")
+                .setOrigin(0.5, 0.5);
             this.scene.tweens.add({
                 targets: arrow,
                 alpha: 0.5,
