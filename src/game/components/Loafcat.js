@@ -3,38 +3,39 @@ import { Async } from "../utils/Async";
 import { MathUtils } from "../utils/Math";
 import { EventBus } from "../EventBus";
 import { PetModel } from "../models/PetModel";
+import gameConfig from "../config/index";
 // import { PetStateSystem } from "../systems/StateSystem";
 
 export default class Loafcat extends Phaser.GameObjects.Container {
-    constructor(scene, config) {
-        const { x, y } = config;
+    constructor(scene) {
+        const { x, y } = gameConfig.petConfig;
         super(scene, x, y);
-        this.config = config;
+        this.config = gameConfig.petConfig;
         this.scene.add.existing(this);
 
         this.character = this.createCharacter();
-        // this.stateSystem = new PetStateSystem(this.scene, this);
         this.actualStateDelay = null;
         this.moveTween = null;
         this.effects = [];
 
         this.add([this.character]);
-
-        // this.moveRandomly();
         this.setState("walk");
+
+        // const text = this.scene.add
+        //     .text(200, 100, "HELLOOO", {
+        //         font: "20px Arial",
+        //         fill: "#ffffff",
+        //     })
+        //     .setScale(0.5);
     }
 
     createCharacter() {
-        return this.scene.add.sprite(0, 0, this.config.sprite);
-        // .play("idle");
+        return this.scene.add.sprite(0, 0, this.config.textureKey);
     }
 
     async setState(state, value) {
-        // this.moveTween && this.moveTween.pause();
         if (this.moveTween) this.moveTween.pause();
-        this.scene.mapInteractionSystem.disableAll();
 
-        // console.log(state);
         switch (state) {
             case "idle":
                 this.cleanEffects();
@@ -44,41 +45,33 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                 this.setStateCatWalk();
                 break;
             case "feed":
-                console.log("FEEEEDDD");
                 await this.setStateCatFeed();
                 break;
             case "eat":
                 await this.eat(value);
                 break;
             case "bath":
-                // this.stateSystem.setState(state);
                 await this.setStateBathing();
                 break;
             case "toilet":
-                // this.stateSystem.setState(state);
                 await this.setStateCatPoop();
                 break;
             case "teeth-brush":
                 await this.setStateCatTeethBrush();
                 break;
             case "TV":
-                // this.stateSystem.setState(state);
                 await this.setStateCatWatchTV();
                 break;
             case "bed":
-                // this.stateSystem.setState(state);
                 await this.sleep();
                 break;
             case "sink":
-                // await this.stateSystem.setState(state);
                 await this.teethBrush();
                 break;
             case "smoke":
-                // this.stateSystem.setState(state);
                 await this.smoke();
                 break;
             case "work":
-                // this.stateSystem.setState(state);
                 await this.work();
                 break;
         }
@@ -140,10 +133,6 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.setScale(1, 1);
         // this.pet.setState("TV");
         //takeAction("toothBrush")
-        this.scene.updatePetData({
-            ...PetModel.PET_DATA,
-            CleanlinessLevel: PetModel.PET_DATA.CleanlinessLevel + 15,
-        });
         await Async.delay(3000);
     }
     drinkCoffee() {
@@ -158,11 +147,6 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             pos: this.scene.input.activePointer,
         });
         this.x = 248;
-        this.scene.updatePetData({
-            ...PetModel.PET_DATA,
-            HappinessLevel: PetModel.PET_DATA.HappinessLevel + 15,
-        });
-
         await Async.delay(3000);
     }
 
@@ -219,12 +203,6 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         //takeAction("poo")
         //takeAction("pee")
 
-        this.scene.updatePetData({
-            ...PetModel.PET_DATA,
-            PoopLevel: 0,
-            PeeLevel: 0,
-        });
-
         await Async.delay(3000);
     }
 
@@ -275,11 +253,6 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         //   .setDepth(3);
         // TODO : refactor it
         return new Promise((resolve) => {
-            // this.scene.setSoapCursor();
-            this.scene.cursorController.soap();
-            this.scene.map.getLayer("Bath").tilemapLayer.setDepth(2);
-            // this.pet.setState("bath");
-
             this.character.setInteractive();
             let soapIn = false;
             let lastEventPoint = {
@@ -344,26 +317,16 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
 
     stopBathAction() {
-        this.scene.cursorController.idle();
         this.setBaseY();
-        // this.pet.moveRandomly();
         this.setState("idle");
         this.soap.destroy();
         this.character.removeInteractive();
-        this.scene.map.getLayer("Bath").tilemapLayer.setDepth(0);
-        this.scene.mapInteractionSystem.setAllInteractive();
-        //takeAction("bath")
-        this.scene.updatePetData({
-            ...PetModel.PET_DATA,
-            CleanlinessLevel: 100,
-        });
     }
 
     actionStopped() {
         this.cleanEffects();
         this.setStateCatIdle();
         this.setStateCatWalk();
-        this.scene.mapInteractionSystem.setAllInteractive();
         this.setBaseY();
     }
 

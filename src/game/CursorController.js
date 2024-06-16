@@ -10,6 +10,10 @@ export default class CursorController {
         this.changeTexture("pointer");
     }
 
+    indicator() {
+        this.changeTexture("pointerPoint");
+    }
+
     grab() {
         this.changeTexture("pointerHold");
     }

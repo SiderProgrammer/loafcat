@@ -36,7 +36,7 @@ export const WorkPopUp = () => {
     };
     const stopWork = () => {
         setIsWorking(false);
-        EventBus.emit("stopWork");
+        EventBus.emit("breakPetStateDuration");
         // closeWorkPopUp();
     };
 
@@ -48,7 +48,7 @@ export const WorkPopUp = () => {
     const finishWork = () => {
         setIsWorkingFinished(true)
         setIsWorking(false);
-        EventBus.emit("stopWork");
+        EventBus.emit("breakPetStateDuration");
         console.log("Work finished")
     }
 

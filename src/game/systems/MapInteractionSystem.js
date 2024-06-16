@@ -1,48 +1,46 @@
-import axios from "axios";
-import { UserModel } from "../models/UserModel";
-import { openInventory } from "../../UI/inventory/inventory";
-import { openShop } from "../../UI/shop/shop";
-import { openWorkPopUp } from "../../UI/work/WorkPopUp";
-import { HOST } from "../../sharedConstants/constants";
+import gameConfig from "../config/index";
 
 export class MapInteractionSystem {
-    constructor(scene) {
+    constructor(scene, mapLayers, cursorController) {
+        this.config = gameConfig.mapConfig.pointArrow;
         this.scene = scene;
+        this.mapLayers = mapLayers;
+        this.cursorController = cursorController;
         this.canInteract = true;
         this.zones = [];
         this.arrows = [];
-        this.cursorUrl = `${HOST}assets/pointerPoint.png`;
+
+        this.addInteractiveZones();
+        this.addPointingArrows();
     }
     addInteractiveZones() {
-        const zones = this.scene.map.getObjectLayer("interactive");
+        const zones = this.mapLayers;
         if (!zones) return;
         zones.objects.forEach((area) => {
             const zone = this.scene.add
                 .zone(area.x, area.y, area.width, area.height)
-                .setInteractive({
-                    cursor: `url(${this.cursorUrl}), pointer`,
-                })
+                .setInteractive()
                 .setOrigin(0, 0);
 
+            zone.areaName = area.name;
             this.zones.push(zone);
 
-            zone.on("pointerdown", () => {
-                // TODO : also should block some of UI
-                this.scene.input.setDefaultCursor(
-                    `url("${HOST}assets/pointer.png"), pointer`
-                );
-                this.disableAll();
-
-                this.startInteraction(area.name);
+            zone.on("pointerover", () => {
+                this.cursorController.indicator();
+            });
+            zone.on("pointerout", () => {
+                this.cursorController.idle();
             });
         });
     }
 
+    getZones() {
+        return this.zones;
+    }
+
     setAllInteractive() {
         this.zones.forEach((zone) => {
-            zone.setInteractive({
-                cursor: `url(${this.cursorUrl}), pointer`,
-            });
+            zone.setInteractive();
             zone.arrow.setVisible(true);
             this.scene.tweens.add({
                 targets: zone.arrow,
@@ -72,8 +70,13 @@ export class MapInteractionSystem {
     addPointingArrows() {
         this.zones.forEach((zone) => {
             const arrow = this.scene.add
-                .image(zone.x + zone.width / 2, zone.y - 15, "arrow")
+                .image(
+                    zone.x + zone.width / 2 + this.config.offsetX,
+                    zone.y + this.config.offsetY,
+                    this.config.textureKey
+                )
                 .setOrigin(0.5, 0.5);
+
             this.scene.tweens.add({
                 targets: arrow,
                 alpha: 0.5,
@@ -85,39 +88,5 @@ export class MapInteractionSystem {
             zone.arrow = arrow;
             this.arrows.push(arrow);
         });
-    }
-    startInteraction(elementName) {
-        //   if (!this.canInteract) return;
-
-        //this.canInteract = false;
-        switch (elementName) {
-            case "shop":
-                openShop();
-                break;
-            case "fridge":
-                openInventory(true);
-                break;
-            case "bath":
-                this.scene.setState("bath");
-                break;
-            case "toilet":
-                this.scene.setState("toilet");
-                break;
-            case "sink":
-                this.scene.setState("sink");
-                break;
-            case "tv":
-                this.scene.setState("TV");
-                break;
-            case "smoke":
-                this.scene.setState("smoke");
-                break;
-            case "bed":
-                this.scene.setState("bed");
-                break;
-            case "work":
-                openWorkPopUp();
-                break;
-        }
     }
 }

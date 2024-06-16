@@ -10,20 +10,19 @@ import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
 import CursorController from "../CursorController";
-import { linkTilemaps } from "../helpers/linkTilemaps";
-import { MAPS_ORDER } from "../constants/houseRooms";
-import { MapInteractionSystem } from "../systems/MapInteractionSystem";
+import Map from "../Map";
 import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
-import { addAmbientAnimations } from "../helpers/addAmbientAnimations";
 import { EventBus } from "../EventBus";
 import { getMyPetData } from "../helpers/requests";
-
 import {
     showLoadingScreen,
     hideLoadingScreen,
 } from "../../UI/loadingScreen/loadingScreen";
-import { HOST } from "../../sharedConstants/constants";
+import { openInventory } from "../../UI/inventory/inventory";
+import { openShop } from "../../UI/shop/shop";
+import { openWorkPopUp } from "../../UI/work/WorkPopUp";
+// import { openWorkPopUp } from "../config/index";
 
 export class Game extends Scene {
     constructor() {
@@ -36,120 +35,25 @@ export class Game extends Scene {
         GameModel.MAIN_SCENE = this;
 
         this.cursorController = new CursorController(this);
-        // this.scale.displaySize.setSnap(SAFE_GAME_WIDTH, SAFE_GAME_HEIGHT);
-        // this.scale.refresh();
-
-        //this.scene.launch("UI");
-        // this.cameras.main.setBackgroundColor(0x00ff00);
-
-        //this.add.image(512, 384, "background").setAlpha(0.5);
         this.alertSystem = new AlertSystem();
+        this.map = new Map(this, this.mapKey, this.cursorController);
+        this.pet = new Loafcat(this).setDepth(1);
 
-        this.mapInteractionSystem = new MapInteractionSystem(this);
-        this.map = this.createMap();
-
-        this.pet = this.createPet();
-        // this.pet.moveRandomly();
         if (this.restarted) this.restartTween();
-
-        //this.pet.playCurious();
-
-        //this.pet.drinkCoffee();
-        // this.pet.smoke();
-        // setTimeout(() => {
-        //     this.pet.setStateCatDead();
-        // }, 7500);
-        //this.pet.listenMusic();
-
-        // this.pet.pee();
-        //this.pet.bathing();
-
-        this.scale.on("resize", () => {
-            this.resize();
-        });
-
-        this.resize();
+        this.handleMapInteraction();
+        this.createListeners();
+        this.handleResize();
 
         this.petData = await getMyPetData();
         this.updatePetData(this.petData.data.pet);
+
         EventBus.emit("current-scene-ready");
-        // this.alertSystem.updateAlerts();
-
-        this.input.on("pointerup", async () => {
-            if (!this.itemInUse) return;
-            this.cursorController.idle();
-            this.itemInUse.destroy();
-            const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
-
-            // this.pet.setState("walk");
-
-            EventBus.emit("itemDrop");
-            //callback();
-
-            //   if (isPetFed) {
-            //     this.itemUsed(this.itemInUse.slot);
-            //     this.itemInUse = null;
-            //   }
-        });
-        if (!EventBus.eventNames().includes("itemGrab")) {
-            EventBus.on("itemGrab", async ({ data }) => {
-                // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
-                // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
-
-                this.cursorController.grab();
-                // this.pet.setState("feed");
-                this.itemInUse = GameModel.MAIN_SCENE.add
-                    .image(
-                        this.input.activePointer.worldX,
-                        this.input.activePointer.worldY,
-                        "apple"
-                    )
-                    .setDepth(2);
-
-                this.itemInUse.itemData = data;
-                // .setInteractive();
-            });
-        }
-
-        EventBus.once("changeMap", (map) => {
-            this.scene.start("Game", map);
-        });
-
-        EventBus.on("startWork", () => {
-            this.setState("work");
-        });
-        EventBus.on("stopWork", () => {
-            this.pet.breakStateDuration();
-        });
-        EventBus.on("handleMapInteraction", (value) => {
-            value
-                ? this.mapInteractionSystem.setAllInteractive()
-                : this.mapInteractionSystem.disableAll();
-        });
-
         hideLoadingScreen();
-        if (!this.restarted) this.openTween();
-        // const layers = this.map.layers;
 
-        // layers.forEach((layer) => {
-        //     this.tweens.add({
-        //         targets: layer.tilemapLayer,
-        //         scale: { from: 3, to: 1 }, // przesunięcie o 100 pikseli
-        //         duration: 1000,
-        //         ease: "Power2",
-        //     });
-        // });
-
-        // const tiles = this.map.layers.flatMap((layer) => layer.data);
-        // tiles.forEach((tileArray) => {
-        //     // console.log(tileArray);
-        //     this.tweens.add({
-        //         targets: tileArray,
-        //         duration: 1000,
-        //         alpha: { from: 0.1, to: 1 },
-        //     });
-        // });
-        if (!this.restarted) this.sound.add("theme").play({ loop: true });
+        if (!this.restarted) {
+            this.openTween();
+            this.sound.add("theme").play({ loop: true });
+        }
     }
 
     update() {
@@ -160,56 +64,66 @@ export class Game extends Scene {
         );
     }
 
-    createTilemap() {
-        const map = this.make.tilemap({ key: this.mapKey });
-        linkTilemaps(map, this.mapKey);
+    handleMapInteraction() {
+        this.map.interactionZones.forEach((zone) => {
+            zone.on("pointerdown", async () => {
+                this.map.interaction(false);
+                this.cursorController.idle();
 
-        //if (!houseRoomsPlacement[this.mapKey]) return;
-        // change name to: roomAbove
-        const mapIndex = MAPS_ORDER.indexOf(this.mapKey);
-        if (mapIndex !== 0) {
-            if (mapIndex !== -1) {
-                this.nextFloor = this.make.tilemap({
-                    key: MAPS_ORDER[mapIndex + 1],
-                });
-                linkTilemaps(this.nextFloor, MAPS_ORDER[mapIndex + 1], true);
-            }
-
-            let roomBelow = MAPS_ORDER[mapIndex - 1];
-            if (roomBelow !== "streetMap") {
-                if (roomBelow) {
-                    this.roomBelow = this.make.tilemap({
-                        key: roomBelow,
-                    });
-
-                    linkTilemaps(this.roomBelow, roomBelow, false, true);
-                    this.add.image(0, 290, "wallOverlay").setOrigin(0, 0);
+                switch (zone.areaName) {
+                    case "shop":
+                        openShop();
+                        break;
+                    case "fridge":
+                        openInventory(true);
+                        break;
+                    case "bath":
+                        this.cursorController.soap();
+                        this.map.getLayer("Bath").tilemapLayer.setDepth(2);
+                        await this.pet.setState("bath");
+                        this.map.getLayer("Bath").tilemapLayer.setDepth(0);
+                        this.updatePetData({
+                            ...PetModel.PET_DATA,
+                            CleanlinessLevel: 100,
+                        });
+                        break;
+                    case "toilet":
+                        await this.pet.setState("toilet");
+                        this.updatePetData({
+                            ...PetModel.PET_DATA,
+                            PoopLevel: 0,
+                            PeeLevel: 0,
+                        });
+                        break;
+                    case "sink":
+                        await this.pet.setState("sink");
+                        this.updatePetData({
+                            ...PetModel.PET_DATA,
+                            HappinessLevel:
+                                PetModel.PET_DATA.HappinessLevel + 15,
+                        });
+                        break;
+                    case "tv":
+                        await this.pet.setState("TV");
+                        this.updatePetData({
+                            ...PetModel.PET_DATA,
+                            CleanlinessLevel:
+                                PetModel.PET_DATA.CleanlinessLevel + 15,
+                        });
+                        break;
+                    case "smoke":
+                        await this.pet.setState("smoke");
+                        break;
+                    case "bed":
+                        await this.pet.setState("bed");
+                        break;
+                    case "work":
+                        openWorkPopUp();
+                        break;
                 }
-            }
-        }
-
-        return map;
-    }
-
-    createMap() {
-        this.map = this.createTilemap();
-        // for (const room in houseRoomsPlacement) {
-        //     if (houseRoomsPlacement[room].nextFloor === this.mapKey)
-        //         roomBelow = room;
-        // }
-
-        addAmbientAnimations(this, this.mapKey);
-        this.mapInteractionSystem.addInteractiveZones();
-        this.mapInteractionSystem.addPointingArrows();
-    }
-
-    createPet() {
-        const config = {
-            x: 325.5,
-            y: 277,
-            textureKey: "loafcat",
-        };
-        return new Loafcat(this, config).setDepth(1);
+                this.map.interaction(true);
+            });
+        });
     }
 
     async checkFeedPet(itemData) {
@@ -238,12 +152,12 @@ export class Game extends Scene {
         return true;
     }
 
-    updatePetData(data) {
-        PetModel.PET_DATA = data;
-    }
+    handleResize() {
+        this.scale.on("resize", () => {
+            this.resize();
+        });
 
-    setState(state) {
-        this.pet.setState(state);
+        this.resize();
     }
 
     resize() {
@@ -253,6 +167,56 @@ export class Game extends Scene {
             Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
             MAX_HEIGHT
         );
+    }
+
+    updatePetData(data) {
+        PetModel.PET_DATA = data;
+    }
+
+    createListeners() {
+        this.input.on("pointerup", async () => {
+            if (!this.itemInUse) return;
+            this.cursorController.idle();
+            this.itemInUse.destroy();
+            const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
+            EventBus.emit("itemDrop");
+            //   if (isPetFed) {
+            //     this.itemUsed(this.itemInUse.slot);
+            //     this.itemInUse = null;
+            //   }
+        });
+        if (!EventBus.eventNames().includes("itemGrab")) {
+            EventBus.on("itemGrab", async ({ data }) => {
+                // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
+                // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
+                this.cursorController.grab();
+                // this.pet.setState("feed");
+                this.itemInUse = GameModel.MAIN_SCENE.add
+                    .image(
+                        this.input.activePointer.worldX,
+                        this.input.activePointer.worldY,
+                        "apple"
+                    )
+                    .setDepth(2);
+
+                this.itemInUse.itemData = data;
+            });
+        }
+
+        EventBus.once("changeMap", (map) => {
+            this.scene.start("Game", map);
+        });
+
+        EventBus.on("startWork", () => {
+            // this.setState("work");
+            this.pet.setState("work");
+        });
+        EventBus.on("breakPetStateDuration", () => {
+            this.pet.breakStateDuration();
+        });
+        EventBus.on("handleMapInteraction", (value) => {
+            this.map.interaction(value);
+        });
     }
 
     openTween() {
@@ -276,49 +240,5 @@ export class Game extends Scene {
             ease: "Power3",
             onComplete: () => {},
         });
-
-        // const layers = this.map.layers;
-        // layers.forEach((layer) => {
-        //     this.tweens.add({
-        //         targets: layer.tilemapLayer,
-        //         alpha: { from: 0, to: 1 },
-        //         duration: 1000,
-        //         ease: "Power2",
-        //     });
-        // });
     }
 }
-
-// this.cameras.main.zoomTo(2, 500);
-// const tweenData = {
-//   centerX: this.cameras.main.centerX,
-//   centerY: this.cameras.main.centerY,
-// };
-// this.tweens.add({
-//   targets: tweenData,
-//   centerX: this.pet.x,
-//   centerY: this.pet.y,
-//   duration: 500,
-//   onUpdate: () => {
-//     this.cameras.main.centerOn(tweenData.centerX, tweenData.centerY);
-//   },
-// });
-// this.cameras.main.zoomTo(1, 500);
-// const tweenData = {
-//   centerX: this.cameras.main.centerX,
-//   centerY: this.cameras.main.centerY,
-// };
-
-// this.tweens.add({
-//   targets: tweenData,
-//   centerX: Math.round(
-//     SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2
-//   ),
-//   centerY:
-//     Math.round(SAFE_GAME_HEIGHT / 2 + (MAX_HEIGHT - SAFE_GAME_HEIGHT) / 2) +
-//     3.5,
-//   duration: 500,
-//   onUpdate: () => {
-//     this.cameras.main.centerOn(tweenData.centerX, tweenData.centerY);
-//   },
-// });
