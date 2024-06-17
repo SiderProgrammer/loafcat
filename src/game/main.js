@@ -26,7 +26,7 @@ const config = {
     canvasStyle: "",
     autoRound: true,
     scale: {
-        mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
+        mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT, //      mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: SAFE_GAME_WIDTH,
         height: SAFE_GAME_HEIGHT,
@@ -57,6 +57,10 @@ const config = {
     roundPixels: true,
     antialias: false,
     antialiasGL: false,
+    render: {
+        pixelArt: true,
+        roundPixels: true,
+    },
     dom: {
         createContainer: true,
     },

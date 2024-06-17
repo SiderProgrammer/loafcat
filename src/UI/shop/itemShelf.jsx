@@ -6,7 +6,6 @@ export const ItemShelf = (props) => {
     props.data.ItemID.item_name = 'apple'
 
     const showBuyPopUp = ()=>{
-        console.log(props);
         props.showBuyPopUp(props)
     }
   

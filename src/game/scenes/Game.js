@@ -9,6 +9,7 @@ import {
 import axios from "axios";
 import { UserModel } from "../models/UserModel";
 import Loafcat from "../components/Loafcat";
+import UsableItem from "../components/UsableItem";
 import CursorController from "../CursorController";
 import Map from "../Map";
 import { AlertSystem } from "../systems/AlertSystem";
@@ -38,6 +39,7 @@ export class Game extends Scene {
         this.alertSystem = new AlertSystem();
         this.map = new Map(this, this.mapKey, this.cursorController);
         this.pet = new Loafcat(this).setDepth(1);
+        this.usableItem = new UsableItem(this, this.input.activePointer);
 
         if (this.restarted) this.restartTween();
         this.handleMapInteraction();
@@ -57,8 +59,8 @@ export class Game extends Scene {
     }
 
     update() {
-        if (!this.itemInUse) return;
-        this.itemInUse.setPosition(
+        if (!this.usableItem.isInUse) return;
+        this.usableItem.setPosition(
             this.input.activePointer.worldX,
             this.input.activePointer.worldY
         );
@@ -73,10 +75,13 @@ export class Game extends Scene {
                 switch (zone.areaName) {
                     case "shop":
                         openShop();
-                        break;
+                        return;
                     case "fridge":
                         openInventory(true);
-                        break;
+                        return;
+                    case "work":
+                        openWorkPopUp();
+                        return;
                     case "bath":
                         this.cursorController.soap();
                         this.map.getLayer("Bath").tilemapLayer.setDepth(2);
@@ -86,6 +91,7 @@ export class Game extends Scene {
                             ...PetModel.PET_DATA,
                             CleanlinessLevel: 100,
                         });
+                        this.addReward("Happiness", 15);
                         break;
                     case "toilet":
                         await this.pet.setState("toilet");
@@ -94,6 +100,7 @@ export class Game extends Scene {
                             PoopLevel: 0,
                             PeeLevel: 0,
                         });
+                        this.addReward("Happiness", 15);
                         break;
                     case "sink":
                         await this.pet.setState("sink");
@@ -102,6 +109,7 @@ export class Game extends Scene {
                             HappinessLevel:
                                 PetModel.PET_DATA.HappinessLevel + 15,
                         });
+                        this.addReward("Happiness", 15);
                         break;
                     case "tv":
                         await this.pet.setState("TV");
@@ -110,15 +118,15 @@ export class Game extends Scene {
                             CleanlinessLevel:
                                 PetModel.PET_DATA.CleanlinessLevel + 15,
                         });
+                        this.addReward("Happiness", 15);
                         break;
                     case "smoke":
                         await this.pet.setState("smoke");
+                        this.addReward("Happiness", 15);
                         break;
                     case "bed":
                         await this.pet.setState("bed");
-                        break;
-                    case "work":
-                        openWorkPopUp();
+                        this.addReward("Happiness", 15);
                         break;
                 }
                 this.map.interaction(true);
@@ -148,7 +156,10 @@ export class Game extends Scene {
             HungerLevel: PetModel.PET_DATA.HungerLevel + 15,
         });
         // this.alertSystem.updateAlerts();
+        this.map.interaction(false);
         await this.pet.setState("eat", 1); // itemData.itemDetails.pointValue
+        this.map.interaction(true);
+        this.addReward("Happiness", 15);
         return true;
     }
 
@@ -161,7 +172,6 @@ export class Game extends Scene {
     }
 
     resize() {
-        // this.resize();
         this.cameras.main.setBounds(0, -20, MAX_WIDTH, MAX_HEIGHT);
         this.cameras.main.centerOn(
             Math.round(SAFE_GAME_WIDTH / 2 + (MAX_WIDTH - SAFE_GAME_WIDTH) / 2),
@@ -173,42 +183,38 @@ export class Game extends Scene {
         PetModel.PET_DATA = data;
     }
 
+    addReward(imageKey, value) {
+        EventBus.emit("rewardUpdate", {
+            value: value,
+            img: imageKey,
+        });
+    }
+
     createListeners() {
+        if (!EventBus.eventNames().includes("itemGrab")) {
+            EventBus.on("itemGrab", async (itemData) => {
+                this.cursorController.grab();
+                this.usableItem.take("apple", itemData);
+                // this.pet.setState("feed");
+            });
+        }
+
         this.input.on("pointerup", async () => {
-            if (!this.itemInUse) return;
+            if (!this.usableItem.isInUse) return;
             this.cursorController.idle();
-            this.itemInUse.destroy();
-            const isPetFed = await this.checkFeedPet(this.itemInUse.itemData);
-            EventBus.emit("itemDrop");
+            this.usableItem.put();
+            const isPetFed = await this.checkFeedPet(this.usableItem.itemData);
+            EventBus.emit("openInventory");
             //   if (isPetFed) {
             //     this.itemUsed(this.itemInUse.slot);
             //     this.itemInUse = null;
             //   }
         });
-        if (!EventBus.eventNames().includes("itemGrab")) {
-            EventBus.on("itemGrab", async ({ data }) => {
-                // const diffX = GameModel.MAIN_SCENE.cameras.main.scrollX;
-                // const diffY = GameModel.MAIN_SCENE.cameras.main.scrollY;
-                this.cursorController.grab();
-                // this.pet.setState("feed");
-                this.itemInUse = GameModel.MAIN_SCENE.add
-                    .image(
-                        this.input.activePointer.worldX,
-                        this.input.activePointer.worldY,
-                        "apple"
-                    )
-                    .setDepth(2);
-
-                this.itemInUse.itemData = data;
-            });
-        }
 
         EventBus.once("changeMap", (map) => {
             this.scene.start("Game", map);
         });
-
         EventBus.on("startWork", () => {
-            // this.setState("work");
             this.pet.setState("work");
         });
         EventBus.on("breakPetStateDuration", () => {
@@ -216,6 +222,9 @@ export class Game extends Scene {
         });
         EventBus.on("handleMapInteraction", (value) => {
             this.map.interaction(value);
+        });
+        EventBus.on("addReward", (imageKey, value) => {
+            this.addReward(imageKey, value);
         });
     }
 

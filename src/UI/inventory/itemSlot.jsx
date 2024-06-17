@@ -8,40 +8,26 @@ import { HOST } from "../../sharedConstants/constants";
 // TODO : fix visiblity (add drag check)
 export const ItemSlot = (props) => {
     const [isDragging,setDrag] = useState(false)
-    // const [itemVisible, setItemVisibility] = useState("hidden")
-    const [isHovered, setHovered] = useState(false);
     const [isClicked, setClicked] = useState(false);
     const itemSlotRef = useRef(null);
 
+    EventBus.on("openInventory",()=>props.openInventory(true))
+
     const onClick = ()=>{
-        //props.onDragStart()
-       // closeInventory()
        if(props.onClick === false) return
        props.onClick()
-       EventBus.emit("itemGrab",props)
+       EventBus.emit("itemGrab",props.data)
        // TODO : need to update item inventory data
-       EventBus.once("itemDrop",()=>props.openInventory(true))
        setClicked(!isClicked);
     }
-
+ 
     const onMouseEnter = () => {
-        // setHovered(true);
-        // console.log("X:", rect.x, "Y:", rect.y);
         props.onHover(true, props.data)
     };
 
     const onMouseLeave = () => {
         props.onHover(false)
-        // setHovered(false);
-        // setClicked(false); 
     };
-
-    // const onDragEnd = async ()=>{
-    //     // TODO : finish item drop
-    //     EventBus.emit("itemDrop")
-    //     //props.data
-    //     openInventory(true)
-    // }
 
     // useEffect(()=>{
     //     if(isDragging || visibilitySignal.value ==='visible') {
@@ -60,19 +46,8 @@ export const ItemSlot = (props) => {
             <div className="count-text-container">
                 <span className="count"> {props.data.quantity}</span>
             </div>
-                {/* <div className="description-container">
-                    <span className="description"> {props.data.itemDetails.description}</span>
-                </div> */}
         </div>
     );
 };
 // data.itemDetails.description
 // data.itemDetails.ItemID
-
-
-
-// {(isHovered || isClicked) && (
-//     <div className="description-container">
-//         <span className="description"> {props.data.itemDetails.description}</span>
-//     </div>
-// )}

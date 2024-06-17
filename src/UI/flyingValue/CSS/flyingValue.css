@@ -1,0 +1,58 @@
+.flyingValue {
+    /* background-color:rgb(170, 123, 47);
+    border: 2px solid rgb(114, 82, 31); */
+    /* border-radius: 10px; */
+    /* background-color:rgba(0, 0, 0, 0.158); */
+    /* padding: 10px; */
+    visibility: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.flyingValue .flyingValueWrapper{
+    /* background-color:rgb(170, 123, 47);
+    border: 2px solid rgb(114, 82, 31); */
+    /* border-radius: 10px; */
+    background-color:rgba(0, 0, 0, 0.158);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.reward-image {
+    transform: scale(2.5);
+    margin-left: 5px;
+    filter: invert(1);
+}
+
+
+
+
+
+@media (max-width: 650px) {
+    .flyingValue {
+        transform: translate(-50%, -50%) scale(0.2);
+    }
+}
+@media (max-width: 880px) {
+    .flyingValue {
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+}
+@media (max-width: 1150px) {
+    .flyingValue {
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+}
+@media (max-width: 1500px) {
+    .flyingValue {
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+}

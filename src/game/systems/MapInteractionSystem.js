@@ -7,12 +7,14 @@ export class MapInteractionSystem {
         this.mapLayers = mapLayers;
         this.cursorController = cursorController;
         this.canInteract = true;
+
         this.zones = [];
         this.arrows = [];
 
         this.addInteractiveZones();
         this.addPointingArrows();
     }
+
     addInteractiveZones() {
         const zones = this.mapLayers;
         if (!zones) return;
