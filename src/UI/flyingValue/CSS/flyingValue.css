@@ -1,23 +1,12 @@
 .flyingValue {
-    /* background-color:rgb(170, 123, 47);
-    border: 2px solid rgb(114, 82, 31); */
-    /* border-radius: 10px; */
-    /* background-color:rgba(0, 0, 0, 0.158); */
-    /* padding: 10px; */
     visibility: hidden;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
 }
 
 .flyingValue .flyingValueWrapper{
-    /* background-color:rgb(170, 123, 47);
-    border: 2px solid rgb(114, 82, 31); */
-    /* border-radius: 10px; */
     background-color:rgba(0, 0, 0, 0.158);
     padding: 10px;
     display: flex;

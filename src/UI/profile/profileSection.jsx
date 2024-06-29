@@ -68,7 +68,7 @@ export const ProfileSection = () =>{
                     {/* <img id="levelFrame" src={HOST+"./assets/ui/profileView/levelBox.png"} />  */}
                     <span id="levelValue">Lv.13</span>
                 </div>
-            </div>
+            </div>   
             <div id="statsDropDownMenu" className="dropdown">
                 <button className="dropbtn button hoverScale" onClick={handleOpenAlertStats}>
                 <img id="alertBox" src={HOST+"assets/ui/profileView/alertBox1.png"}></img>

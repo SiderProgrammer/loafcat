@@ -22,6 +22,6 @@ export default class UsableItem extends Phaser.GameObjects.Image {
     put() {
         this.setVisible(false);
         this.isInUse = false;
-        this.itemData = null;
+        // this.itemData = null;
     }
 }

@@ -26,7 +26,7 @@ export const openCoinsBuy = () => {
     if(!canOpen) return
     visibilitySignal.value = "visible";
     showOverlay();
-    EventBus.emit("handleMapInteraction",false)
+    EventBus.emit("handleGameInteraction",false)
     canOpen = false
 };
 export const closeCoinsBuy = () => {
@@ -112,7 +112,7 @@ export const CoinsBuy = () => {
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setBuyCoinsVisible("hidden")
                 setInputValue("0.00")
-                EventBus.emit("handleMapInteraction",true)
+                EventBus.emit("handleGameInteraction",true)
                 canOpen = true
             } })
     }

@@ -10,13 +10,15 @@ export const FlyingValue = ()=>{
     const [visible,setVisiblity] = useState('hidden')
     const rewardContainerRef = useRef(null);
 
-    EventBus.on("rewardUpdate", async (rewardData)=>{
-        const {value,img} = rewardData
-        setRewardImage(img)
-        setValue(value)
-        setVisiblity("visible")
-        openTween()
-    })
+    useEffect( () => {
+        EventBus.on("rewardUpdate", async (rewardData)=>{
+            const {value,img} = rewardData
+            setRewardImage(img)
+            setValue(value)
+            setVisiblity("visible")
+            openTween()
+        })
+      }, []);
 
     const openTween = async () => {
         await gsap.fromTo(

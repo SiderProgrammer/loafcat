@@ -7,6 +7,7 @@
 .work-popup .work-popup-wrapper{
     transform-origin: center;
     image-rendering: pixelated;
+    pointer-events: all;
     /* top: 300px */
 }
 
@@ -37,6 +38,10 @@
     position: absolute;
     left: 22px;
     top: 136px;
+
+}
+.nameSubmitButton .button-wrapper{
+    height: 10px;
 }
 .nameSubmitButton .buttonText{
     top: -19px;
@@ -44,7 +49,11 @@
 .workPopupCloseButton {
     position: absolute;
     left: 144px;
-    top: -44px;
+    top: -49px;
+    pointer-events: all;
+}
+.workPopupCloseButton .button-image{
+    pointer-events: all;
 }
 
 .coffee-icon {

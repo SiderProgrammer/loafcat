@@ -22,8 +22,8 @@ import {
 } from "../../UI/loadingScreen/loadingScreen";
 import { openInventory } from "../../UI/inventory/inventory";
 import { openShop } from "../../UI/shop/shop";
+import { handleBottomButtonsInteractive } from "../../UI/UIView";
 import { openWorkPopUp } from "../../UI/work/WorkPopUp";
-// import { openWorkPopUp } from "../config/index";
 
 export class Game extends Scene {
     constructor() {
@@ -37,12 +37,13 @@ export class Game extends Scene {
 
         this.cursorController = new CursorController(this);
         this.alertSystem = new AlertSystem();
-        this.map = new Map(this, this.mapKey, this.cursorController);
+        this.map = new Map(this, this.mapKey);
         this.pet = new Loafcat(this).setDepth(1);
         this.usableItem = new UsableItem(this, this.input.activePointer);
 
         if (this.restarted) this.restartTween();
         this.handleMapInteraction();
+        this.handlePetInteraction();
         this.createListeners();
         this.handleResize();
 
@@ -66,12 +67,33 @@ export class Game extends Scene {
         );
     }
 
+    handlePetInteraction() {
+        const pointerdownCb = () => {
+            this.cursorController.grab();
+        };
+        const pointerupCb = () => {
+            this.cursorController.indicator();
+        };
+        const pointeroverCb = () => {
+            this.cursorController.indicator();
+        };
+        const pointerOutCb = () => {
+            this.cursorController.idle();
+        };
+
+        this.pet.handleInteraction(
+            pointerdownCb,
+            pointerupCb,
+            pointeroverCb,
+            pointerOutCb
+        );
+    }
+
     handleMapInteraction() {
         this.map.interactionZones.forEach((zone) => {
-            zone.on("pointerdown", async () => {
-                this.map.interaction(false);
+            const pointerdownCb = async () => {
+                this.handleGameInteractive(false);
                 this.cursorController.idle();
-
                 switch (zone.areaName) {
                     case "shop":
                         openShop();
@@ -87,80 +109,173 @@ export class Game extends Scene {
                         this.map.getLayer("Bath").tilemapLayer.setDepth(2);
                         await this.pet.setState("bath");
                         this.map.getLayer("Bath").tilemapLayer.setDepth(0);
+                        this.addReward("Happiness", 15);
                         this.updatePetData({
                             ...PetModel.PET_DATA,
                             CleanlinessLevel: 100,
                         });
-                        this.addReward("Happiness", 15);
                         break;
                     case "toilet":
                         await this.pet.setState("toilet");
+                        this.addReward("Happiness", 15);
                         this.updatePetData({
                             ...PetModel.PET_DATA,
                             PoopLevel: 0,
                             PeeLevel: 0,
                         });
-                        this.addReward("Happiness", 15);
                         break;
                     case "sink":
                         await this.pet.setState("sink");
+                        this.addReward("Happiness", 15);
                         this.updatePetData({
                             ...PetModel.PET_DATA,
                             HappinessLevel:
                                 PetModel.PET_DATA.HappinessLevel + 15,
                         });
-                        this.addReward("Happiness", 15);
                         break;
                     case "tv":
                         await this.pet.setState("TV");
+                        this.addReward("Happiness", 15);
                         this.updatePetData({
                             ...PetModel.PET_DATA,
                             CleanlinessLevel:
                                 PetModel.PET_DATA.CleanlinessLevel + 15,
                         });
-                        this.addReward("Happiness", 15);
                         break;
                     case "smoke":
                         await this.pet.setState("smoke");
                         this.addReward("Happiness", 15);
+                        this.updatePetData({
+                            ...PetModel.PET_DATA,
+                            HappinessLevel:
+                                PetModel.PET_DATA.HappinessLevel + 15,
+                        });
                         break;
                     case "bed":
                         await this.pet.setState("bed");
                         this.addReward("Happiness", 15);
+                        this.updatePetData({
+                            ...PetModel.PET_DATA,
+                            HappinessLevel:
+                                PetModel.PET_DATA.HappinessLevel + 15,
+                        });
                         break;
                 }
-                this.map.interaction(true);
-            });
+                this.handleGameInteractive(true);
+            };
+            const pointeroverCb = () => {
+                this.cursorController.indicator();
+            };
+            const pointerOutCb = () => {
+                this.cursorController.idle();
+            };
+            zone.handleInteractive(pointerdownCb, pointeroverCb, pointerOutCb);
+
+            // zone.on("pointerover", () => {
+            //     this.cursorController.indicator();
+            // });
+            // zone.on("pointerout", () => {
+            //     this.cursorController.idle();
+            // });
+            // zone.on("pointerdown", async () => {
+            //     this.handleGameInteractive(false);
+            //     this.cursorController.idle();
+
+            //     switch (zone.areaName) {
+            //         case "shop":
+            //             openShop();
+            //             return;
+            //         case "fridge":
+            //             openInventory(true);
+            //             return;
+            //         case "work":
+            //             openWorkPopUp();
+            //             return;
+            //         case "bath":
+            //             this.cursorController.soap();
+            //             this.map.getLayer("Bath").tilemapLayer.setDepth(2);
+            //             await this.pet.setState("bath");
+            //             this.map.getLayer("Bath").tilemapLayer.setDepth(0);
+            //             this.addReward("Happiness", 15);
+            //             this.updatePetData({
+            //                 ...PetModel.PET_DATA,
+            //                 CleanlinessLevel: 100,
+            //             });
+            //             break;
+            //         case "toilet":
+            //             await this.pet.setState("toilet");
+            //             this.addReward("Happiness", 15);
+            //             this.updatePetData({
+            //                 ...PetModel.PET_DATA,
+            //                 PoopLevel: 0,
+            //                 PeeLevel: 0,
+            //             });
+            //             break;
+            //         case "sink":
+            //             await this.pet.setState("sink");
+            //             this.addReward("Happiness", 15);
+            //             this.updatePetData({
+            //                 ...PetModel.PET_DATA,
+            //                 HappinessLevel:
+            //                     PetModel.PET_DATA.HappinessLevel + 15,
+            //             });
+            //             break;
+            //         case "tv":
+            //             await this.pet.setState("TV");
+            //             this.addReward("Happiness", 15);
+            //             this.updatePetData({
+            //                 ...PetModel.PET_DATA,
+            //                 CleanlinessLevel:
+            //                     PetModel.PET_DATA.CleanlinessLevel + 15,
+            //             });
+            //             break;
+            //         case "smoke":
+            //             await this.pet.setState("smoke");
+            //             this.addReward("Happiness", 15);
+            //             this.updatePetData({
+            //                 ...PetModel.PET_DATA,
+            //                 HappinessLevel:
+            //                     PetModel.PET_DATA.HappinessLevel + 15,
+            //             });
+            //             break;
+            //         case "bed":
+            //             await this.pet.setState("bed");
+            //             this.addReward("Happiness", 15);
+            //             this.updatePetData({
+            //                 ...PetModel.PET_DATA,
+            //                 HappinessLevel:
+            //                     PetModel.PET_DATA.HappinessLevel + 15,
+            //             });
+            //             break;
+            //     }
+            //     this.handleGameInteractive(true);
+            // });
         });
     }
 
-    async checkFeedPet(itemData) {
-        // TODO : memory leak?
+    checkIsPointerHoverPet() {
         const petRect = new Phaser.Geom.Rectangle(
             this.pet.x - 25,
             this.pet.y - 25,
             50,
             50
         );
-        if (
-            !Phaser.Geom.Rectangle.Contains(
-                petRect,
-                this.input.activePointer.worldX,
-                this.input.activePointer.worldY
-            )
-        )
-            return false;
+        return Phaser.Geom.Rectangle.Contains(
+            petRect,
+            this.input.activePointer.worldX,
+            this.input.activePointer.worldY
+        );
+    }
 
+    async handlePetFeed(statsPointValue) {
+        this.handleGameInteractive(false);
+        await this.pet.setState("eat", statsPointValue);
+        this.handleGameInteractive(true);
+        this.addReward("Happiness", statsPointValue);
         this.updatePetData({
             ...PetModel.PET_DATA,
-            HungerLevel: PetModel.PET_DATA.HungerLevel + 15,
+            HungerLevel: PetModel.PET_DATA.HungerLevel + statsPointValue,
         });
-        // this.alertSystem.updateAlerts();
-        this.map.interaction(false);
-        await this.pet.setState("eat", 1); // itemData.itemDetails.pointValue
-        this.map.interaction(true);
-        this.addReward("Happiness", 15);
-        return true;
     }
 
     handleResize() {
@@ -190,6 +305,11 @@ export class Game extends Scene {
         });
     }
 
+    handleGameInteractive(value) {
+        this.map.interaction(value);
+        handleBottomButtonsInteractive(value);
+    }
+
     createListeners() {
         if (!EventBus.eventNames().includes("itemGrab")) {
             EventBus.on("itemGrab", async (itemData) => {
@@ -201,14 +321,14 @@ export class Game extends Scene {
 
         this.input.on("pointerup", async () => {
             if (!this.usableItem.isInUse) return;
+            // this.pet.breakStateDuration();
             this.cursorController.idle();
             this.usableItem.put();
-            const isPetFed = await this.checkFeedPet(this.usableItem.itemData);
+            if (!this.checkIsPointerHoverPet()) return;
+            await this.handlePetFeed(
+                this.usableItem.itemData.itemDetails.pointValue
+            );
             EventBus.emit("openInventory");
-            //   if (isPetFed) {
-            //     this.itemUsed(this.itemInUse.slot);
-            //     this.itemInUse = null;
-            //   }
         });
 
         EventBus.once("changeMap", (map) => {
@@ -219,9 +339,13 @@ export class Game extends Scene {
         });
         EventBus.on("breakPetStateDuration", () => {
             this.pet.breakStateDuration();
+            handleBottomButtonsInteractive(true);
         });
         EventBus.on("handleMapInteraction", (value) => {
             this.map.interaction(value);
+        });
+        EventBus.on("handleGameInteraction", (value) => {
+            this.handleGameInteractive(value);
         });
         EventBus.on("addReward", (imageKey, value) => {
             this.addReward(imageKey, value);

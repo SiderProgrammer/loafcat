@@ -16,7 +16,7 @@ const sampleData = [{Rank:1, UserID:"asdasd"},{Rank:2, UserID:"asdasd"},{Rank:3,
 export const openLeaderboard = async () => {
     visibilitySignal.value = "visible";
     showOverlay();
-    EventBus.emit("handleMapInteraction",false)
+    EventBus.emit("handleGameInteraction",false)
 };
 export const closeLeaderboard = () => {
     visibilitySignal.value = "hidden";
@@ -61,7 +61,7 @@ export const Leaderboard = (props) => {
             { scale: 1 },
             { scale: 0,ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                EventBus.emit("handleMapInteraction",true)
+                EventBus.emit("handleGameInteraction",true)
             } })
     }
 

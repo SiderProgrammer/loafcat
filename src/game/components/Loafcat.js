@@ -16,17 +16,12 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.character = this.createCharacter();
         this.actualStateDelay = null;
         this.moveTween = null;
+        this.interactive = false;
         this.effects = [];
 
         this.add([this.character]);
+        this.setSize(34, 36);
         this.setState("walk");
-
-        // const text = this.scene.add
-        //     .text(200, 100, "HELLOOO", {
-        //         font: "20px Arial",
-        //         fill: "#ffffff",
-        //     })
-        //     .setScale(0.5);
     }
 
     createCharacter() {
@@ -35,44 +30,78 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
     async setState(state, value) {
         if (this.moveTween) this.moveTween.pause();
+        this.interactive = false;
 
         switch (state) {
             case "idle":
                 this.cleanEffects();
-                this.setStateCatIdle();
+                this.idle();
                 break;
             case "walk":
-                this.setStateCatWalk();
+                this.walk();
                 break;
             case "feed":
-                await this.setStateCatFeed();
+                await this.feed();
                 break;
             case "eat":
                 await this.eat(value);
                 break;
             case "bath":
-                await this.setStateBathing();
+                await this.moveToPointTween(369, 272);
+                await this.bath();
                 break;
             case "toilet":
-                await this.setStateCatPoop();
+                await this.moveToPointTween(185, 268);
+                await this.poop();
+                await this.moveToStandOnFloorTween();
                 break;
             case "TV":
-                await this.setStateCatWatchTV();
+                await this.moveToPointTween(336, 260.5);
+                await this.watchTV();
+                await this.moveToStandOnFloorTween();
                 break;
             case "bed":
+                await this.moveToPointTween(410, 261);
                 await this.sleep();
+                await this.moveToStandOnFloorTween();
                 break;
             case "sink":
-                await this.setStateCatTeethBrush();
+                await this.moveToPointTween(248);
+                await this.brushTeeth();
                 break;
             case "smoke":
+                await this.moveToPointTween(127);
                 await this.smoke();
                 break;
             case "work":
+                await this.moveToPointTween(422, 266);
+                console.log("START WORKING");
                 await this.work();
+                console.log("END WORKING");
+                await this.moveToStandOnFloorTween();
                 break;
         }
         this.actionStopped();
+    }
+
+    handleInteraction(pointerdownCb, pointerupCb, pointeroverCb, pointerOutCb) {
+        this.setInteractive();
+        this.interactive = true;
+
+        this.on("pointerover", () => {
+            pointeroverCb();
+        });
+        this.on("pointerout", () => {
+            pointerOutCb();
+        });
+        this.on("pointerdown", () => {
+            if (!this.interactive) return;
+            this.flatTween("width");
+            pointerdownCb();
+        });
+        this.on("pointerup", () => {
+            pointerupCb();
+        });
     }
 
     setBaseY() {
@@ -105,10 +134,17 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         Async.break();
     }
 
+    setFacingDirection(sideKey) {
+        if (sideKey === "left") {
+            this.setScale(-1, 1);
+        } else if ("right") {
+            this.setScale(1, 1);
+        }
+    }
+
     async work() {
         this.handlePlayEffect("working", "office-set", "office-set", 0, 0);
-        this.x = 422;
-        this.y = 266.5;
+        this.setFacingDirection("right");
         this.actualStateDelay = await Async.delay(100000000);
     }
 
@@ -118,56 +154,37 @@ export default class Loafcat extends Phaser.GameObjects.Container {
 
     async sleep() {
         this.handlePlayEffect("sleep", "sleep", "sleep-idle");
-        this.x = 410;
-        this.y = 261;
-        await Async.delay(10000);
+        this.setFacingDirection("left");
+        await Async.delay(3000);
     }
-    async setStateCatWatchTV() {
+    async watchTV() {
         this.handlePlayEffect("watch-tv", "tv-popcorn", "tv-popcorn");
-        // this.setPosition(336, 260.5);
-        await this.moveToPointTween(336, 260.5);
-        this.setScale(1, 1);
-        // this.pet.setState("TV");
-        //takeAction("toothBrush")
+        this.setFacingDirection("right");
         await Async.delay(3000);
     }
     drinkCoffee() {
         this.handlePlayEffect("drink-coffee", "cap-coffee", "coffee-idle");
     }
 
-    // async teethBrush() {
-    //     this.setState("teeth-brush");
-    //     EventBus.emit("actionUpdate", {
-    //         value: 15,
-    //         img: "Happiness",
-    //         pos: this.scene.input.activePointer,
-    //     });
-    //     this.x = 248;
-    //     await Async.delay(3000);
-    // }
-
-    async setStateCatFeed() {
-        this.setStateCatIdle();
+    async feed() {
+        this.idle();
         this.character.play("feed-me");
-        await Async.delay(3000);
+        await Async.delay(300000000000000000000);
     }
-    setStateCatWalk() {
+    walk() {
         this.character.play("walk");
         this.moveRandomly();
-        // this.moveTween.resume();
     }
-    setStateCatIdle() {
+    idle() {
         this.character.play("idle");
         this.moveTween && this.moveTween.pause();
     }
-    setStateCatDead() {
-        this.setStateCatIdle();
+    dead() {
+        this.idle();
         this.cleanEffects();
         this.character.play("dead");
     }
     async smoke() {
-        // this.x = 127;
-        await this.moveToPointTween(127);
         this.handlePlayEffect("smoke", "smoke", "smoke-idle", 16, -2);
         await Async.delay(3000);
     }
@@ -189,13 +206,13 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.handlePlayEffect("fart", "fart", "fart-idle");
     }
 
-    async setStateCatPoop() {
+    async poop() {
         this.handlePlayEffect("toiletPoop", "newspaper", "newspaper-idle");
         // TODO : best to have select menu between poop/pee when toilet clicked
 
         // TODO: play here pee then poop just after
-        this.x = 185;
-        this.y = 268;
+        // this.x = 185;
+        // this.y = 268;
         // this.pet.setState("toiletPoop");
         //takeAction("poo")
         //takeAction("pee")
@@ -203,8 +220,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         await Async.delay(3000);
     }
 
-    setStateCatTeethBrush() {
-        this.x = 248;
+    async brushTeeth() {
         this.handlePlayEffect(
             "teeth-brushing",
             "teeth-brushing",
@@ -233,14 +249,14 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         // this.swap(this.peeSprite, this.character);
     }
 
-    async setStateBathing() {
+    async bath() {
         this.handlePlayEffect("bathing", "soap", "soap-idle");
         await this.bathAction();
     }
 
     async bathAction() {
-        this.x = 369;
-        this.y = 272;
+        // this.x = 369;
+        // this.y = 272;
         // this.itemInUse = this.add
         //   .image(
         //     this.input.activePointer.worldX,
@@ -313,6 +329,24 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         });
     }
 
+    flatTween(type) {
+        this.interactive = false;
+        const time = 100;
+        const x = type === "height" ? 1.2 : 0.8;
+        const y = type === "height" ? 0.8 : 1.2;
+
+        this.scene.tweens.add({
+            targets: this.character,
+            scaleX: x,
+            scaleY: y,
+            yoyo: true,
+            duration: time,
+            onComplete: () => {
+                this.interactive = true;
+            },
+        });
+    }
+
     stopBathAction() {
         this.setBaseY();
         this.setState("idle");
@@ -321,10 +355,11 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
 
     actionStopped() {
+        this.interactive = true;
         this.cleanEffects();
-        this.setStateCatIdle();
-        this.setStateCatWalk();
-        this.setBaseY();
+        this.idle();
+        this.walk();
+        // this.setBaseY();
     }
 
     handlePlayEffect(
@@ -335,7 +370,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         y = 0,
         scale = 1
     ) {
-        this.setStateCatIdle();
+        this.idle();
         this.character.play(characterStateKey);
         const officeSet = this.scene.add
             .sprite(x, y, effectSetKey)
@@ -350,6 +385,22 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.effects.forEach((effect) => {
             this.remove(effect, true);
         });
+    }
+
+    async moveToStandOnFloorTween() {
+        this.cleanEffects();
+        const time = 300;
+        this.character.play("idle");
+        await this.scene.tweens.add({
+            targets: this,
+            y: this.config.y,
+            ease: "power3.out",
+            duration: time - 100,
+            onComplete: () => {
+                this.flatTween("height");
+            },
+        });
+        await Async.delay(time);
     }
 
     async moveToPointTween(x, y) {
@@ -375,6 +426,9 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                     y: y ? y : startY,
                     ease: "power3.out",
                     duration: time / 2,
+                    onComplete: () => {
+                        this.flatTween("height");
+                    },
                 });
             },
         });

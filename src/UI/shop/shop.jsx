@@ -18,7 +18,7 @@ let canOpen = true
 export const openShop = () => {
     if(!canOpen) return
     visibilitySignal.value = "visible";
-    EventBus.emit("handleMapInteraction",false)
+    EventBus.emit("handleGameInteraction",false)
     showOverlay();
     canOpen = false
 };
@@ -126,7 +126,7 @@ export const Shop = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                EventBus.emit("handleMapInteraction",true)
+                EventBus.emit("handleGameInteraction",true)
                 canOpen = true
             } })
     }

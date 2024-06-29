@@ -1,11 +1,10 @@
 import gameConfig from "../config/index";
 
 export class MapInteractionSystem {
-    constructor(scene, mapLayers, cursorController) {
+    constructor(scene, mapLayers) {
         this.config = gameConfig.mapConfig.pointArrow;
         this.scene = scene;
         this.mapLayers = mapLayers;
-        this.cursorController = cursorController;
         this.canInteract = true;
 
         this.zones = [];
@@ -25,14 +24,22 @@ export class MapInteractionSystem {
                 .setOrigin(0, 0);
 
             zone.areaName = area.name;
+            zone.handleInteractive = (
+                pointerdownCb,
+                pointeroverCb,
+                pointerOutCb
+            ) => {
+                zone.on("pointerover", () => {
+                    pointeroverCb();
+                });
+                zone.on("pointerout", () => {
+                    pointerOutCb();
+                });
+                zone.on("pointerdown", async () => {
+                    pointerdownCb();
+                });
+            };
             this.zones.push(zone);
-
-            zone.on("pointerover", () => {
-                this.cursorController.indicator();
-            });
-            zone.on("pointerout", () => {
-                this.cursorController.idle();
-            });
         });
     }
 

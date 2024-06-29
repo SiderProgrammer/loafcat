@@ -17,7 +17,7 @@ export const draggableSignal = createSignal(false);
 
 export const openInventory = (itemsDraggable = false) => {
     // draggable = itemsDraggable
-    EventBus.emit("handleMapInteraction",false)
+    EventBus.emit("handleGameInteraction",false)
     draggableSignal.value = itemsDraggable
     visibilitySignal.value = "visible"
     showOverlay()
@@ -306,7 +306,7 @@ export const Inventory = ()=>{
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                EventBus.emit("handleMapInteraction",true)
+                EventBus.emit("handleGameInteraction",true)
             } })
     }
 

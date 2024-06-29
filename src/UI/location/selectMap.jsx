@@ -11,7 +11,7 @@ export const visibilitySignal = createSignal("hidden");
 export const openMapSelection = async () => {
     visibilitySignal.value = "visible";
     showOverlay();
-   EventBus.emit("handleMapInteraction",false)
+   EventBus.emit("handleGameInteraction",false)
 };
 export const closeMapSelection = () => {
     visibilitySignal.value = "hidden";
@@ -53,7 +53,7 @@ export const MapSelection = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                EventBus.emit("handleMapInteraction",true)
+                EventBus.emit("handleGameInteraction",true)
             } })
     }
 

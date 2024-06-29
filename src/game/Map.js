@@ -5,7 +5,7 @@ import { addAmbientAnimations } from "./helpers/addAmbientAnimations";
 import gameConfig from "./config/index";
 
 export default class Map {
-    constructor(scene, key, cursorController) {
+    constructor(scene, key) {
         this.config = gameConfig.mapConfig;
         this.scene = scene;
         this.mapKey = key;
@@ -13,8 +13,7 @@ export default class Map {
         addAmbientAnimations(this.scene, this.mapKey);
         this.interactionSystem = new MapInteractionSystem(
             this.scene,
-            this.tile.getObjectLayer("interactive"),
-            cursorController
+            this.tile.getObjectLayer("interactive")
         );
     }
 

@@ -19,7 +19,7 @@ export const visibilitySignal = createSignal("hidden");
 export const openMainPetView = () => {
     visibilitySignal.value = "visible";
     showOverlay();
-    EventBus.emit("handleMapInteraction",false)
+    EventBus.emit("handleGameInteraction",false)
 };
 export const closeMainPetView = () => {
     visibilitySignal.value = "hidden";
@@ -59,10 +59,10 @@ export const MainPetView = () => {
             { scale: 1 },
             { scale: 0, ease: "back.in", duration: 0.3, onComplete: ()=> {
                 setProfileVisible("hidden")
-                EventBus.emit("handleMapInteraction",true)
+                EventBus.emit("handleGameInteraction",true)
             } })
     }
-
+   
     return (
         <div className="petStats popup ui center" style={{ visibility: profileVisible}}>
              <div className="profile-wrapper"  ref={profileRef}>

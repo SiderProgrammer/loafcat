@@ -2,6 +2,7 @@ import React,{ useEffect, useState, useRef } from "react";
 import { ProfileSection } from "./profile/profileSection";
 import { PetStats } from "./stats/petStats";
 import { Inventory } from "./inventory/inventory";
+import { createSignal } from "react-use-signals";
 import { Shop } from "./shop/shop";
 import { Leaderboard } from "./leaderboard/leaderboard";
 import { DownRightButtons } from "./downRightButtons/downRightButtons";
@@ -14,16 +15,26 @@ import gsap from 'gsap';
 import { BlackOverlay } from "./blackOverlay/blackOverlay";
 // import { LoadingScreen } from "./loadingScreen/loadingScreen";
 
+export const bottomButtonsInteractiveSignal = createSignal("all");
+
+export const handleBottomButtonsInteractive = (value) => {
+    bottomButtonsInteractiveSignal.value = value ? "all" : "none";
+};
+
 export const UIView = (props) => {
+    const changeVisiblity = bottomButtonsInteractiveSignal.useStateAdapter();
     const [UIVisible, setUIVisible] = useState("hidden");
+    const [bottomButtonsInteractive, setBottomButtonsInteractive] = useState("all");
     const UIRef = useRef(null);
+
+    useEffect(() => {
+        setBottomButtonsInteractive( bottomButtonsInteractiveSignal.value )
+    }, [bottomButtonsInteractiveSignal.value]);
 
     useEffect(() => {
         setUIVisible("visible")
         openTween()
     }, []);
-
-    // pointerEvents: "none !important" 
 
     const openTween = () => {
         gsap.fromTo(
@@ -42,7 +53,7 @@ export const UIView = (props) => {
             <MapSelection></MapSelection>
             <CoinsBuy></CoinsBuy>
             <WorkPopUp></WorkPopUp>
-            <div id="bottomButtonsSection" className="ui" >
+            <div id="bottomButtonsSection" className="ui" style={{ pointerEvents: bottomButtonsInteractive}} >
                 <DownRightButtons></DownRightButtons>
             </div>
             <FlyingValue></FlyingValue>
