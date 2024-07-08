@@ -6,8 +6,8 @@ export const MAPS_ORDER = [
     "livingRoomMap",
     "laundryMap",
     "bedroomMap",
-    "officeMap",
     "playroomMap",
+    "officeMap",
     "chillRoomMap",
 ];
 

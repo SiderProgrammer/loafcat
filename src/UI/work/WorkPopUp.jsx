@@ -7,10 +7,11 @@ import React, { useRef, useState, useEffect } from "react";
 import { RangeSlider } from "../common/rangeSlider.jsx/rangeSlider";
 import { EventBus } from "../../game/EventBus";
 import { HOST } from "../../sharedConstants/constants";
-export const visibilitySignal = createSignal("hidden");
 import { Timestamp } from "../../UI/shop/timestamp/Timestamp";
 import "./CSS/WorkPopUp.css";
 import gsap from 'gsap';
+export const visibilitySignal = createSignal("hidden");
+export const isWorkingSignal = createSignal(null);
 
 export const openWorkPopUp = () => {
     // EventBus.emit("handleMapInteraction",false)
@@ -18,6 +19,7 @@ export const openWorkPopUp = () => {
     showOverlay();
 };
 export const closeWorkPopUp = () => {
+    // EventBus.emit("handleGameInteraction", true);
     visibilitySignal.value = "hidden";
     hideOverlay();
 };
@@ -38,6 +40,7 @@ export const WorkPopUp = () => {
     const stopWork = () => {
         setIsWorking(false);
         EventBus.emit("breakPetStateDuration");
+        EventBus.emit("handleGameInteraction", true);
         // closeWorkPopUp();
     };
 
@@ -50,6 +53,7 @@ export const WorkPopUp = () => {
         setIsWorkingFinished(true)
         setIsWorking(false);
         EventBus.emit("breakPetStateDuration");
+        EventBus.emit("handleGameInteraction", true);
         EventBus.emit("addReward", "Coin", coinsToEarn);
         console.log("Work finished")
     }

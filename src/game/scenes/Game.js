@@ -12,6 +12,7 @@ import Loafcat from "../components/Loafcat";
 import UsableItem from "../components/UsableItem";
 import CursorController from "../CursorController";
 import Map from "../Map";
+import { MAPS_ORDER } from "../../game/constants/houseRooms";
 import { AlertSystem } from "../systems/AlertSystem";
 import { PetModel } from "../models/PetModel";
 import { EventBus } from "../EventBus";
@@ -35,6 +36,7 @@ export class Game extends Scene {
         this.mapKey = map;
         GameModel.MAIN_SCENE = this;
 
+        this.backgroundAudio = this.playAudio(this.mapKey, 0.1, true);
         this.cursorController = new CursorController(this);
         this.alertSystem = new AlertSystem();
         this.map = new Map(this, this.mapKey);
@@ -47,15 +49,17 @@ export class Game extends Scene {
         this.createListeners();
         this.handleResize();
 
-        this.petData = await getMyPetData();
-        this.updatePetData(this.petData.data.pet);
+        this.fetchedGameData = await this.handleFetchGameData();
 
         EventBus.emit("current-scene-ready");
         hideLoadingScreen();
 
         if (!this.restarted) {
             this.openTween();
-            this.sound.add("theme").play({ loop: true });
+            // this.playAudio(this.mapKey, 0.1, true);
+            // this.playAudio("kitchen", 0.1, true);
+            // this.playAudio("city", 0.01, true);
+            // this.playAudio("theme", 0.03, true);
         }
     }
 
@@ -70,6 +74,7 @@ export class Game extends Scene {
     handlePetInteraction() {
         const pointerdownCb = () => {
             this.cursorController.grab();
+            this.playAudio("squeezePet", 0.1);
         };
         const pointerupCb = () => {
             this.cursorController.indicator();
@@ -94,6 +99,7 @@ export class Game extends Scene {
             const pointerdownCb = async () => {
                 this.handleGameInteractive(false);
                 this.cursorController.idle();
+                this.playAudio("click", 0.5);
                 switch (zone.areaName) {
                     case "shop":
                         openShop();
@@ -310,9 +316,22 @@ export class Game extends Scene {
         handleBottomButtonsInteractive(value);
     }
 
+    async handleFetchGameData() {
+        const gameData = await getMyPetData();
+        this.updatePetData(gameData.data.pet);
+        return gameData;
+    }
+
+    playAudio(key, volume = 1, loop = false) {
+        const sound = this.sound.add(key);
+        sound.play({ volume: volume, loop: loop });
+        return sound;
+    }
+
     createListeners() {
         if (!EventBus.eventNames().includes("itemGrab")) {
             EventBus.on("itemGrab", async (itemData) => {
+                this.playAudio("grab");
                 this.cursorController.grab();
                 this.usableItem.take("apple", itemData);
                 // this.pet.setState("feed");
@@ -332,6 +351,7 @@ export class Game extends Scene {
         });
 
         EventBus.once("changeMap", (map) => {
+            this.backgroundAudio.stop();
             this.scene.start("Game", map);
         });
         EventBus.on("startWork", () => {
@@ -339,7 +359,7 @@ export class Game extends Scene {
         });
         EventBus.on("breakPetStateDuration", () => {
             this.pet.breakStateDuration();
-            handleBottomButtonsInteractive(true);
+            // handleBottomButtonsInteractive(true);
         });
         EventBus.on("handleMapInteraction", (value) => {
             this.map.interaction(value);
@@ -349,6 +369,9 @@ export class Game extends Scene {
         });
         EventBus.on("addReward", (imageKey, value) => {
             this.addReward(imageKey, value);
+        });
+        EventBus.on("playAudio", (soundKey, volume = 1) => {
+            this.playAudio(soundKey, volume);
         });
     }
 

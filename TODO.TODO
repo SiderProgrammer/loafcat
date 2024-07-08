@@ -1,3 +1,7 @@
+- fix alert system
+- add all pet actions
+
+
 DETAIL TODO:
 - create backend overview, run backend on local, implement office anim + burp
 - stats update value fly to the up when taking action

@@ -21,6 +21,7 @@ export const openShop = () => {
     EventBus.emit("handleGameInteraction",false)
     showOverlay();
     canOpen = false
+    EventBus.emit("playAudio","store_enter", 0.05)
 };
 export const closeShop = () => {
     visibilitySignal.value = "hidden";
@@ -56,6 +57,7 @@ export const Shop = () => {
         // closePopUp()
         setIsItemBuying(true)
         await buyItem(data.ItemID.id)
+        EventBus.emit("playAudio", "buy_item", 0.1);
       const newItems = await getDailyItems()
       setIsItemBuying(false)
       setShopData(newItems.data)
@@ -134,7 +136,7 @@ export const Shop = () => {
     const RefreshPrice = () => {
         return (
             <div style={{ display: "flex", fontFamily: "slkscr", fontSize: "6px", alignItems: "center", marginLeft: "5px"}}>
-                <div>{refreshCost}</div>
+                <div style={{ color: "white"}}>{refreshCost}</div>
                 <img src={HOST+"assets/coin.png"} style={{ transform: "Scale(0.83)",marginLeft: "-2px"}}></img>{/* <div>)</div> */}
             </div>
         );

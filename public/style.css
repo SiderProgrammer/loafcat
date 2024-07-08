@@ -323,12 +323,14 @@ canvas {
         margin-top: -11px;
         margin-left: 13px;
         letter-spacing: -1px;
+        color: rgb(248, 255, 144);
     }
     .refresh-timer .timestamp-text{
         font-size: 6px;
         position: absolute;
         margin-top: 0px;
         margin-left: 2px;
+        color: rgb(248, 255, 144);
         /* letter-spacing: -1px; */
     }
 

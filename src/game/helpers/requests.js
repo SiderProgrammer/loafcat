@@ -112,3 +112,17 @@ export const buyItem = (itemID) => {
         },
     });
 };
+
+export const verifyUserWalletAddress = (signedMessage) => {
+    return axios({
+        method: "POST",
+        url: `${HOST_URL}/api/verify-user-wallet-address`,
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+        data: JSON.stringify({
+            signedMessage: signedMessage,
+        }),
+    });
+};

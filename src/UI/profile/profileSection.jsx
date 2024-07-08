@@ -6,6 +6,8 @@ import { PetModel } from "../../game/models/PetModel";
 import { HOST } from "../../sharedConstants/constants";
 import { openMainPetView } from "../profile/mainPetView";
 import gsap from 'gsap';
+import { EventBus } from "../../game/EventBus";
+ 
 
 export const ProfileSection = () =>{
     const [petData,setPetData] = useState(PetModel.PET_DATA)
@@ -17,6 +19,7 @@ export const ProfileSection = () =>{
    if(!canClickOpenStatsButton) return
         setCanClickOpenStatsButton(false)
         areStatsVisible ? statsContentCloseTween() : statsContentOpenTween()
+        EventBus.emit("playAudio","click", 0.5)
     };
 
     useEffect(() => {

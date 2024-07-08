@@ -201,14 +201,12 @@ export class Preloader extends Scene {
         this.load.image("nurse", "nurse.png");
         this.load.image("soapImage", "soapImage.png");
 
-        this.load.bitmapFont(
-            "WhitePeaberry",
-            "WhitePeaberry.png",
-            "WhitePeaberry.xml"
-        );
-
-        this.load.audio("theme", ["audio/theme.wav"]);
-
+        // this.load.bitmapFont(
+        //     "WhitePeaberry",
+        //     "WhitePeaberry.png",
+        //     "WhitePeaberry.xml"
+        // );
+        this.loadAudio();
         // this.loadUI();
         // this.loadStats();
         this.loadAmbient();
@@ -328,5 +326,28 @@ export class Preloader extends Scene {
         });
 
         this.scene.start("Game", { map: "streetMap" });
+    }
+
+    loadAudio() {
+        this.load.audio("theme", ["audio/theme.ogg"]);
+        this.load.audio("squeezePet", ["audio/squeeze_pet.ogg"]);
+        this.load.audio("click", ["audio/click.mp3"]);
+        this.load.audio("smoking", ["audio/smoking.mp3"]);
+        this.load.audio("jump", ["audio/jump.ogg"]);
+        this.load.audio("reward", ["audio/reward.ogg"]);
+        this.load.audio("fall_down", ["audio/fall_down.mp3"]);
+        this.load.audio("fridge_open", ["audio/fridge_open.ogg"]);
+        this.load.audio("buy_item", ["audio/buy_item.ogg"]);
+        this.load.audio("store_enter", ["audio/store_enter.mp3"]);
+        this.load.audio("poop", ["audio/poop.mp3"]);
+        this.load.audio("eating", ["audio/eating.mp3"]);
+        this.load.audio("teeth_brush", ["audio/teeth_brush.mp3"]);
+        this.load.audio("popcorn_eating", ["audio/popcorn_eating.mp3"]);
+        this.load.audio("sleep", ["audio/sleep.mp3"]);
+        this.load.audio("fart", ["audio/fart.mp3"]);
+        this.load.audio("grab", ["audio/grab.ogg"]);
+        this.load.audio("streetMap", ["audio/streetMap.ogg"]);
+        this.load.audio("kitchenMap", ["audio/kitchenMap.ogg"]);
+        this.load.audio("officeMap", ["audio/officeMap.ogg"]);
     }
 }

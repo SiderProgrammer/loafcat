@@ -18,6 +18,7 @@ export const draggableSignal = createSignal(false);
 export const openInventory = (itemsDraggable = false) => {
     // draggable = itemsDraggable
     EventBus.emit("handleGameInteraction",false)
+    if(itemsDraggable) EventBus.emit("playAudio", "fridge_open", 0.1);
     draggableSignal.value = itemsDraggable
     visibilitySignal.value = "visible"
     showOverlay()

@@ -75,9 +75,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                 break;
             case "work":
                 await this.moveToPointTween(422, 266);
-                console.log("START WORKING");
                 await this.work();
-                console.log("END WORKING");
                 await this.moveToStandOnFloorTween();
                 break;
         }
@@ -153,14 +151,16 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     }
 
     async sleep() {
+        EventBus.emit("playAudio", "sleep", 0.5);
         this.handlePlayEffect("sleep", "sleep", "sleep-idle");
         this.setFacingDirection("left");
-        await Async.delay(3000);
+        await Async.delay(11000);
     }
     async watchTV() {
+        EventBus.emit("playAudio", "popcorn_eating", 0.1);
         this.handlePlayEffect("watch-tv", "tv-popcorn", "tv-popcorn");
         this.setFacingDirection("right");
-        await Async.delay(3000);
+        await Async.delay(4000);
     }
     drinkCoffee() {
         this.handlePlayEffect("drink-coffee", "cap-coffee", "coffee-idle");
@@ -185,28 +185,32 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         this.character.play("dead");
     }
     async smoke() {
+        EventBus.emit("playAudio", "smoking", 0.5);
         this.handlePlayEffect("smoke", "smoke", "smoke-idle", 16, -2);
-        await Async.delay(3000);
+        await Async.delay(7000);
     }
 
     async eat(feedValue) {
+        EventBus.emit("playAudio", "eating", 0.5);
         this.character.play("eat");
         await Async.delay(2000);
         // should be only when food is not liquid
         if (MathUtils.chance(30)) {
-            this.fart();
-            await Async.delay(2000);
+            await this.fart();
             // should be only when food is liquid
         }
 
         this.cleanEffects();
     }
 
-    fart() {
+    async fart() {
+        EventBus.emit("playAudio", "fart", 0.5);
         this.handlePlayEffect("fart", "fart", "fart-idle");
+        await Async.delay(2000);
     }
 
     async poop() {
+        EventBus.emit("playAudio", "poop", 0.2);
         this.handlePlayEffect("toiletPoop", "newspaper", "newspaper-idle");
         // TODO : best to have select menu between poop/pee when toilet clicked
 
@@ -216,11 +220,11 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         // this.pet.setState("toiletPoop");
         //takeAction("poo")
         //takeAction("pee")
-
-        await Async.delay(3000);
+        await Async.delay(5000);
     }
 
     async brushTeeth() {
+        EventBus.emit("playAudio", "teeth_brush", 0.5);
         this.handlePlayEffect(
             "teeth-brushing",
             "teeth-brushing",
@@ -230,7 +234,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve();
-            }, 3000);
+            }, 5000);
         });
     }
 
@@ -398,6 +402,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
             duration: time - 100,
             onComplete: () => {
                 this.flatTween("height");
+                EventBus.emit("playAudio", "fall_down", 0.2);
             },
         });
         await Async.delay(time);
@@ -406,6 +411,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
     async moveToPointTween(x, y) {
         const time = 500;
         const startY = this.y;
+        EventBus.emit("playAudio", "jump", 0.3);
         this.scene.tweens.add({
             targets: this,
             x: x ? x : this.x,
@@ -428,6 +434,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                     duration: time / 2,
                     onComplete: () => {
                         this.flatTween("height");
+                        EventBus.emit("playAudio", "fall_down", 0.2);
                     },
                 });
             },

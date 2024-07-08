@@ -1,16 +1,16 @@
-import { useLayoutEffect, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "../UI/buttons/button";
 import { UserModel } from "../game/models/UserModel";
 import { WalletConnect } from "./walletConnect";
 import { LinkPets } from "./linkPets";
 import { useNavigate } from "react-router-dom";
-import { EventBus } from "../game/EventBus";
-import { Connection, PublicKey, SystemProgram } from '@solana/web3.js';
-import { GameModel } from "../game/models/GameModel";
 import { navigatePrefixURL } from "../sharedConstants/constants"
+import Phantom from "../../web3/phantom/Phantom"
+import Solana from "../../web3/solana/Solana"
 import { showLoadingScreen, hideLoadingScreen } from '../UI/loadingScreen/loadingScreen';
 import { HOST } from "../sharedConstants/constants";
 import gsap from 'gsap';
+import { verifyUserWalletAddress } from "../../src/game/helpers/requests";
 
 export const PreGameScreen = (props) => {
     const [isWalletConnected, setWalletConnect] = useState(false);
@@ -23,51 +23,58 @@ export const PreGameScreen = (props) => {
     const navigate = useNavigate();
     const phantomExtensionURL = "https://phantom.app"
 
-    // useLayoutEffect(async () => {
-    //     showLoadingScreen()
-    //     connect();
-    // }, []);
-
     useEffect(() => {
         showLoadingScreen()
         openTween()
     }, []);
 
     const handleConnect = async () => {
-        const hasPhantomWallet = checkHasPhantom()
-        if(!hasPhantomWallet) {
-            setHasPhantom(false)
-            return
-        }
-        await connectBlockchain()
-        await connectWallet();
-        handleNextScene()
-    };
+        if(Phantom.checkIsAvailable()) {
+            await Solana.connect()
 
-    const checkHasPhantom = () => window.solana && window.solana.isPhantom;
+// //! /////////////////////////////////////////
+    // const message = "jaja"
+    // //    const userWalletAddress = Solana.userWalletAddress
+    // const signedMessage = await Phantom.signMessage(message)
+    // const jaja = verifyUserWalletAddress(signedMessage)
 
-    const connectBlockchain = async () => {
-        try {
-            if (window.solana) {
-                window.solana.on("connect", () => {});
-                const resp = await window.solana.connect();
-                console.log("connected wallet", resp);
-                const connection = new Connection('https://multi-blissful-wind.solana-mainnet.quiknode.pro/13fc50b03434c8775643c0ae2d3db06e6162d1ef');
-                GameModel.solanaConnection = connection
-            }
-        } catch (err) {
-            // TODO : update the text on connect error
-            // { code: 4001, message: 'User rejected the request.' }
-        }
-    };
+    //? BACKEND
 
-    const connectWallet = async () => {
-        if (window.solana && window.solana.publicKey) {
-            UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //window.solana.publicKey.toString();
+    // router.post(
+    //     "/verify-user-wallet-address",
+    //     operationsController.verifyUserWalletAddress
+    //   );
+
+
+    // exports.verifyUserWalletAddress = async (req, res) => {
+    //     const { signedMessage } = req.body;
+    //     const userWalletAddress = signedMessage.publicKey;
+    //     const signature = signedMessage.signature;
+      
+    //     const encodedMessage = new TextEncoder().encode("jaja");
+    //     const encodeSignature = bs58.default.encode(signature.data);
+    //     const decodedSignature = bs58.default.decode(encodeSignature);
+    //     const decodedPublicKey = bs58.default.decode(userWalletAddress);
+      
+    //     const isValid = nacl.sign.detached.verify(
+    //       encodedMessage,
+    //       decodedSignature,
+    //       decodedPublicKey
+    //     );
+      
+    //     console.log(isValid);
+    //   };
+// //! /////////////////////////////////////////
+
+            UserModel.USER_ID = "LofD1qHiLDAnj4q6smfDbHC61Z5rCxhGjosN2NU3vv45"; //Solana.userWalletAddress
             setWalletConnect(true);
             setIsCorrectIconVisible("visible")
             setIsButtonBlocked(true)
             await openCorrectIcon()
+            handleNextScene()
+        } else {
+            setHasPhantom(false)
+            return
         }
     };
 
