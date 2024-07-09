@@ -349,5 +349,12 @@ export class Preloader extends Scene {
         this.load.audio("streetMap", ["audio/streetMap.ogg"]);
         this.load.audio("kitchenMap", ["audio/kitchenMap.ogg"]);
         this.load.audio("officeMap", ["audio/officeMap.ogg"]);
+        this.load.audio("bathroomMap", ["audio/bathroomMap.mp3"]);
+        this.load.audio("laundryMap", ["audio/laundryMap.mp3"]);
+        this.load.audio("chillRoomMap", ["audio/chillRoomMap.mp3"]);
+        this.load.audio("livingRoomMap", ["audio/livingRoomMap.mp3"]);
+        this.load.audio("garageMap", ["audio/garageMap.mp3"]);
+        this.load.audio("playroomMap", ["audio/playroomMap.mp3"]);
+        this.load.audio("bedroomMap", ["audio/bedroomMap.mp3"]);
     }
 }
