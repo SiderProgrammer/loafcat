@@ -11,8 +11,6 @@ export const ItemSlot = (props) => {
     const [isClicked, setClicked] = useState(false);
     const itemSlotRef = useRef(null);
 
-    EventBus.on("openInventory",()=>props.openInventory(true))
-
     const onClick = ()=>{
        if(props.onClick === false) return
        props.onClick()

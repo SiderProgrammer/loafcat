@@ -13,7 +13,7 @@ export const Button = React.forwardRef((props, ref) => {
     const handleClick = () => {
         if(props.onClick)props.onClick()
         // audioRef.current.play()
-        EventBus.emit("playAudio","click", 0.5)
+        EventBus.emit("playAudio","click", 1)
     };
 
     return (

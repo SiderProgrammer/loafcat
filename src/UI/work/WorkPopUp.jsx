@@ -11,21 +11,22 @@ import { Timestamp } from "../../UI/shop/timestamp/Timestamp";
 import "./CSS/WorkPopUp.css";
 import gsap from 'gsap';
 export const visibilitySignal = createSignal("hidden");
-export const isWorkingSignal = createSignal(null);
+export const isWorkingSignal = createSignal(false);
 
 export const openWorkPopUp = () => {
-    // EventBus.emit("handleMapInteraction",false)
     visibilitySignal.value = "visible";
     showOverlay();
 };
 export const closeWorkPopUp = () => {
-    // EventBus.emit("handleGameInteraction", true);
     visibilitySignal.value = "hidden";
     hideOverlay();
+    if(isWorkingSignal.value === false) EventBus.emit("handleGameInteraction", true);
 };
 
 export const WorkPopUp = () => {
     const changeVisiblity = visibilitySignal.useStateAdapter();
+    const changeIsWorking = isWorkingSignal.useStateAdapter();
+
     const [numberOfHours, setNumberOfHours] = useState({ min: 1, max: 10 });
     const [isWorking, setIsWorking] = useState(false);
     const [workPopupVisible, setWorkPopupVisible] = useState("hidden");
@@ -34,24 +35,27 @@ export const WorkPopUp = () => {
     const workPopupRef = useRef(null);
 
     const startWork = () => {
+        isWorkingSignal.value = true
         setIsWorking(true);
         EventBus.emit("startWork");
     };
     const stopWork = () => {
         setIsWorking(false);
+        isWorkingSignal.value = false
         EventBus.emit("breakPetStateDuration");
         EventBus.emit("handleGameInteraction", true);
-        // closeWorkPopUp();
     };
 
     const restartWork = () => {
         setIsWorkingFinished(false)
+        isWorkingSignal.value = false
         setIsWorking(false);
     }
 
     const finishWork = () => {
         setIsWorkingFinished(true)
         setIsWorking(false);
+        isWorkingSignal.value = false
         EventBus.emit("breakPetStateDuration");
         EventBus.emit("handleGameInteraction", true);
         EventBus.emit("addReward", "Coin", coinsToEarn);

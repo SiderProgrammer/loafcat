@@ -16,7 +16,7 @@ export const FlyingValue = ()=>{
             setRewardImage(img)
             setValue(value)
             setVisiblity("visible")
-            EventBus.emit("playAudio", "reward", 0.2);
+            EventBus.emit("playAudio", "reward", 1);
             openTween()
         })
       }, []);

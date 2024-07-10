@@ -19,7 +19,7 @@ export const ProfileSection = () =>{
    if(!canClickOpenStatsButton) return
         setCanClickOpenStatsButton(false)
         areStatsVisible ? statsContentCloseTween() : statsContentOpenTween()
-        EventBus.emit("playAudio","click", 0.5)
+        EventBus.emit("playAudio","click", 1)
     };
 
     useEffect(() => {

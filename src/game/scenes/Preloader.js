@@ -329,32 +329,32 @@ export class Preloader extends Scene {
     }
 
     loadAudio() {
-        this.load.audio("theme", ["audio/theme.ogg"]);
+        // this.load.audio("theme", ["audio/theme.ogg"]);
         this.load.audio("squeezePet", ["audio/squeeze_pet.ogg"]);
-        this.load.audio("click", ["audio/click.mp3"]);
-        this.load.audio("smoking", ["audio/smoking.mp3"]);
+        this.load.audio("click", ["audio/click.ogg"]);
+        this.load.audio("smoking", ["audio/smoking.ogg"]);
         this.load.audio("jump", ["audio/jump.ogg"]);
         this.load.audio("reward", ["audio/reward.ogg"]);
-        this.load.audio("fall_down", ["audio/fall_down.mp3"]);
+        this.load.audio("fall_down", ["audio/fall_down.ogg"]);
         this.load.audio("fridge_open", ["audio/fridge_open.ogg"]);
         this.load.audio("buy_item", ["audio/buy_item.ogg"]);
-        this.load.audio("store_enter", ["audio/store_enter.mp3"]);
-        this.load.audio("poop", ["audio/poop.mp3"]);
-        this.load.audio("eating", ["audio/eating.mp3"]);
-        this.load.audio("teeth_brush", ["audio/teeth_brush.mp3"]);
-        this.load.audio("popcorn_eating", ["audio/popcorn_eating.mp3"]);
-        this.load.audio("sleep", ["audio/sleep.mp3"]);
-        this.load.audio("fart", ["audio/fart.mp3"]);
+        this.load.audio("store_enter", ["audio/store_enter.ogg"]);
+        this.load.audio("poop", ["audio/poop.ogg"]);
+        this.load.audio("eating", ["audio/eating.ogg"]);
+        this.load.audio("teeth_brush", ["audio/teeth_brush.ogg"]);
+        this.load.audio("popcorn_eating", ["audio/popcorn_eating.ogg"]);
+        this.load.audio("sleep", ["audio/sleep.ogg"]);
+        this.load.audio("fart", ["audio/fart.ogg"]);
         this.load.audio("grab", ["audio/grab.ogg"]);
         this.load.audio("streetMap", ["audio/streetMap.ogg"]);
+        this.load.audio("garageMap", ["audio/garageMap.ogg"]);
         this.load.audio("kitchenMap", ["audio/kitchenMap.ogg"]);
+        this.load.audio("bathroomMap", ["audio/bathroomMap.ogg"]);
+        this.load.audio("livingRoomMap", ["audio/livingRoomMap.ogg"]);
+        this.load.audio("laundryMap", ["audio/laundryMap.ogg"]);
+        this.load.audio("bedroomMap", ["audio/bedroomMap.ogg"]);
+        this.load.audio("playroomMap", ["audio/playroomMap.ogg"]);
         this.load.audio("officeMap", ["audio/officeMap.ogg"]);
-        this.load.audio("bathroomMap", ["audio/bathroomMap.mp3"]);
-        this.load.audio("laundryMap", ["audio/laundryMap.mp3"]);
-        this.load.audio("chillRoomMap", ["audio/chillRoomMap.mp3"]);
-        this.load.audio("livingRoomMap", ["audio/livingRoomMap.mp3"]);
-        this.load.audio("garageMap", ["audio/garageMap.mp3"]);
-        this.load.audio("playroomMap", ["audio/playroomMap.mp3"]);
-        this.load.audio("bedroomMap", ["audio/bedroomMap.mp3"]);
+        this.load.audio("chillRoomMap", ["audio/chillRoomMap.ogg"]);
     }
 }

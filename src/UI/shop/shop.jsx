@@ -21,7 +21,7 @@ export const openShop = () => {
     EventBus.emit("handleGameInteraction",false)
     showOverlay();
     canOpen = false
-    EventBus.emit("playAudio","store_enter", 0.05)
+    EventBus.emit("playAudio","store_enter", 1)
 };
 export const closeShop = () => {
     visibilitySignal.value = "hidden";
@@ -57,7 +57,7 @@ export const Shop = () => {
         // closePopUp()
         setIsItemBuying(true)
         await buyItem(data.ItemID.id)
-        EventBus.emit("playAudio", "buy_item", 0.1);
+        EventBus.emit("playAudio", "buy_item", 1);
       const newItems = await getDailyItems()
       setIsItemBuying(false)
       setShopData(newItems.data)

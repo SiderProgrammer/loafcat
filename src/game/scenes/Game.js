@@ -36,7 +36,7 @@ export class Game extends Scene {
         this.mapKey = map;
         GameModel.MAIN_SCENE = this;
 
-        this.backgroundAudio = this.playAudio(this.mapKey, 0.1, true);
+        this.backgroundAudio = this.playAudio(this.mapKey, 1, true);
         this.cursorController = new CursorController(this);
         this.alertSystem = new AlertSystem();
         this.map = new Map(this, this.mapKey);
@@ -56,10 +56,6 @@ export class Game extends Scene {
 
         if (!this.restarted) {
             this.openTween();
-            // this.playAudio(this.mapKey, 0.1, true);
-            // this.playAudio("kitchen", 0.1, true);
-            // this.playAudio("city", 0.01, true);
-            // this.playAudio("theme", 0.03, true);
         }
     }
 
@@ -176,86 +172,6 @@ export class Game extends Scene {
                 this.cursorController.idle();
             };
             zone.handleInteractive(pointerdownCb, pointeroverCb, pointerOutCb);
-
-            // zone.on("pointerover", () => {
-            //     this.cursorController.indicator();
-            // });
-            // zone.on("pointerout", () => {
-            //     this.cursorController.idle();
-            // });
-            // zone.on("pointerdown", async () => {
-            //     this.handleGameInteractive(false);
-            //     this.cursorController.idle();
-
-            //     switch (zone.areaName) {
-            //         case "shop":
-            //             openShop();
-            //             return;
-            //         case "fridge":
-            //             openInventory(true);
-            //             return;
-            //         case "work":
-            //             openWorkPopUp();
-            //             return;
-            //         case "bath":
-            //             this.cursorController.soap();
-            //             this.map.getLayer("Bath").tilemapLayer.setDepth(2);
-            //             await this.pet.setState("bath");
-            //             this.map.getLayer("Bath").tilemapLayer.setDepth(0);
-            //             this.addReward("Happiness", 15);
-            //             this.updatePetData({
-            //                 ...PetModel.PET_DATA,
-            //                 CleanlinessLevel: 100,
-            //             });
-            //             break;
-            //         case "toilet":
-            //             await this.pet.setState("toilet");
-            //             this.addReward("Happiness", 15);
-            //             this.updatePetData({
-            //                 ...PetModel.PET_DATA,
-            //                 PoopLevel: 0,
-            //                 PeeLevel: 0,
-            //             });
-            //             break;
-            //         case "sink":
-            //             await this.pet.setState("sink");
-            //             this.addReward("Happiness", 15);
-            //             this.updatePetData({
-            //                 ...PetModel.PET_DATA,
-            //                 HappinessLevel:
-            //                     PetModel.PET_DATA.HappinessLevel + 15,
-            //             });
-            //             break;
-            //         case "tv":
-            //             await this.pet.setState("TV");
-            //             this.addReward("Happiness", 15);
-            //             this.updatePetData({
-            //                 ...PetModel.PET_DATA,
-            //                 CleanlinessLevel:
-            //                     PetModel.PET_DATA.CleanlinessLevel + 15,
-            //             });
-            //             break;
-            //         case "smoke":
-            //             await this.pet.setState("smoke");
-            //             this.addReward("Happiness", 15);
-            //             this.updatePetData({
-            //                 ...PetModel.PET_DATA,
-            //                 HappinessLevel:
-            //                     PetModel.PET_DATA.HappinessLevel + 15,
-            //             });
-            //             break;
-            //         case "bed":
-            //             await this.pet.setState("bed");
-            //             this.addReward("Happiness", 15);
-            //             this.updatePetData({
-            //                 ...PetModel.PET_DATA,
-            //                 HappinessLevel:
-            //                     PetModel.PET_DATA.HappinessLevel + 15,
-            //             });
-            //             break;
-            //     }
-            //     this.handleGameInteractive(true);
-            // });
         });
     }
 
@@ -338,7 +254,7 @@ export class Game extends Scene {
             });
         }
 
-        this.input.on("pointerup", async () => {
+        this.pointerUpHandler = async () => {
             if (!this.usableItem.isInUse) return;
             // this.pet.breakStateDuration();
             this.cursorController.idle();
@@ -348,10 +264,13 @@ export class Game extends Scene {
                 this.usableItem.itemData.itemDetails.pointValue
             );
             EventBus.emit("openInventory");
-        });
+        };
+
+        this.input.on("pointerup", this.pointerUpHandler);
 
         EventBus.once("changeMap", (map) => {
             this.backgroundAudio.stop();
+            this.offListeners();
             this.scene.start("Game", map);
         });
         EventBus.on("startWork", () => {
@@ -359,7 +278,6 @@ export class Game extends Scene {
         });
         EventBus.on("breakPetStateDuration", () => {
             this.pet.breakStateDuration();
-            // handleBottomButtonsInteractive(true);
         });
         EventBus.on("handleMapInteraction", (value) => {
             this.map.interaction(value);
@@ -373,6 +291,18 @@ export class Game extends Scene {
         EventBus.on("playAudio", (soundKey, volume = 1) => {
             this.playAudio(soundKey, volume);
         });
+    }
+
+    offListeners() {
+        EventBus.off("playAudio");
+        EventBus.off("addReward");
+        EventBus.off("handleGameInteraction");
+        EventBus.off("handleMapInteraction");
+        EventBus.off("breakPetStateDuration");
+        EventBus.off("startWork");
+        EventBus.off("itemGrab");
+        this.input.on("pointerup", this.pointerUpHandler);
+        this.pointerUpHandler = null;
     }
 
     openTween() {

@@ -61,7 +61,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                 await this.moveToStandOnFloorTween();
                 break;
             case "bed":
-                await this.moveToPointTween(410, 261);
+                await this.moveToPointTween(410, 264);
                 await this.sleep();
                 await this.moveToStandOnFloorTween();
                 break;
@@ -74,7 +74,7 @@ export default class Loafcat extends Phaser.GameObjects.Container {
                 await this.smoke();
                 break;
             case "work":
-                await this.moveToPointTween(422, 266);
+                await this.moveToPointTween(422, 268);
                 await this.work();
                 await this.moveToStandOnFloorTween();
                 break;
